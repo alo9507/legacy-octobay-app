@@ -94,6 +94,5 @@ sw.*
 
 # Custom
 .mnemonic
-chainlink/.adapters/
-chainlink/.node/
-chainlink/.jobs
+.evm/
+.chainlink/

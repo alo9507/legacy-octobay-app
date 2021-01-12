@@ -32,7 +32,6 @@ export default async ({ app }, inject) => {
     })
 
     linkToken.methods.balanceOf(process.env.OCTOBAY_ADDRESS).call().then(balance => console.log(`OctoBay: ${web3.utils.fromWei(balance, 'ether')} LINK`))
-    linkToken.methods.balanceOf(process.env.ORACLES[0].address).call().then(balance => console.log(`Oracle: ${web3.utils.fromWei(balance, 'ether')} LINK`))
     web3.eth.getBalance(process.env.CHAINLINK_NODE_ADDRESS).then(balance => console.log(`CL Node: ${web3.utils.fromWei(balance, 'ether')} ETH`))
 
     inject('octoBay', octoBay)

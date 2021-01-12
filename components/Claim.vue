@@ -281,7 +281,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'registeredAccount']),
+    ...mapGetters(['connected', 'account', 'registeredAccount', 'oracles']),
     ...mapGetters("github", {
       githubUser: 'user',
       githubAccessToken: 'accessToken'
@@ -322,8 +322,8 @@ export default {
       // get gas price, trigger registration
       web3.eth.getGasPrice((error, gasPrice) => {
         this.$octoBay.methods.register(
-          process.env.ORACLES[0].address,
-          this.$web3.utils.toHex(process.env.ORACLES[0].jobs.register),
+          this.oracles[0].address,
+          this.$web3.utils.toHex(this.oracles[0].registerJobId),
           this.githubUser.login
         ).send({
           // useGSN: false,
@@ -401,8 +401,8 @@ export default {
       // trigger claim (get gas price first)
       web3.eth.getGasPrice((error, gasPrice) => {
         this.$octoBay.methods.claimPullRequest(
-          process.env.ORACLES[0].address,
-          this.$web3.utils.toHex(process.env.ORACLES[0].jobs.claim),
+          this.oracles[0].address,
+          this.$web3.utils.toHex(this.oracles[0].claimJobId),
           this.contribution.id,
           this.githubUser.login
         ).send({

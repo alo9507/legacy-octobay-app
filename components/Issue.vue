@@ -229,7 +229,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['account', 'registeredAccount']),
+    ...mapGetters(['account', 'registeredAccount', 'oracles']),
     ...mapGetters('github', { githubUser: 'user' })
   },
   methods: {
@@ -294,8 +294,8 @@ export default {
         // trigger release (get gas price first)
         web3.eth.getGasPrice((error, gasPrice) => {
           this.$octoBay.methods.releaseIssueDeposits(
-            process.env.ORACLES[0].address,
-            this.$web3.utils.toHex(process.env.ORACLES[0].jobs.release),
+            this.oracles[0].address,
+            this.$web3.utils.toHex(this.oracles[0].releaseJobId),
             this.issue.id,
             this.releaseTo
           ).send({
