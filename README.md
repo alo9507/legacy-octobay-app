@@ -4,7 +4,7 @@
 
 ### Prepare
 
-You need Node v12.18, Go 1.14 and an empty postgres database named `chainlink-local` with the default `postgres:postgres` user and port 5432 (or adjust chainlink/.env.sample) as well as a GitHub [OAuth app](https://github.com/settings/applications/new) client ID and secret and a [personal access token](https://github.com/settings/tokens/new). You need to provide those during installation.
+You need Node v12.18, Go 1.14 and an empty postgres database named `chainlink-local` with the default `postgres:postgres` user and port 5432 (or adjust `.env.chainlink.sample`) as well as a GitHub [OAuth app](https://github.com/settings/applications/new) client ID for the web app and a [personal access token](https://github.com/settings/tokens/new) for the chainlink adapters. You will be asked during installation to provide this information.
 
 ## Install
 
@@ -25,23 +25,21 @@ yarn evm
 yarn evm:gsn
 ```
 
+When running the Chainlink node for the first time, you will be asked to set an email address and a password. You'll need those in the next step.
+
 ```bash
 yarn chainlink:node
 ```
+
+When running the adapters for the first time, you will be asked to provide your GitHub personal access token.
 
 ```bash
 yarn chainlink:adapters
 ```
 
-When running the Chainlink node for the first time, you will be asked to set an email address and a password. You'll need those in the next step. When the node is running, open http://localhost:6688/config in your browser, login and copy your Chainlink node's `ACCOUNT_ADDRESS` to your `.env` file.
-
-```
-CHAINLINK_NODE_ADDRESS=0x...
-```
-
 ## Deploy Contracts
 
-Now you can deploy the contracts. During deployment you will be asked to log in to your Chainlink node, using your email and password from before, so the necessary job specifications can be created for you.
+When running for the first time, you will be asked to provide your Chainlink node's address. Open http://localhost:6688/config in your browser (`yarn chainlink:node` must be running), login using your email and password from before, and copy the `ACCOUNT_ADDRESS`. Now you can deploy the contracts. During deployment you will also have to log in to your Chainlink node, so the necessary job specifications can be created for you.
 
 ```bash
 yarn evm:deploy
@@ -51,7 +49,8 @@ This will deploy all OctoBay contracts as well as the Chainlink token and an ora
 
 ## Run App
 
-Now run the app and open `http://localhost:3000` in your browser.
+When running the app for the first time you will be asked to provide your GitHub app's client ID.
+Run the app and open `http://localhost:3000/octobay` in your browser.
 
 ```bash
 yarn app
