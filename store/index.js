@@ -188,6 +188,8 @@ export const actions = {
         oracleAddresses.forEach(oracleAddress => {
           this.$octoBay.methods.activeOracles(oracleAddress).call().then(oracle => {
             oracle.address = oracleAddress
+            console.log('Oracle', oracle.address)
+            console.log('- Register Job ID', this.$web3.utils.hexToAscii(oracle.registerJobId))
             commit('setOracle', oracle)
           })
         })
