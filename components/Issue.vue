@@ -295,7 +295,6 @@ export default {
         web3.eth.getGasPrice((error, gasPrice) => {
           this.$octoBay.methods.releaseIssueDeposits(
             this.oracles[0].address,
-            this.$web3.utils.toHex(this.oracles[0].releaseJobId),
             this.issue.id,
             this.releaseTo
           ).send({

@@ -320,10 +320,9 @@ export default {
       })
 
       // get gas price, trigger registration
-      web3.eth.getGasPrice((error, gasPrice) => {
+      this.$web3.eth.getGasPrice((error, gasPrice) => {
         this.$octoBay.methods.register(
           this.oracles[0].address,
-          this.$web3.utils.toHex(this.oracles[0].registerJobId),
           this.githubUser.login
         ).send({
           // useGSN: false,
@@ -399,10 +398,9 @@ export default {
       })
 
       // trigger claim (get gas price first)
-      web3.eth.getGasPrice((error, gasPrice) => {
+      this.$web3.eth.getGasPrice((error, gasPrice) => {
         this.$octoBay.methods.claimPullRequest(
           this.oracles[0].address,
-          this.$web3.utils.toHex(this.oracles[0].claimJobId),
           this.contribution.id,
           this.githubUser.login
         ).send({
