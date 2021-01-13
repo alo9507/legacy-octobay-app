@@ -11,7 +11,7 @@
     "install:copyfiles": "cp .env.sample .env && cp .evm/.env.sample .evm/.env && cp .env.chainlink.sample .chainlink/node/.env && cp -rf .chainlink/adapters/jobs .chainlink/jobs",
     "evm": "cd .evm && ganache-cli -l 8000000 -m $1",
     "evm:gsn": "cd .evm && npx gsn start -w ./build/gsn",
-    "evm:deploy": "node configure-evm && cd .evm && truffle migrate --f 1 --to 3 --network development && cd .. && yarn chainlink:jobs:create && cd .evm && truffle migrate --f 4 --to 5 --network development && cd .. && node set-octobay",
+    "evm:deploy": "rm -rf .evm/build/contracts && node configure-evm && cd .evm && truffle migrate --f 1 --to 3 --network development && cd .. && yarn chainlink:jobs:create && cd .evm && truffle migrate --f 4 --to 5 --network development && cd .. && node set-octobay",
     "evm:test": "cd .evm && truffle test",
     "chainlink:node": "cd .chainlink/node && chainlink local start",
     "chainlink:adapters": "node configure-adapters && cd .chainlink/adapters && yarn start",

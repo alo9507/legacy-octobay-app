@@ -1,38 +1,46 @@
+require('dotenv').config({ path: './evm/.env' })
 const sh = require('shelljs')
 const oracle = require('./.evm/build/contracts/Oracle.json')
 const oracleAddress = oracle.networks[Object.keys(oracle.networks)[0]].address
+const timestamp = new Date()
 
-sh.echo('Creating Chainlink Bridges...')
+sh.echo('Creating Chainlink jobs:')
+
+sh.echo('Creating bridges...')
 
 sh.exec('chainlink bridges create ./.chainlink/adapters/bridges/register.json')
 sh.exec('chainlink bridges create ./.chainlink/adapters/bridges/release.json')
 sh.exec('chainlink bridges create ./.chainlink/adapters/bridges/claim.json')
-sh.exec('chainlink bridges create ./.chainlink/adapters/bridges/graphql.json')
 
-sh.echo('Creating Chainlink Jobs...')
+if (process.env.CHAINLINK_REGISTER_JOB_ID) {
+  sh.echo('Archiving old jobs...')
 
-// copying spec templates
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/register.json')
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/release.json')
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/claim.json')
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/graphql/bool.json')
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/graphql/bytes32.json')
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/graphql/int256.json')
-sh.sed('-i', 'YOUR_ORACLE_CONTRACT_ADDRESS', oracleAddress, './.chainlink/jobs/graphql/uint256.json')
+  sh.exec('chainlink jobs archive ' + process.env.CHAINLINK_REGISTER_JOB_ID)
+  sh.exec('chainlink jobs archive ' + process.env.CHAINLINK_RELEASE_JOB_ID)
+  sh.exec('chainlink jobs archive ' + process.env.CHAINLINK_CLAIM_JOB_ID)
+}
+
+sh.echo('Creating jobs...')
+
+// replacing names
+sh.sed('-i', /\"name\": \".*\"/, `"name": "OctoBay Register ${timestamp}"`, './.chainlink/jobs/register.json')
+sh.sed('-i', /\"name\": \".*\"/, `"name": "OctoBay Release ${timestamp}"`, './.chainlink/jobs/release.json')
+sh.sed('-i', /\"name\": \".*\"/, `"name": "OctoBay Claim ${timestamp}"`, './.chainlink/jobs/claim.json')
+
+// replacing oracle address
+sh.sed('-i', /\"address\": \".*\"/, `"address": "${oracleAddress}"`, './.chainlink/jobs/register.json')
+sh.sed('-i', /\"address\": \".*\"/, `"address": "${oracleAddress}"`, './.chainlink/jobs/release.json')
+sh.sed('-i', /\"address\": \".*\"/, `"address": "${oracleAddress}"`, './.chainlink/jobs/claim.json')
 
 // creating jobs
 sh.exec('chainlink jobs create ./.chainlink/jobs/register.json')
 sh.exec('chainlink jobs create ./.chainlink/jobs/release.json')
 sh.exec('chainlink jobs create ./.chainlink/jobs/claim.json')
-sh.exec('chainlink jobs create ./.chainlink/jobs/graphql/bool.json')
-sh.exec('chainlink jobs create ./.chainlink/jobs/graphql/bytes32.json')
-sh.exec('chainlink jobs create ./.chainlink/jobs/graphql/int256.json')
-sh.exec('chainlink jobs create ./.chainlink/jobs/graphql/uint256.json')
 
 // store job ids in filenames
 sh.exec('chainlink jobs list', (code, output) => {
-  const jobIDs = output.match(/[a-f0-9]{32}/ig)
-  sh.sed('-i', /^CHAINLINK_REGISTER_JOB_ID=.*$/, 'CHAINLINK_REGISTER_JOB_ID=' + jobIDs[0], '.evm/.env')
+  const jobIDs = output.match(/[a-f0-9]{32}/ig).reverse()
+  sh.sed('-i', /^CHAINLINK_CLAIM_JOB_ID=.*$/, 'CHAINLINK_CLAIM_JOB_ID=' + jobIDs[0], '.evm/.env')
   sh.sed('-i', /^CHAINLINK_RELEASE_JOB_ID=.*$/, 'CHAINLINK_RELEASE_JOB_ID=' + jobIDs[1], '.evm/.env')
-  sh.sed('-i', /^CHAINLINK_CLAIM_JOB_ID=.*$/, 'CHAINLINK_CLAIM_JOB_ID=' + jobIDs[2], '.evm/.env')
+  sh.sed('-i', /^CHAINLINK_REGISTER_JOB_ID=.*$/, 'CHAINLINK_REGISTER_JOB_ID=' + jobIDs[2], '.evm/.env')
 })
