@@ -27,7 +27,7 @@ export default async ({ app }, inject) => {
       app.store.dispatch('load')
     })
 
-    window.ethereum.on('networkChanged', network => {
+    window.ethereum.on('chainChanged', network => {
       app.store.dispatch('load')
     })
 
