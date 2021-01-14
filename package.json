@@ -21,7 +21,7 @@
     "app:build": "node configure-app && nuxt build",
     "app:start": "nuxt start --hostname ::",
     "app:generate": "node configure-app && nuxt generate",
-    "app:deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
+    "app:deploy": "push-dir --dir=dist --branch=gh-pages"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
