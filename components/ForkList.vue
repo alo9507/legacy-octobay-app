@@ -17,7 +17,7 @@
             </div>
           </a>
           <a v-for="fork in filteredForkList" :class="'mt-2 text-left d-flex align-items-center btn btn-outline-light text-dark'" :href="`https://${fork.username}.github.io/${fork.repository}`">
-            <div target="_blank" class="rounded-circle shadow-sm avatar border avatar" :style="'background-image: url(' + fork.logo + ')'"></div>
+            <div target="_blank" class="rounded-circle shadow-sm avatar border" :style="'background-image: url(' + fork.logo + ')'"></div>
             <div class="ml-2 mr-auto d-flex flex-column">
               {{ fork.username }}
               <small>{{ fork.description }}</small>
