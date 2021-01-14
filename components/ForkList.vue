@@ -10,7 +10,7 @@
         </div>
         <div class="card-body p-2">
           <a :class="'mt-2 text-left d-flex align-items-center btn btn-outline-light text-dark'" href="https://octobay.github.io/">
-            <img :src="'./icon.png'" width="32" height="32" class="rounded-circle" />
+            <img :src="'./icon.png'" width="32" height="32" class="rounded-circle shadow-sm" />
             <div class="ml-2 d-flex flex-column">
               OctoBay
               <small :class="'text-muted'">Ethereum payment service for GitHub users.</small>
