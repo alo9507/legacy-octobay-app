@@ -76,7 +76,7 @@ export default {
     filteredForkList() {
       const search = this.forkSearch.toLowerCase()
       return this.forkSearch ?
-        this.forks.filter(fork => (fork.username + '/' + fork.repository).toLowerCase().includes(search)).splice(0, this.showNum) :
+        this.forks.filter(fork => fork.username.toLowerCase().includes(search)).splice(0, this.showNum) :
         this.forks.filter(fork => fork).splice(0, this.showNum)
     }
   }
