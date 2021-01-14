@@ -5,6 +5,11 @@
       {{ activeOracle ? activeOracle.name : 'Random' }}
       <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
     </button>
+    <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm mb-4 oracle-button" @click="$store.commit('setShowForkList', true)">
+      <img :src="'./chainlink-icon.png'" width="24px" class="rounded-circle p-1" />
+      {{ appName }}
+      <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
+    </button>
     <div class="mb-3">
       <a href="https://twitter.com/OctoBayApp" target="_blank" class="text-white px-2">
         <font-awesome-icon :icon="['fab', 'twitter']" />
@@ -60,7 +65,10 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['activeOracle'])
+    ...mapGetters(['activeOracle']),
+    appName() {
+      return process.env.APP_NAME
+    }
   }
 }
 </script>

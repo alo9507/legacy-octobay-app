@@ -38,6 +38,7 @@
     <RecipientTypeList />
     <IntervalSelect />
     <OracleList />
+    <ForkList />
   </div>
 </template>
 

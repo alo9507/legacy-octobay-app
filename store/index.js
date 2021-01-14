@@ -16,7 +16,9 @@ export const state = () => ({
   view: 'issues',
   oracles: [],
   activeOracle: null,
-  showOracleList: false
+  showOracleList: false,
+  forks: [],
+  showForkList: false
 })
 
 export const getters = {
@@ -86,6 +88,12 @@ export const getters = {
   },
   showOracleList(state) {
     return state.showOracleList
+  },
+  forks(state) {
+    return state.forks
+  },
+  showForkList(state) {
+    return state.showForkList
   }
 }
 
@@ -174,6 +182,12 @@ export const mutations = {
   },
   setShowOracleList(state, show) {
     state.showOracleList = show
+  },
+  setFork(state, fork) {
+    state.forks.push(fork)
+  },
+  setShowForkList(state, show) {
+    state.showForkList = show
   }
 }
 
@@ -195,6 +209,16 @@ export const actions = {
         })
       })
     }
+
+    this.$axios.$get('https://api.github.com/repos/mktcode/octobay/forks').then(forks => {
+      forks.forEach(fork => {
+        this.$axios.$get(`https://${fork.owner.login}.github.io/${fork.name}`).then(res => {
+          commit('setFork', fork)
+        }).catch(e => {
+          console.log(e)
+        })
+      })
+    })
 
     return dispatch("github/login").then((result) => {
       if (rootState.github.user && this.$octoBay) {

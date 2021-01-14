@@ -74,6 +74,7 @@ export default {
         path: './',
         only: [
           'API_URL',
+          'APP_NAME',
           'GITHUB_CLIENT_ID',
           'OCTOBAY_ADDRESS',
           'OCTOPIN_ADDRESS',
