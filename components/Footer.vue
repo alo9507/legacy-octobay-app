@@ -59,11 +59,6 @@ footer
 import { mapGetters } from 'vuex'
 
 export default {
-  data() {
-    return {
-      showDonate: false
-    }
-  },
   computed: {
     ...mapGetters(['activeOracle'])
   }
