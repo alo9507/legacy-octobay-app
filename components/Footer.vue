@@ -1,15 +1,17 @@
 <template>
   <footer class="pt-3 pb-5 text-center">
-    <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm mb-4 oracle-button" @click="$store.commit('setShowOracleList', true)">
-      <img :src="'./chainlink-icon.png'" width="24px" class="rounded-circle p-1" />
-      {{ activeOracle ? activeOracle.name : 'Random' }}
-      <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
-    </button>
-    <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm mb-4 oracle-button" @click="$store.commit('setShowForkList', true)">
-      <img :src="'./chainlink-icon.png'" width="24px" class="rounded-circle p-1" />
-      {{ appName }}
-      <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
-    </button>
+    <div class="d-flex mb-4">
+      <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm oracle-button" @click="$store.commit('setShowOracleList', true)">
+        <img :src="'./chainlink-icon.png'" width="24px" class="rounded-circle p-1" />
+        {{ activeOracle ? activeOracle.name : 'Random' }}
+        <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
+      </button>
+      <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm oracle-button" @click="$store.commit('setShowForkList', true)">
+        <font-awesome-icon :icon="['fas', 'code-branch']" class="mr-1" />
+        {{ appName }}
+        <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
+      </button>
+    </div>
     <div class="mb-3">
       <a href="https://twitter.com/OctoBayApp" target="_blank" class="text-white px-2">
         <font-awesome-icon :icon="['fab', 'twitter']" />

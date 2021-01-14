@@ -210,13 +210,9 @@ export const actions = {
       })
     }
 
-    this.$axios.$get('https://api.github.com/repos/mktcode/octobay/forks').then(forks => {
+    this.$axios.$get(`${process.env.API_URL}/github-forks/mktcode/octobay`).then(forks => {
       forks.forEach(fork => {
-        this.$axios.$get(`https://${fork.owner.login}.github.io/${fork.name}`).then(res => {
-          commit('setFork', fork)
-        }).catch(e => {
-          console.log(e)
-        })
+        commit('setFork', fork)
       })
     })
 
