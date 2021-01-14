@@ -20,7 +20,7 @@
             <div target="_blank" class="rounded-circle shadow-sm avatar border avatar" :style="'background-image: url(' + fork.logo + ')'"></div>
             <div class="ml-2 mr-auto d-flex flex-column">
               {{ fork.username }}
-              <small>$0.24/Request</small>
+              <small>{{ fork.description }}</small>
             </div>
           </a>
           <button class="btn btn-outline-light text-dark btn-block my-2" @click="showNum += 25" v-if="!forkSearch && forks.length > 25">
