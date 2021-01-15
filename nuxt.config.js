@@ -17,9 +17,9 @@ export default {
   },
 
   env: {
-    OCTOBAY_ABI: JSON.parse(fs.readFileSync("./.evm/build/contracts/OctoBay.json").toString()).abi,
-    OCTOPIN_ABI: JSON.parse(fs.readFileSync("./.evm/build/contracts/OctoPin.json").toString()).abi,
-    LINK_TOKEN_ABI: JSON.parse(fs.readFileSync("./.evm/build/contracts/LinkToken.json").toString()).abi
+    OCTOBAY_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoBay.json").toString()).abi,
+    OCTOPIN_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoPin.json").toString()).abi,
+    LINK_TOKEN_ABI: JSON.parse(fs.readFileSync("./contract-abi/LinkToken.json").toString()).abi
   },
 
   /*
