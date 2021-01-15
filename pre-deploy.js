@@ -17,7 +17,6 @@ sh.sed('-i', /^GSN_FORWARDER_ADDRESS=.*$/, 'GSN_FORWARDER_ADDRESS=' + forwarderA
 if (!process.env.CHAINLINK_NODE_ADDRESS) {
   rl.question('Chainlink Node Address? ', chainlinkNodeAddress => {
     sh.sed('-i', /^CHAINLINK_NODE_ADDRESS=.*$/, 'CHAINLINK_NODE_ADDRESS=' + chainlinkNodeAddress, '.evm/.env')
-    sh.sed('-i', /^CHAINLINK_NODE_ADDRESS=.*$/, 'CHAINLINK_NODE_ADDRESS=' + chainlinkNodeAddress, '.env')
     rl.close()
   })
 } else {

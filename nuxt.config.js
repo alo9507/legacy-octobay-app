@@ -18,8 +18,7 @@ export default {
 
   env: {
     OCTOBAY_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoBay.json").toString()).abi,
-    OCTOPIN_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoPin.json").toString()).abi,
-    LINK_TOKEN_ABI: JSON.parse(fs.readFileSync("./contract-abi/LinkToken.json").toString()).abi
+    OCTOPIN_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoPin.json").toString()).abi
   },
 
   /*
@@ -80,8 +79,6 @@ export default {
           'OCTOPIN_ADDRESS',
           'GSN_RELAYHUB_ADDRESS',
           'GSN_PAYMASTER_ADDRESS',
-          'CHAINLINK_NODE_ADDRESS',
-          'LINK_TOKEN_ADDRESS',
           'MAX_CLAIMPR_AGE'
         ]
       }
