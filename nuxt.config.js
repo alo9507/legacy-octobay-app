@@ -13,7 +13,7 @@ export default {
   */
   target: 'static',
   router: {
-    base: '/app/'
+    base: location.pathname
   },
 
   env: {
