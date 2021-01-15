@@ -13,7 +13,6 @@ const paymasterAddress = require('./.evm/build/gsn/Paymaster.json').address
 
 sh.sed('-i', /^GSN_RELAYHUB_ADDRESS=.*$/, 'GSN_RELAYHUB_ADDRESS=' + relayHubAddress, '.evm/.env')
 sh.sed('-i', /^GSN_FORWARDER_ADDRESS=.*$/, 'GSN_FORWARDER_ADDRESS=' + forwarderAddress, '.evm/.env')
-sh.sed('-i', /^GSN_PAYMASTER_ADDRESS=.*$/, 'GSN_PAYMASTER_ADDRESS=' + paymasterAddress, '.evm/.env')
 
 if (!process.env.CHAINLINK_NODE_ADDRESS) {
   rl.question('Chainlink Node Address? ', chainlinkNodeAddress => {

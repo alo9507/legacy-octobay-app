@@ -78,6 +78,8 @@ export default {
           'GITHUB_CLIENT_ID',
           'OCTOBAY_ADDRESS',
           'OCTOPIN_ADDRESS',
+          'GSN_RELAYHUB_ADDRESS',
+          'GSN_PAYMASTER_ADDRESS',
           'CHAINLINK_NODE_ADDRESS',
           'LINK_TOKEN_ADDRESS',
           'MAX_CLAIMPR_AGE'
