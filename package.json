@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "app:dev": "nuxt",
-    "app:generate": "nuxt generate",
+    "app:generate": "nuxt generate --force-build",
     "app:deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
