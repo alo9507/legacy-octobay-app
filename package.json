@@ -6,7 +6,7 @@
   "scripts": {
     "app:dev": "nuxt",
     "app:generate": "nuxt generate",
-    "app:deploy": "push-dir --dir=dist --branch=gh-pages"
+    "app:deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
