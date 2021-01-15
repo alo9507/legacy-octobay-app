@@ -7,7 +7,7 @@
 
 ## Transfers
 
-Transfers in ETH or any ERC20 token can be made to GitHub users, projects and issues and can be released in user defined intervals. Recipients can decide what currency they receive and payments are automatically converted.
+Transfers in ETH or any ERC20 token can be made to GitHub users, projects and issues and can be released at a certain date and in user defined rates. Recipients can decide what currency they want when withdrawing funds.
 
 ### Bounties
 
@@ -15,11 +15,11 @@ Funds sent to issues must be released by the maintainer to a GitHub account of c
 
 ## Onboarding
 
-Any GitHub user, issue or repository can receive ETH/ERC20 payments, without knowing about this service or having an ethereum account. The involved users will be notified on GitHub and also Twitter and via email, if provided in their GitHub profile. When they register to withdraw the funds, there is no need to prefund a newly created Ethereum account. The deposits will be automatically released and the GitHub user can immediately start using the service and act in the Ethereum network.
+Any GitHub user, issue or repository can receive ETH/ERC20 payments, without knowing about this service or having an Ethereum account. The involved users will be notified on GitHub and also Twitter and via email, if provided in their GitHub profile. When they register to withdraw the funds, there is no need to prefund a newly created Ethereum account. Deposits can be withdrawn with no gas fees and the GitHub user can immediately start using the service and act in the Ethereum network.
 
 ## Promotion
 
-One of the key aspects of the service is the bounty and promotion system. The custom ERC20 token of the service is minted through merged pull requests. That way only contributors can mint the token while on the other side they can be spend (burned) to promote issues, projects or developers.
+One of the key aspects of the service is the bounty and promotion system. The custom ERC20 token of the service is minted through merged pull requests. That way only contributors can mint the token while on the other side they can be spend (burned) to promote issues, projects or developers on social media.
 
 ### Twitter
 
@@ -52,14 +52,18 @@ For convenience the following deeplinks are available to prefill the send form:
 
 ## Oracles
 
-The service uses Chainlink nodes as oracles, that run custom external adapters while also acting as relay stations, funded from prior deposits, to provide the seamless onboarding experience.
+The service uses Chainlink nodes as oracles, that run custom external adapters, to check data from GitHub and also to send notifications via email, Twitter or GitHub.
 
-Oracles will also be the only form of project funding. Actions that don't require oracles, won't cost more than the Etherem gas fee. While Ethereum gas costs will be the only user-facing fees, oracles will still be payed in LINK but also ETH to directly cover the gas cost and enable a more autonomous operation.
+Oracles will also be the main form of project funding. Actions that don't require oracles, won't cost more than the Etherem gas fee. While Ethereum gas costs will be the only user-facing fees, oracles will still be payed in LINK via internal swaps.
 
-Up to ten oracles will balance out rate limitations GitHub, Twitter and other services have and ensure decentralization.
+## Gas Station Network
+
+The Gas Station Network is used to facilitate the meta transactions needed for the seamless onboarding process. OctoBay runs its own relaý station, with the rest of the network as its backup.
+
+## UI Forks
+
+The UI is meant to get forked and deployed as a GitHub page or elsewhere, including an own API server to backup the system or to be adjusted and built upon.
 
 ## Current Status
 
 There is an early prototype comprising GitHub user registration, ETH transfers to GitHub users, issue deposits/withdrawals, claiming tokens for merged pull requests and spending them to pin issues and a simple UI, providing access to those features. Basic Chainlink integration is finished but further additions/improvements will come.
-
-## Challenges
