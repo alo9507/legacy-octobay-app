@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "app:dev": "node configure-app && nuxt",
-    "app:generate": "node configure-app && nuxt generate",
+    "app:dev": "nuxt",
+    "app:generate": "nuxt generate",
     "app:deploy": "push-dir --dir=dist --branch=gh-pages"
   },
   "dependencies": {
