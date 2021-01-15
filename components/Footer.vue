@@ -22,7 +22,7 @@
       <a href="https://github.com/octobay" target="_blank" class="text-white px-2">
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
-      <a href="https://kovan.etherscan.io/address/0xDB065c6421ba13C8d4Fb66dAca7dE25E22E72dBe" class="text-white px-2">
+      <a :href="'https://kovan.etherscan.io/address/' + octoBayAddress" class="text-white px-2">
         <font-awesome-icon :icon="['fab', 'ethereum']" />
       </a>
     </div>
@@ -70,6 +70,9 @@ export default {
     ...mapGetters(['activeOracle']),
     appName() {
       return process.env.APP_NAME
+    },
+    octoBayAddress() {
+      return process.env.OCTOBAY_ADDRESS
     }
   }
 }
