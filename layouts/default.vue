@@ -25,7 +25,7 @@
           <a href="https://gitter.im/kovan-testnet/faucet" target="_blank" class="ml-1 btn btn-sm btn-outline-light" v-tooltip="{ content: 'Kovan Faucet', trigger: 'hover' }">
             <font-awesome-icon :icon="['fas', 'faucet']" />
           </a>
-          <a href="https://github.com/mktcode/octobay-website/issues/new" target="_blank" class="ml-1 btn btn-sm btn-outline-light" v-tooltip="{ content: 'New Issue', trigger: 'hover' }">
+          <a href="https://github.com/octobay/app/issues/new" target="_blank" class="ml-1 btn btn-sm btn-outline-light" v-tooltip="{ content: 'New Issue', trigger: 'hover' }">
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" />
           </a>
         </div>

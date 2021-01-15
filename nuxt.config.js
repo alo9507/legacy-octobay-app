@@ -13,7 +13,7 @@ export default {
   */
   target: 'static',
   router: {
-    base: '/octobay/'
+    base: '/app/'
   },
 
   env: {
@@ -33,9 +33,9 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
       { property: 'og:title', content: 'OctoBay' },
-      { property: 'og:image', content: 'https://octobay.uber.space/cover.png' },
+      { property: 'og:image', content: 'https://octobay.github.io/app/cover.png' },
       { property: 'twitter:title', content: 'OctoBay' },
-      { property: 'twitter:image', content: 'https://octobay.uber.space/cover.png' },
+      { property: 'twitter:image', content: 'https://octobay.github.io/app/cover.png' },
     ],
     link: [
       { rel: 'icon', type: 'image/png', href: './icon.png' },

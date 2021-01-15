@@ -210,7 +210,7 @@ export const actions = {
       })
     }
 
-    this.$axios.$get(`${process.env.API_URL}/github-forks/mktcode/octobay`).then(forks => {
+    this.$axios.$get(`${process.env.API_URL}/github-forks/octobay/app`).then(forks => {
       forks.forEach(fork => {
         commit('setFork', fork)
       })

@@ -6,7 +6,7 @@
           <h5 class="text-center text-muted-light py-3 px-4 m-0">Explore the ecosystem. Here's a list of all OctoBay forks.</h5>
           <div class="text-right">
             <small>
-              <a href="https://github.com/mktcode/octobay/fork" target="_blank" class="font-weight-bold">create fork</a>
+              <a href="https://github.com/octobay/app/fork" target="_blank" class="font-weight-bold">create fork</a>
             </small>
           </div>
         </div>
