@@ -9,8 +9,8 @@ const rl = readline.createInterface({
 
 const relayHubAddress = require('./.evm/build/gsn/RelayHub.json').address
 const forwarderAddress = require('./.evm/build/gsn/Forwarder.json').address
-const paymasterAddress = require('./.evm/build/gsn/Paymaster.json').address
 
+sh.sed('-i', /^GSN_RELAYHUB_ADDRESS=.*$/, 'GSN_RELAYHUB_ADDRESS=' + relayHubAddress, '.env')
 sh.sed('-i', /^GSN_RELAYHUB_ADDRESS=.*$/, 'GSN_RELAYHUB_ADDRESS=' + relayHubAddress, '.evm/.env')
 sh.sed('-i', /^GSN_FORWARDER_ADDRESS=.*$/, 'GSN_FORWARDER_ADDRESS=' + forwarderAddress, '.evm/.env')
 
