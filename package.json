@@ -17,9 +17,7 @@
     "chainlink:adapters": "node configure-adapters && cd .chainlink/adapters && yarn start",
     "chainlink:login": "cd .chainlink/node && chainlink admin login",
     "chainlink:jobs:create": "yarn chainlink:login && node create-chainlink-jobs",
-    "app": "node configure-app && nuxt",
-    "app:build": "node configure-app && nuxt build",
-    "app:start": "nuxt start --hostname ::",
+    "app:dev": "node configure-app && nuxt",
     "app:generate": "node configure-app && nuxt generate",
     "app:deploy": "push-dir --dir=dist --branch=gh-pages"
   },

@@ -41,7 +41,7 @@ You **can** adjust the following parameters in your `.env` file:
 | `UI_REPOSITORY_WHITELIST` | `OctoBay` | Support only certain repositories. You can add a list of usernames/organizations or specific repositories. `ethereum,octobay/contracts` |
 | `UI_DEFAULT_ORACLE` | `random` | Set a default oracle you want to support with your UI.
 
-After you made your adjustments, run `yarn app:generate` to generate a static site build and then `yarn app:deploy` to push it to your remote `gh-pages` branch to update your OctoBay instance.
+After you made your adjustments, run `yarn app:generate` to generate a static site build and then `yarn app:deploy` to push it to your remote `gh-pages` branch to update your OctoBay instance. To test your changes run `yarn app:dev` to start a local server.
 
 ## Local Development Setup
 
