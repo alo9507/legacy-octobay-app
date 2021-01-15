@@ -13,7 +13,7 @@ export default {
   */
   target: 'static',
   router: {
-    base: './'
+    base: process.env.BASE_PATH
   },
 
   env: {
