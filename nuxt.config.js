@@ -13,7 +13,7 @@ export default {
   */
   target: 'static',
   router: {
-    base: typeof window != 'undefined' ? window.location.pathname : '/app/'
+    base: './'
   },
 
   env: {
