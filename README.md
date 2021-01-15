@@ -54,7 +54,7 @@ You need Node v12.18, Go 1.14 and an empty postgres database named `chainlink-lo
 Clone the repository and install its dependencies.
 
 ```bash
-git clone https://github.com/octobay/app && cd octobay && yarn
+git clone https://github.com/octobay/app octobay-app && cd octobay-app && yarn
 ```
 
 Now start the local Ethereum node, the Gas Station Network and the Chainlink node and its adapters, all in their own terminal sessions.
