@@ -56,6 +56,10 @@ The service uses Chainlink nodes as oracles, that run custom external adapters, 
 
 Oracles will also be the main form of project funding. Actions that don't require oracles, won't cost more than the Etherem gas fee. While Ethereum gas costs will be the only user-facing fees, oracles will still be payed in LINK via internal swaps.
 
+### Notifications
+
+Notifications are basically Chainlink oracle jobs. There is a Twitter comment job, a GitHub comment job and an email job. The node must whitelist client contracts to allow them to use the node to send messages.
+
 ## Gas Station Network
 
 The Gas Station Network is used to facilitate the meta transactions needed for the seamless onboarding process. OctoBay runs its own relaý station, with the rest of the network as its backup.
