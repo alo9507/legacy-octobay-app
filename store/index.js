@@ -18,7 +18,9 @@ export const state = () => ({
   activeOracle: null,
   showOracleList: false,
   forks: [],
-  showForkList: false
+  showForkList: false,
+  showModal: false,
+  modalComponent: null
 })
 
 export const getters = {
@@ -94,6 +96,12 @@ export const getters = {
   },
   showForkList(state) {
     return state.showForkList
+  },
+  showModal(state) {
+    return state.showModal
+  },
+  modalComponent(state) {
+    return state.modalComponent
   }
 }
 
@@ -188,6 +196,12 @@ export const mutations = {
   },
   setShowForkList(state, show) {
     state.showForkList = show
+  },
+  setShowModal(state, show) {
+    state.showModal = show
+  },
+  setModalComponent(state, component) {
+    state.modalComponent = component
   }
 }
 

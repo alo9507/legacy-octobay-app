@@ -39,6 +39,7 @@
     <IntervalSelect />
     <OracleList />
     <ForkList />
+    <Modal />
   </div>
 </template>
 
