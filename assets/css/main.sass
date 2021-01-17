@@ -30,6 +30,18 @@ body
     &:focus
       box-shadow: none !important
 
+.btn-outline-twitter
+  color: #1DA1F2 !important
+  &:hover
+    color: #fff !important
+    background-color: #1DA1F2 !important
+
+.btn-twitter
+  color: #fff !important
+  background-color: #1DA1F2 !important
+  &:hover:not(:disabled)
+    background-color: darken(#1DA1F2, 10) !important
+
 .card
   border-radius: 2rem
 
@@ -113,7 +125,7 @@ a:hover
     margin-top: -5px
 
 .rounded-xl
-  border-radius: 2rem
+  border-radius: 2rem !important
 
 @media screen and (max-width: 480px)
   .main

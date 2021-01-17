@@ -52,6 +52,9 @@
             <button class="btn btn-sm btn-outline-success" @click="fundIssue(issueNode.owner, issueNode.repository, issueNode.number)">
               <font-awesome-icon :icon="['fas', 'plus']" />
             </button>
+            <button class="btn btn-sm btn-outline-twitter" @click="twitterPost(issueNode)">
+              <font-awesome-icon :icon="['fab', 'twitter']" />
+            </button>
             <button :class="['btn btn-sm btn-light ml-2', { active: action === 'release' }]" @click="changeAction('release')" v-if="githubUser && issueNode.repositoryOwner === githubUser.login">
               <font-awesome-icon :icon="['fas', 'gavel']" />
             </button>
@@ -242,6 +245,10 @@ export default {
         amount: '1.0'
       })
       this.$store.commit('setView', 'send')
+    },
+    twitterPost(issueNode) {
+      this.$store.commit('setModalComponent', 'ModalTwitterPost')
+      this.$store.commit('setShowModal', true)
     },
     changeAction(action) {
       if (this.action === action) {
