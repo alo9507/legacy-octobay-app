@@ -25,6 +25,18 @@ One of the key aspects of the service is the bounty and promotion system. The cu
 
 The custom token can be used to promote issues, projects and developers on Twitter. Any of these can be promoted by any user but only at a certain rate, e.g. once per day. Hashtags are used as subcategories, e.g. #octobay-jobs or #octobay-issue-javascript.
 
+A post on Twitter will always cost the number of followers of the OctoBay account in OPIN token. So if the account has 1000 followers, a post will cost 1000 OPIN token. A single pull request can farm up to 100, realistically around ~50. A Tweet burns them.
+
+If 10% of followers are active devs submitting a PR (score ~50) once per month:
+
+1,000 followers = 100 devs = 100 PRs per month = ~3 PRs per day = ~150 OPIN per day
+post cost 1000 OPIN / 150 per day = 1 post every ~6.6 days
+
+If 50% of followers are active devs submitting a PR (score ~50) once per month:
+
+1,000 followers = 500 devs = 500 PRs per month = ~16 PRs per day = ~800 OPIN per day
+post cost 1000 OPIN / 800 per day = 1 post every ~1.25 days
+
 ### Leaderboard
 
 The leaderboard keeps track of who minted how many tokens by submitting their merged pull requests, indicating the activity of contributors.
