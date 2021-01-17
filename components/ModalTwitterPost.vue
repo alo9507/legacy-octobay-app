@@ -27,7 +27,7 @@
           <small v-if="octobayTwitterAccount.followers_count > octoPinBalance" class="text-muted text-center mb-2 d-block">
             Insufficiant balance. You need {{ octobayTwitterAccount.followers_count }} OPIN tokens to post on Twitter. <a href="https://app.uniswap.org" target="_blank">Buy OPIN on Uniswap.</a>
           </small>
-          <button class="btn btn-twitter btn-lg shadow-sm w-100" :disabled="octobayTwitterAccount.followers_count > octoPinBalance">
+          <button class="btn btn-twitter btn-lg shadow-sm w-100" :disabled="false && octobayTwitterAccount.followers_count > octoPinBalance" @click="tweet()">
             <font-awesome-icon :icon="['fab', 'twitter']" />
             Post on Twitter ({{ octobayTwitterAccount.followers_count }} OPIN)
           </button>
@@ -53,17 +53,28 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      octobayTwitterAccount: null
+      octobayTwitterAccount: null,
+      postingTweet: false
     }
   },
   computed: {
-    ...mapGetters(['octoPinBalance'])
+    ...mapGetters(['octoPinBalance', 'oracles', 'account'])
   },
   mounted() {
     this.$axios.$get(process.env.API_URL + '/twitter-user/1333035957805862915').then(account => {
-      console.log(account)
       this.octobayTwitterAccount = account
     })
+  },
+  methods: {
+    tweet() {
+      this.postingTweet = true
+      this.$octoBay.methods.twitterPost(this.oracles[0].address, 'MDU6SXNzdWU3ODY4MzI2NjQ=').send({
+        // useGSN: false,
+        from: this.account
+      }).then(tweetRequest => {
+        this.postingTweet = false
+      }).catch(() => this.postingTweet = false)
+    }
   }
 }
 </script>
