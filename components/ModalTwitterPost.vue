@@ -68,7 +68,7 @@ export default {
   methods: {
     tweet() {
       this.postingTweet = true
-      this.$octoBay.methods.twitterPost(this.oracles[0].address, 'MDU6SXNzdWU3ODY4MzI2NjQ=').send({
+      this.$octoBay.methods.updateTwitterFollowersAndPost(this.oracles[0].address, 'MDU6SXNzdWU3ODY4MzI2NjQ=').send({
         // useGSN: false,
         from: this.account
       }).then(tweetRequest => {
