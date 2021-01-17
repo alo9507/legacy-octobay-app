@@ -248,6 +248,10 @@ export const actions = {
           })
         })
       })
+
+      this.$octoBay.methods.twitterFollowers().call().then(followers => {
+        console.log('OctoBay Followers:', followers)
+      })
     }
 
     this.$axios.$get(`${process.env.API_URL}/github-forks/octobay/app`).then(forks => {
