@@ -22,7 +22,7 @@ OctoBay also provides deeplinks (like `/u/<username>/<amount>` or `/r/<username>
 
 #### Gas Station Network
 
-The Gas Station Network is used to facilitate the meta transactions needed for the gasless onboarding of new users. OctoBay runs its own relaý station, with the rest of the network as its backup.
+The Gas Station Network is used to facilitate the meta transactions needed for the gasless onboarding of new users. OctoBay runs its own relay station, with the rest of the network as its backup.
 
 ## Twitter & OPIN Token
 
