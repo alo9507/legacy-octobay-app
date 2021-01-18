@@ -18,7 +18,7 @@ Funds sent to issues are held in the OctoBay contract until the maintainer of th
 
 Any GitHub user, issue or repository can receive ETH/ERC20 payments, without knowing about this service or having an Ethereum account. The involved users (e.g. project owner or issue author) will be notified on GitHub and optionally on Twitter and via email, if this information is available in their GitHub profiles. When they register to withdraw the funds, there is no need to fund a newly created Ethereum account in advance. Using meta transactions and the Gas Station Network, deposits can be withdrawn with no gas fees and the GitHub user can immediately start using the service and act in the Ethereum network.
 
-OctoBay also provides deeplinks (like `/u/<username>/<amount>` or `/r/<username>/<repository>/<amount>`), which projects and users can use to ask for donations via OctoBay, without having to have ETH or even create an Ethereum account before withdrawing their first payments.
+OctoBay also provides deeplinks (like `/u/<username>/<amount>` or `/r/<username>/<repository>/<amount>`), which can be used to ask for donations, without requiring the recipient to even have an Ethereum account yet.
 
 #### Gas Station Network
 
