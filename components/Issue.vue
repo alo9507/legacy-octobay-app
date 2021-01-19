@@ -239,9 +239,9 @@ export default {
     fundIssue() {
       this.$store.commit('setRedirectPrefills', {
         type: 'send-issue',
-        username: issueNode.owner,
-        repository: issueNode.repository,
-        issue: issueNode.number,
+        username: this.issueNode.owner,
+        repository: this.issueNode.repository,
+        issue: this.issueNode.number,
         amount: '1.0'
       })
       this.$store.commit('setView', 'send')
