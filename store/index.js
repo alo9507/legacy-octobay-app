@@ -20,7 +20,8 @@ export const state = () => ({
   forks: [],
   showForkList: false,
   showModal: false,
-  modalComponent: null
+  modalComponent: null,
+  modalData: null
 })
 
 export const getters = {
@@ -102,6 +103,9 @@ export const getters = {
   },
   modalComponent(state) {
     return state.modalComponent
+  },
+  modalData(state) {
+    return state.modalData
   }
 }
 
@@ -202,6 +206,9 @@ export const mutations = {
   },
   setModalComponent(state, component) {
     state.modalComponent = component
+  },
+  setModalData(state, data) {
+    state.modalData = data
   }
 }
 

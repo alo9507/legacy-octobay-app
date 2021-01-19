@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="in-out">
-    <div class="overlay d-flex justify-content-center align-items-center" v-if="showModal" @click="$store.commit('setShowModal', false)">
+    <div class="overlay d-flex justify-content-center align-items-center" v-if="showModal" @click="close()">
       <component v-bind:is="modalComponent"></component>
     </div>
   </transition>
@@ -30,6 +30,12 @@ export default {
   components: { ModalTwitterPost },
   computed: {
     ...mapGetters(['showModal', 'modalComponent'])
+  },
+  methods: {
+    close() {
+      this.$store.commit('setModalData', null)
+      this.$store.commit('setShowModal', false)
+    }
   }
 }
 </script>

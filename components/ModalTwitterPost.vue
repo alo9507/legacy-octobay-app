@@ -61,7 +61,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['octoPinBalance', 'oracles', 'account'])
+    ...mapGetters(['octoPinBalance', 'oracles', 'account']),
+    ...mapGetters({ issue: 'modalData' })
   },
   mounted() {
     this.$axios.$get(process.env.API_URL + '/twitter-user/1333035957805862915').then(account => {
@@ -71,7 +72,7 @@ export default {
   methods: {
     tweet() {
       this.postingTweet = true
-      this.$octoBay.methods.updateTwitterFollowersAndPost(this.oracles[0].address, 'MDU6SXNzdWU3ODY4MzI2NjQ=').send({
+      this.$octoBay.methods.updateTwitterFollowersAndPost(this.oracles[0].address, this.issue.id).send({
         // useGSN: false,
         from: this.account
       }).then(tweetRequest => {

@@ -49,10 +49,10 @@
       <transition name="fade">
         <div :class="['d-flex flex-column justify-content-start align-items-center px-3', { action: !!action, deposits: action == 'deposits' }]" @click.stop v-if="showDetails" style="cursor: default">
           <div class="border-top w-100 py-2 text-nowrap d-flex align-items-center">
-            <button class="btn btn-sm btn-outline-success" @click="fundIssue(issueNode.owner, issueNode.repository, issueNode.number)">
+            <button class="btn btn-sm btn-outline-success" @click="fundIssue()">
               <font-awesome-icon :icon="['fas', 'plus']" />
             </button>
-            <button class="btn btn-sm btn-outline-twitter" @click="twitterPost(issueNode)">
+            <button class="btn btn-sm btn-outline-twitter" @click="twitterPost()">
               <font-awesome-icon :icon="['fab', 'twitter']" />
             </button>
             <button :class="['btn btn-sm btn-light ml-2', { active: action === 'release' }]" @click="changeAction('release')" v-if="githubUser && issueNode.repositoryOwner === githubUser.login">
@@ -236,17 +236,18 @@ export default {
     ...mapGetters('github', { githubUser: 'user' })
   },
   methods: {
-    fundIssue(username, repository, number) {
+    fundIssue() {
       this.$store.commit('setRedirectPrefills', {
         type: 'send-issue',
-        username,
-        repository,
-        issue: number,
+        username: issueNode.owner,
+        repository: issueNode.repository,
+        issue: issueNode.number,
         amount: '1.0'
       })
       this.$store.commit('setView', 'send')
     },
-    twitterPost(issueNode) {
+    twitterPost() {
+      this.$store.commit('setModalData', this.issueNode)
       this.$store.commit('setModalComponent', 'ModalTwitterPost')
       this.$store.commit('setShowModal', true)
     },
@@ -317,6 +318,7 @@ export default {
   mounted() {
     this.loadIssueById(this.issue.id).then(issue => {
       this.issueNode = {
+        id: issue.id,
         number: issue.number,
         title: issue.title,
         owner: issue.repository.owner.login,
