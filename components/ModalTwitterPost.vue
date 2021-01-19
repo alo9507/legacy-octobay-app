@@ -1,6 +1,6 @@
 <template>
   <div class="card shadow-sm d-flex flex-column" @click.stop>
-    <div v-if="octobayTwitterAccount">
+    <div v-if="octobayTwitterAccount && issue">
       <div class="card-body p-2 modal-body flex-fill">
         <h5 class="text-center text-muted-light py-3 px-4 m-0">
           Share this issue on Twitter<br>
@@ -20,7 +20,11 @@
                 {{ $moment(new Date()).format("MMM D, YYYY") }}
               </span>
             </div>
-            2.5 <a href="#">#ETH</a> for solving this issue: <a href="#">https://github.com/mktcode/octobay/issues/30</a> <a href="#">#ethereum</a> <a href="#">#github</a> <a href="#">#opensource</a>
+            {{ depositAmount }} <a href="#">#ETH</a> for solving this issue:
+            <a :href="`https://github.com/${issue.owner}/${issue.repository}/issues/${issue.number}`" target="_blank">https://github.com/{{ issue.owner }}/{{ issue.repository }}/issues/{{ issue.number }}</a>
+            <a href="https://twitter.com/hashtag/ethereum" target="_blank">#ethereum</a>
+            <a href="https://twitter.com/hashtag/github" target="_blank">#github</a>
+            <a href="https://twitter.com/hashtag/opensource" target="_blank">#opensource</a>
           </div>
         </div>
         <div>
@@ -57,6 +61,7 @@ export default {
   data() {
     return {
       octobayTwitterAccount: null,
+      depositAmount: 0,
       postingTweet: false
     }
   },
@@ -67,6 +72,10 @@ export default {
   mounted() {
     this.$axios.$get(process.env.API_URL + '/twitter-user/1333035957805862915').then(account => {
       this.octobayTwitterAccount = account
+    })
+
+    this.$octoBay.methods.issueDepositsAmountByIssueId(this.issue.id).call().then(depositAmount => {
+      this.depositAmount = this.$web3.utils.fromWei(depositAmount, 'ether')
     })
   },
   methods: {
