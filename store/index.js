@@ -1,4 +1,5 @@
 export const state = () => ({
+  owner: null,
   networkId: null,
   accounts: [],
   registeredAccount: null,
@@ -106,6 +107,9 @@ export const getters = {
   },
   modalData(state) {
     return state.modalData
+  },
+  owner(state) {
+    return state.owner
   }
 }
 
@@ -209,6 +213,9 @@ export const mutations = {
   },
   setModalData(state, data) {
     state.modalData = data
+  },
+  setOwner(state, owner) {
+    state.owner = owner
   }
 }
 
@@ -219,6 +226,10 @@ export const actions = {
     })
 
     if (this.$octoBay) {
+      this.$octoBay.methods.owner().call().then(owner => {
+        commit('setOwner', owner)
+      })
+
       this.$octoBay.methods.getOracles().call().then(oracleAddresses => {
         oracleAddresses.forEach(oracleAddress => {
           const requests = []
