@@ -27,6 +27,13 @@
       <CheckIcon width="24px" height="24px" />
       Transfer confirmed! :)
     </div>
+    <div class="alert alert-success border-0" v-if="showIssueDepositSuccess">
+      <button type="button" class="close text-success" @click="showIssueDepositSuccess = false">
+        <span>&times;</span>
+      </button>
+      <CheckIcon width="24px" height="24px" />
+      Issue deposit confirmed! :)
+    </div>
     <div class="input-with-embed select-input select-input-left" v-if="selectedRecipientType == 'User'">
       <input type="text" class="form-control form-control-lg form-control-with-embed mb-2" style="padding-right: 5rem" v-model="username" placeholder="Username" />
       <span class="btn btn-primary shadow-sm" @click="$store.commit('setShowRecipientTypeList', true)" style="width: 95px">
@@ -225,6 +232,7 @@ export default {
       amount: 0,
       sending: false,
       showSendSuccess: false,
+      showIssueDepositSuccess: false,
       loadRecipientTimeout: null,
       accountsUserDeposits: [],
       refundingUserDeposit: 0,
@@ -452,7 +460,7 @@ export default {
         this.$store.dispatch('updateOctoPinBalance')
         this.$web3.eth.getBalance(this.account).then(balance => this.$store.commit('setBalance', balance))
         this.sending = false
-        this.showDepositSuccess = true
+        this.showIssueDepositSuccess = true
         this.amount = 0
       })
     },
