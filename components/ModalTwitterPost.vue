@@ -27,9 +27,12 @@
           <small v-if="octobayTwitterAccount.followers_count > octoPinBalance" class="text-muted text-center mb-2 d-block">
             Insufficiant balance. You need {{ octobayTwitterAccount.followers_count }} OPIN tokens to post on Twitter. <a href="https://app.uniswap.org" target="_blank">Buy OPIN on Uniswap.</a>
           </small>
-          <button class="btn btn-twitter btn-lg shadow-sm w-100" :disabled="false && octobayTwitterAccount.followers_count > octoPinBalance" @click="tweet()">
-            <font-awesome-icon :icon="['fab', 'twitter']" />
-            Post on Twitter ({{ octobayTwitterAccount.followers_count }} OPIN)
+          <button class="btn btn-twitter btn-lg shadow-sm w-100" :disabled="postingTweet || octobayTwitterAccount.followers_count > octoPinBalance" @click="tweet()">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin class="ml-2" v-if="postingTweet" />
+            <span v-else>
+              <font-awesome-icon :icon="['fab', 'twitter']" class="mr-1" />
+              Post on Twitter ({{ octobayTwitterAccount.followers_count }} OPIN)
+            </span>
           </button>
         </div>
       </div>
