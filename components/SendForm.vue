@@ -61,7 +61,7 @@
           <small class="d-block font-weight-bold text-muted text-center">Available repository funds:</small>
           <div class="d-flex justify-content-between mb-1">
             <span>
-              <img src="/eth-logo.png" width="18" height="18" class="rounded-circle" />
+              <img :src="'./eth-logo.png'" width="18" height="18" class="rounded-circle" />
               ETH
             </span>
             <span>
