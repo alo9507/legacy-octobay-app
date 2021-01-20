@@ -1,0 +1,170 @@
+<template>
+    <div class="card-body" style="max-width: 360px">
+      <div>
+        <b>New Oracle</b>
+        <div>
+          <small class="text-muted">Address:</small>
+          <input type="text" v-model="newOracle.address" class="form-control" />
+        </div>
+        <div>
+          <small class="text-muted">Name</small>
+          <input type="text" v-model="newOracle.name" class="form-control" />
+        </div>
+        <button class="btn btn-primary mt-3 w-100 shadow-sm" @click="addNewOracle()" :disabled="!isNewOracleValid()">
+          <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="addingNewOracle" />
+          <span v-else>Add new Oracle</span>
+        </button>
+      </div>
+      <div v-for="oracle in oracleForms" class="border rounded-xl p-3 mt-3 oracle-form">
+        <div>
+          <small class="text-muted">Address</small>
+          <input type="text" v-model="oracle.address" class="form-control" readonly />
+        </div>
+        <div>
+          <small class="text-muted">Name</small>
+          <input type="text" v-model="oracle.name" class="form-control" readonly />
+        </div>
+        <div>
+          <small class="text-muted">Register Job ID</small>
+          <input type="text" v-model="oracle.registerJobId" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 1, oracle.registerJobId, oracle.registerJobFee)">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="oracleUpdating == oracle.address && jobUpdating == 1" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+        <div>
+          <small class="text-muted">Release Job ID</small>
+          <input type="text" v-model="oracle.releaseJobId" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 2, oracle.releaseJobId, oracle.releaseJobFee)">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="oracleUpdating == oracle.address && jobUpdating == 2" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+        <div>
+          <small class="text-muted">Claim Job ID</small>
+          <input type="text" v-model="oracle.claimJobId" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 3, oracle.claimJobId, oracle.claimJobFee)">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="oracleUpdating == oracle.address && jobUpdating == 3" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+        <div>
+          <small class="text-muted">Twitter Post Job ID</small>
+          <input type="text" v-model="oracle.twitterPostJobId" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 4, oracle.twitterPostJobId, oracle.twitterPostJobFee)">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="oracleUpdating == oracle.address && jobUpdating == 4" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+        <div>
+          <small class="text-muted">Twitter Followers Job ID</small>
+          <input type="text" v-model="oracle.twitterFollowersJobId" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 5, oracle.twitterFollowersJobId, oracle.twitterFollowersJobFee)">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="oracleUpdating == oracle.address && jobUpdating == 5" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+        <button class="btn btn-danger mt-3 w-100 shadow-sm" @click="removeOracle(oracle.address)" :disabled="removingOralce == oracle.address">
+          <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="removingOralce == oracle.address" />
+          <span v-else>Remove Oracle</span>
+        </button>
+      </div>
+    </div>
+</template>
+
+<style lang="sass" scoped>
+.oracle-form
+  > div
+    position: relative
+    input
+      padding-right: 50px
+    button
+      position: absolute
+      right: 5px
+      bottom: 5px
+
+</style>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+  data() {
+    return {
+      newOracle: {
+        address: '',
+        name: '',
+        registerJobId: '',
+        releaseJobId: '',
+        claimJobId: '',
+        twitterPostJobId: '',
+        twitterFollowersJobId: ''
+      },
+      oracleForms: [],
+      oracleUpdating: false,
+      jobUpdating: false,
+      addingNewOracle: false,
+      removingOralce: false
+    }
+  },
+  computed: {
+    ...mapGetters(['account', 'oracles'])
+  },
+  mounted() {
+    this.oracles.forEach(oracle => {
+      this.oracleForms.push({
+        address: oracle.address,
+        name: oracle.name,
+        registerJobId: oracle.registerJobId,
+        releaseJobId: oracle.releaseJobId,
+        claimJobId: oracle.claimJobId,
+        twitterPostJobId: oracle.twitterPostJobId,
+        twitterFollowersJobId: oracle.twitterFollowersJobId
+      })
+    })
+  },
+  methods: {
+    isNewOracleValid() {
+      return this.newOracle.address.length == 42 && this.newOracle.address.startsWith('0x') && this.newOracle.name
+    },
+    addNewOracle() {
+      this.addingNewOracle = true
+      this.$octoBay.methods.setOracle(
+        this.newOracle.address,
+        this.newOracle.name,
+      ).send({ from: this.account }).then(() => {
+        this.newOracle.address = ''
+        this.newOracle.name = ''
+        this.$store.dispatch('updateOracles').then(oracles => {
+          this.oracleForms = oracles
+          this.addingNewOracle = false
+        })
+      })
+    },
+    updateJobId(oracle, type, jobId, jobFee) {
+      this.oracleUpdating = oracle
+      this.jobUpdating = type
+      this.$octoBay.methods.setOracleJob(
+        oracle,
+        type,
+        this.$web3.utils.toHex(jobId),
+        jobFee || '10000000000000000'
+      ).send({ from: this.account }).then(() => {
+        this.oracleUpdating = false
+        this.jobUpdating = false
+      })
+    },
+    removeOracle(address) {
+      this.removingOralce = address
+      this.$octoBay.methods.removeOracle(
+        address
+      ).send({ from: this.account }).then(() => {
+        this.$store.dispatch('updateOracles').then(oracles => {
+          this.oracleForms = oracles
+          this.removingOralce = false
+        })
+      })
+    }
+  }
+}
+</script>

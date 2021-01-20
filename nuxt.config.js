@@ -145,7 +145,8 @@ export default {
         'faTimes',
         'faStar',
         'faUsers',
-        'faDice'
+        'faDice',
+        'faSlidersH'
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },

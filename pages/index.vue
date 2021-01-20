@@ -7,6 +7,9 @@
       <a href="#" :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')" @click="$store.commit('setView', 'claim')">
         {{ registeredAccount === account ? 'Claim' : 'Register' }}
       </a>
+      <a href="#" :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')" @click="$store.commit('setView', 'admin')" v-if="account && account === owner">
+        <font-awesome-icon :icon="['fas', 'sliders-h']" />
+      </a>
     </div>
     <transition name="fade" mode="out-in">
       <keep-alive>
@@ -14,6 +17,7 @@
         <IssuesList v-else-if="view == 'issues'" />
         <Contributors v-else-if="view == 'contributors'" />
         <Claim v-else-if="view == 'claim'" />
+        <Admin v-else-if="account && account === owner && view == 'admin'" />
       </keep-alive>
     </transition>
   </div>
@@ -25,7 +29,7 @@ import { mapGetters } from "vuex"
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'registeredAccount', 'redirectPrefills']),
+    ...mapGetters(['view', 'account', 'registeredAccount', 'redirectPrefills', 'owner']),
     ...mapGetters('github', { githubUser: 'user' })
   },
   created() {
