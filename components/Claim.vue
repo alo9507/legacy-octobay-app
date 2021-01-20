@@ -295,8 +295,12 @@ export default {
   methods: {
     checkRepo() {
       if (this.connected && this.githubUser) {
-        const repoUrl = `https://api.github.com/repos/${this.githubUser.login}/${this.account}?access_token=${this.githubAccessToken}`
-        this.$axios.get(repoUrl).then(res => {
+        const repoUrl = `https://api.github.com/repos/${this.githubUser.login}/${this.account}`
+        this.$axios.get(repoUrl, {
+          headers: {
+            Authorization: 'bearer ' + this.githubAccessToken
+          }
+        }).then(res => {
           this.repoExists = true
           this.checkingRepo = false
           clearInterval(this.checkRepoInterval)
