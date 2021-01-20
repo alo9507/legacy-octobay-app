@@ -4,6 +4,7 @@ export const state = () => ({
   accounts: [],
   registeredAccount: null,
   balance: 0,
+  octoPinAddress: null,
   octoPinBalance: 0,
   issues: [],
   tokenList: [],
@@ -22,7 +23,8 @@ export const state = () => ({
   showForkList: false,
   showModal: false,
   modalComponent: null,
-  modalData: null
+  modalData: null,
+  twitterAccountId: null
 })
 
 export const getters = {
@@ -110,6 +112,12 @@ export const getters = {
   },
   owner(state) {
     return state.owner
+  },
+  octoPinAddress(state) {
+    return state.octoPinAddress
+  },
+  twitterAccountId(state) {
+    return state.twitterAccountId
   }
 }
 
@@ -216,6 +224,12 @@ export const mutations = {
   },
   setOwner(state, owner) {
     state.owner = owner
+  },
+  setOctoPinAddress(state, address) {
+    state.octoPinAddress = address
+  },
+  setTwitterAccountId(state, id) {
+    state.twitterAccountId = id
   }
 }
 
@@ -230,7 +244,15 @@ export const actions = {
         commit('setOwner', owner)
       })
 
+      this.$octoBay.methods.octoPin().call().then(address => {
+        commit('setOctoPinAddress', address)
+      })
+
       dispatch('updateOracles')
+
+      this.$octoBay.methods.twitterAccountId().call().then(id => {
+        commit('setTwitterAccountId', id)
+      })
 
       this.$octoBay.methods.twitterFollowers().call().then(followers => {
         console.log('OctoBay Followers:', followers)

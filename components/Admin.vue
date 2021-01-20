@@ -1,6 +1,28 @@
 <template>
     <div class="card-body" style="max-width: 360px">
       <div>
+        <b>OctoPin Token</b>
+        <div class="input-with-button">
+          <small class="text-muted">Address:</small>
+          <input type="text" v-model="octoPinAddress" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateOctoPinToken()" :disabled="updatingOctoPinToken">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="updatingOctoPinToken" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+      </div>
+      <div class="mt-3">
+        <b>Twitter Account ID</b>
+        <div class="input-with-button">
+          <small class="text-muted">ID:</small>
+          <input type="text" v-model="twitterAccountId" class="form-control" />
+          <button class="btn btn-primary btn-sm shadow-sm" @click="updateTwitterAccountId()" :disabled="updatingTwitterAccountId">
+            <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="updatingTwitterAccountId" />
+            <font-awesome-icon :icon="['fas', 'check']" v-else />
+          </button>
+        </div>
+      </div>
+      <div class="mt-3">
         <b>New Oracle</b>
         <div>
           <small class="text-muted">Address:</small>
@@ -15,7 +37,7 @@
           <span v-else>Add new Oracle</span>
         </button>
       </div>
-      <div v-for="oracle in oracleForms" class="border rounded-xl p-3 mt-3 oracle-form">
+      <div v-for="oracle in oracleForms" class="border rounded-xl p-3 mt-3">
         <div>
           <small class="text-muted">Address</small>
           <input type="text" v-model="oracle.address" class="form-control" readonly />
@@ -24,7 +46,7 @@
           <small class="text-muted">Name</small>
           <input type="text" v-model="oracle.name" class="form-control" readonly />
         </div>
-        <div>
+        <div class="input-with-button">
           <small class="text-muted">Register Job ID</small>
           <input type="text" v-model="oracle.registerJobId" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 1, oracle.registerJobId, oracle.registerJobFee)">
@@ -32,7 +54,7 @@
             <font-awesome-icon :icon="['fas', 'check']" v-else />
           </button>
         </div>
-        <div>
+        <div class="input-with-button">
           <small class="text-muted">Release Job ID</small>
           <input type="text" v-model="oracle.releaseJobId" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 2, oracle.releaseJobId, oracle.releaseJobFee)">
@@ -40,7 +62,7 @@
             <font-awesome-icon :icon="['fas', 'check']" v-else />
           </button>
         </div>
-        <div>
+        <div class="input-with-button">
           <small class="text-muted">Claim Job ID</small>
           <input type="text" v-model="oracle.claimJobId" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 3, oracle.claimJobId, oracle.claimJobFee)">
@@ -48,7 +70,7 @@
             <font-awesome-icon :icon="['fas', 'check']" v-else />
           </button>
         </div>
-        <div>
+        <div class="input-with-button">
           <small class="text-muted">Twitter Post Job ID</small>
           <input type="text" v-model="oracle.twitterPostJobId" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 4, oracle.twitterPostJobId, oracle.twitterPostJobFee)">
@@ -56,7 +78,7 @@
             <font-awesome-icon :icon="['fas', 'check']" v-else />
           </button>
         </div>
-        <div>
+        <div class="input-with-button">
           <small class="text-muted">Twitter Followers Job ID</small>
           <input type="text" v-model="oracle.twitterFollowersJobId" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateJobId(oracle.address, 5, oracle.twitterFollowersJobId, oracle.twitterFollowersJobFee)">
@@ -73,15 +95,14 @@
 </template>
 
 <style lang="sass" scoped>
-.oracle-form
-  > div
-    position: relative
-    input
-      padding-right: 50px
-    button
-      position: absolute
-      right: 5px
-      bottom: 5px
+.input-with-button
+  position: relative
+  input
+    padding-right: 50px
+  button
+    position: absolute
+    right: 5px
+    bottom: 5px
 
 </style>
 
@@ -104,11 +125,29 @@ export default {
       oracleUpdating: false,
       jobUpdating: false,
       addingNewOracle: false,
-      removingOralce: false
+      removingOralce: false,
+      updatingOctoPinToken: false,
+      updatingTwitterAccountId: false
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles'])
+    ...mapGetters(['account', 'oracles', 'octoPinAddress', 'twitterAccountId']),
+    octoPinAddress: {
+      get() {
+        return this.$store.state.octoPinAddress
+      },
+      set(address) {
+        this.$store.commit('setOctoPinAddress', address)
+      }
+    },
+    twitterAccountId: {
+      get() {
+        return this.$store.state.twitterAccountId
+      },
+      set(id) {
+        this.$store.commit('setTwitterAccountId', id)
+      }
+    }
   },
   mounted() {
     this.oracles.forEach(oracle => {
@@ -124,6 +163,22 @@ export default {
     })
   },
   methods: {
+    updateOctoPinToken() {
+      this.updatingOctoPinToken = true
+      this.$octoBay.methods.setOctoPin(
+        this.octoPinAddress
+      ).send({ from: this.account }).then(() => {
+        this.updatingOctoPinToken = false
+      })
+    },
+    updateTwitterAccountId() {
+      this.updatingTwitterAccountId = true
+      this.$octoBay.methods.setTwitterAccountId(
+        this.twitterAccountId
+      ).send({ from: this.account }).then(() => {
+        this.updatingTwitterAccountId = false
+      })
+    },
     isNewOracleValid() {
       return this.newOracle.address.length == 42 && this.newOracle.address.startsWith('0x') && this.newOracle.name
     },
