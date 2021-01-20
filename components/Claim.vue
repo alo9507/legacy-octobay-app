@@ -320,17 +320,15 @@ export default {
       })
 
       // get gas price, trigger registration
-      this.$web3.eth.getGasPrice((error, gasPrice) => {
-        this.$octoBay.methods.register(
-          this.oracles[0].address,
-          this.githubUser.login
-        ).send({
-          // useGSN: false,
-          from: this.account
-        }).then(registerRequest => {
-          this.registerRequestID = registerRequest.events.ChainlinkRequested.returnValues.id
-        }).catch(() => this.loadingRegistration = false)
-      })
+      this.$octoBay.methods.register(
+        this.oracles[0].address,
+        this.githubUser.login
+      ).send({
+        // useGSN: false,
+        from: this.account
+      }).then(registerRequest => {
+        this.registerRequestID = registerRequest.events.ChainlinkRequested.returnValues.id
+      }).catch(() => this.loadingRegistration = false)
     },
     registerRetry() {
       this.showRegistrationError = 0
@@ -398,18 +396,16 @@ export default {
       })
 
       // trigger claim (get gas price first)
-      this.$web3.eth.getGasPrice((error, gasPrice) => {
-        this.$octoBay.methods.claimPullRequest(
-          this.oracles[0].address,
-          this.contribution.id,
-          this.githubUser.login
-        ).send({
-          // useGSN: false,
-          from: this.account
-        }).then(claimRequest => {
-          this.claimRequestID = claimRequest.events.ChainlinkRequested.returnValues.id
-        }).catch(() => this.claimingPullRequest = false)
-      })
+      this.$octoBay.methods.claimPullRequest(
+        this.oracles[0].address,
+        this.contribution.id,
+        this.githubUser.login
+      ).send({
+        // useGSN: false,
+        from: this.account
+      }).then(claimRequest => {
+        this.claimRequestID = claimRequest.events.ChainlinkRequested.returnValues.id
+      }).catch(() => this.claimingPullRequest = false)
     },
     withdrawFromIssue() {
       this.withdrawingFromIssue = true
