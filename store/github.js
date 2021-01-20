@@ -35,7 +35,9 @@ export const actions = {
           // try to fetch user object
           this.$axios
             .$get("https://api.github.com/user", {
-              params: { access_token: accessToken }
+              headers: {
+                Authorization: 'bearer ' + accessToken
+              }
             })
             .then(response => {
               // save user object in store
