@@ -3,7 +3,7 @@ const Web3 = require("web3")
 
 export default async ({ app }, inject) => {
   if (window.ethereum) {
-    const plainWeb3 = new Web3(window.ethereum || "ws://localhost:8545");
+    const plainWeb3 = new Web3(window.ethereum)
 
     // const gsnRelayProvider = await RelayProvider.newProvider({
     //   provider: plainWeb3.currentProvider,
