@@ -323,7 +323,6 @@ export default {
         }
       })
 
-      // get gas price, trigger registration
       this.$octoBay.methods.register(
         this.oracles[0].address,
         this.githubUser.login
