@@ -1,5 +1,5 @@
 const Web3 = require("web3")
-const { RelayProvider } = require('@opengsn/gsn')
+// const { RelayProvider } = require('@opengsn/gsn')
 
 export default async ({ app }, inject) => {
   if (window.ethereum) {
