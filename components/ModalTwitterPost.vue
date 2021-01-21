@@ -31,13 +31,30 @@
           <small v-if="octobayTwitterAccount.followers_count > octoPinBalance" class="text-muted text-center mb-2 d-block">
             Insufficiant balance. You need {{ octobayTwitterAccount.followers_count }} OPIN tokens to post on Twitter. <a href="https://app.uniswap.org" target="_blank">Buy OPIN on Uniswap.</a>
           </small>
-          <button class="btn btn-twitter btn-lg shadow-sm w-100" :disabled="postingTweet || octobayTwitterAccount.followers_count > octoPinBalance" @click="tweet()">
-            <font-awesome-icon :icon="['fas', 'circle-notch']" spin class="ml-2" v-if="postingTweet" />
-            <span v-else>
-              <font-awesome-icon :icon="['fab', 'twitter']" class="mr-1" />
-              Post on Twitter ({{ octobayTwitterAccount.followers_count }} OPIN)
-            </span>
-          </button>
+          <transition name="fade" mode="out-in">
+            <div v-if="tweetId">
+              <a :href="'https://twitter.com/OctoBayApp/status/' + tweetId" target="_blank" class="d-flex justify-content-between align-items-center btn btn-twitter btn-lg shadow-sm w-100">
+                <font-awesome-icon :icon="['fab', 'twitter']" class="mr-auto" />
+                Show Tweet
+                <font-awesome-icon :icon="['fas', 'check']" class="ml-auto" />
+              </a>
+            </div>
+            <button v-else class="btn btn-twitter btn-lg shadow-sm w-100" :disabled="requestingTweet || postingTweet || octobayTwitterAccount.followers_count > octoPinBalance" @click="tweet()">
+              <span v-if="requestingTweet">
+                <font-awesome-icon :icon="['fas', 'circle-notch']" spin class="ml-2" />
+                Waiting for confirmation...
+              </span>
+              <span v-else-if="postingTweet">
+                <font-awesome-icon :icon="['fas', 'circle-notch']" spin class="ml-2" />
+                Posting to Twitter...
+              </span>
+              <span v-else class="d-flex justify-content-between align-items-center">
+                <font-awesome-icon :icon="['fab', 'twitter']" class="mr-2" />
+                <span class="pl-3">Post on Twitter</span>
+                <small>{{ octobayTwitterAccount.followers_count }} OPIN</small>
+              </span>
+            </button>
+          </transition>
         </div>
       </div>
     </div>
@@ -62,7 +79,9 @@ export default {
     return {
       octobayTwitterAccount: null,
       depositAmount: 0,
-      postingTweet: false
+      requestingTweet: false,
+      postingTweet: false,
+      tweetId: null
     }
   },
   computed: {
@@ -80,13 +99,23 @@ export default {
   },
   methods: {
     tweet() {
-      this.postingTweet = true
+      const confirmListener = this.$octoBay.events.TwitterPost().on('data', event => {
+        if (event.returnValues.issueId === this.issue.id) {
+          // stop listening and finish process
+          confirmListener.unsubscribe()
+          this.tweetId = this.$web3.utils.hexToAscii(event.returnValues.tweetId)
+          this.postingTweet = false
+        }
+      })
+
+      this.requestingTweet = true
       this.$octoBay.methods.updateTwitterFollowersAndPost(this.oracles[0].address, this.issue.id).send({
         // useGSN: false,
         from: this.account
-      }).then(tweetRequest => {
-        this.postingTweet = false
-      }).catch(() => this.postingTweet = false)
+      }).then(() => {
+        this.requestingTweet = false
+        this.postingTweet = true
+      }).catch(() => this.requestingTweet = false)
     }
   }
 }
