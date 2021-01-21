@@ -8,7 +8,7 @@
         <div :class="{ 'text-truncate': !showDetails }">
           <small class="text-muted text-truncate">
             <small>
-              <span v-if="issue.boostAmount || true">
+              <span v-if="issue.boostAmount">
                 <svg style="width:14px;height:14px" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z" />
                 </svg>
