@@ -1,17 +1,5 @@
 <template>
   <footer class="pt-3 pb-5 text-center">
-    <div class="d-flex mb-4">
-      <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm oracle-button" @click="$store.commit('setShowOracleList', true)">
-        <img :src="'./chainlink-icon.png'" width="24px" class="rounded-circle p-1" />
-        {{ activeOracle ? activeOracle.name : 'Random' }}
-        <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
-      </button>
-      <button class="d-flex mx-auto align-items-center btn btn-link text-white btn-sm oracle-button" @click="$store.commit('setShowForkList', true)">
-        <font-awesome-icon :icon="['fas', 'code-branch']" class="mr-1" />
-        {{ appName }}
-        <small class="ml-1"><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
-      </button>
-    </div>
     <div class="mb-3">
       <a href="https://twitter.com/OctoBayApp" target="_blank" class="text-white px-2">
         <font-awesome-icon :icon="['fab', 'twitter']" />
@@ -25,6 +13,14 @@
       <a :href="'https://kovan.etherscan.io/address/' + octoBayAddress" class="text-white px-2">
         <font-awesome-icon :icon="['fab', 'ethereum']" />
       </a>
+      <button class="align-items-center btn btn-link text-white btn-sm oracle-button" @click="$store.commit('setShowOracleList', true)">
+        <img :src="'./chainlink-icon.png'" width="20px" class="rounded-circle py-1 pl-1" />
+        <small><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
+      </button>
+      <button class="align-items-center btn btn-link text-white btn-sm oracle-button" @click="$store.commit('setShowForkList', true)">
+        <font-awesome-icon :icon="['fas', 'code-branch']" />
+        <small><font-awesome-icon :icon="['fas', 'chevron-down']" style="opacity: 0.5" /></small>
+      </button>
     </div>
     <div>
       <nuxt-link to="/about" class="text-white px-1" v-if="$route.path != '/about'">about</nuxt-link>
