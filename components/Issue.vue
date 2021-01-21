@@ -204,6 +204,7 @@ export default {
       loadingReleaseToUser: false,
       releaseToUser: null,
       releaseRequestID: null,
+      isRepoAdmin: false,
       fundingGoal: Math.floor(Math.random() * 5) + 1
     }
   },
@@ -228,6 +229,13 @@ export default {
         }
       }, 500)
     },
+    showDetails(show) {
+      if (show) {
+        this.$axios.$get(
+          `${process.env.API_URL}/github-is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`
+        ).then(isRepoAdmin => this.isRepoAdmin = isRepoAdmin).catch(() => this.isRepoAdmin = false)
+      }
+    }
   },
   computed: {
     ...mapGetters(['account', 'registeredAccount', 'oracles']),
