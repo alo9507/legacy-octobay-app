@@ -2,7 +2,7 @@
   <div>
     <div v-if="issueNode" :class="['issue d-flex flex-column', { 'pinned': issue.boostAmount > 0, showDetails }]" @click="showDetails = !showDetails">
       <div>
-        <div class="bg-success" :style="`height: 5px; width: ${(issue.depositAmount / 5 * 100).toFixed(2)}%`"></div>
+        <div class="bg-success" :style="`height: 5px; width: ${(Math.min(issue.depositAmount / fundingGoal * 100, 100)).toFixed(2)}%`"></div>
       </div>
       <div class="d-flex align-items-top px-3 py-2">
         <div :class="{ 'text-truncate': !showDetails }">
@@ -30,7 +30,10 @@
           <div class="mb-0 d-flex align-items-center" @click.stop>
             <div class="text-center d-flex flex-column">
               <small class="text-muted">
-                <small>5 ETH Goal</small>
+                <small>
+                  <font-awesome-icon :icon="['fas', 'check']" v-if="issue.depositAmount >= fundingGoal" class="text-success mr-1" />
+                  {{ fundingGoal }} ETH Goal
+                </small>
               </small>
               <div>
                 {{ issue.depositAmount }} ETH
@@ -206,7 +209,8 @@ export default {
       loadReleaseToUserTimeout: null,
       loadingReleaseToUser: false,
       releaseToUser: null,
-      releaseRequestID: null
+      releaseRequestID: null,
+      fundingGoal: Math.floor(Math.random() * 5) + 1
     }
   },
   watch: {
