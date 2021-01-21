@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <div v-if="issueNode.primaryLanguage" :class="['px-3 pb-2', { 'text-truncate': !showDetails }]" style="text-overflow: ' ...'">
+      <div v-if="issueNode.primaryLanguage" :class="['px-3 pb-3', { 'text-truncate': !showDetails }]" style="text-overflow: ' ...'">
         <span :class="'mr-1 badge badge-pill' + (brightnessByColor(issueNode.primaryLanguage.color) < 180 ? ' text-white' : '')" :style="'background-color: ' + issueNode.primaryLanguage.color">
           {{ issueNode.primaryLanguage.name }}
         </span><span :class="'mr-1 badge badge-pill' + (brightnessByColor('#' + label.color) < 180 ? ' text-white' : '')" v-for="label in issueNode.labels" :style="'background-color: #' + label.color">
@@ -44,34 +44,33 @@
         </span>
       </div>
       <transition name="fade">
-        <div :class="['d-flex flex-column justify-content-start align-items-center px-3', { action: !!action, deposits: action == 'deposits' }]" @click.stop v-if="showDetails" style="cursor: default">
-          <div class="border-top w-100 py-2 text-nowrap d-flex align-items-center">
-            <button class="btn btn-sm btn-outline-success" @click="fundIssue()">
+        <div :class="['d-flex flex-column justify-content-start align-items-center', { action: !!action, deposits: action == 'deposits' }]" @click.stop v-if="showDetails" style="cursor: default">
+          <div class="border-top border-bottom w-100 py-2 text-nowrap d-flex justify-content-between align-items-center px-4">
+            <button class="btn btn-sm btn-light text-muted" @click="fundIssue()">
               <font-awesome-icon :icon="['fas', 'plus']" />
             </button>
-            <button class="btn btn-sm btn-outline-twitter" @click="twitterPost()">
-              <font-awesome-icon :icon="['fab', 'twitter']" />
-            </button>
-            <button :class="['btn btn-sm btn-light ml-2', { active: action === 'release' }]" @click="changeAction('release')" v-if="githubUser && issueNode.repositoryOwner === githubUser.login">
-              <font-awesome-icon :icon="['fas', 'gavel']" />
-            </button>
-            <span class="mr-auto"></span>
-            <button :class="['btn btn-sm btn-light ml-1', { active: action === 'deposits' }]" @click="changeAction('deposits')">
+            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'deposits' }]" @click="changeAction('deposits')">
               <font-awesome-icon :icon="['fas', 'coins']" />
             </button>
-            <button :class="['btn btn-sm btn-light ml-1', { active: action === 'pin' }]" @click="changeAction('pin')">
+            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'release' }]" @click="changeAction('release')" v-if="isRepoAdmin">
+              <font-awesome-icon :icon="['fas', 'gavel']" />
+            </button>
+            <button class="btn btn-sm btn-light text-muted" @click="twitterPost()">
+              <font-awesome-icon :icon="['fab', 'twitter']" />
+            </button>
+            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'pin' }]" @click="changeAction('pin')">
               <svg style="width:18px;height:18px" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z" />
               </svg>
             </button>
-            <a class="btn btn-sm btn-light ml-1" @click :href="'https://github.com/' + issueNode.owner + '/' + issueNode.repository + '/issues/' + issueNode.number" target="_blank">
+            <a class="btn btn-sm btn-light text-muted" @click :href="'https://github.com/' + issueNode.owner + '/' + issueNode.repository + '/issues/' + issueNode.number" target="_blank">
               <font-awesome-icon :icon="['fab', 'github']" />
               <font-awesome-icon :icon="['fas', 'external-link-alt']" class="text-muted-light ml-1" />
             </a>
           </div>
-          <div class="w-100">
+          <div class="w-100 px-3">
             <transition name="fade" mode="out-in">
-              <div v-if="action === 'release'" key="release" class="py-2">
+              <div v-if="action === 'release'" key="release" class="py-3">
                 <div class="alert alert-success border-0" v-if="showReleaseSuccess">
                   <button type="button" class="close text-success" @click="showReleaseSuccess = false">
                     <span>&times;</span>
@@ -105,8 +104,8 @@
                   </button>
                 </div>
               </div>
-              <div v-if="action === 'deposits'" key="deposits" class="py-2">
-                <div v-for="(deposit, index) in issue.deposits" :key="index" class="d-flex justify-content-between align-items-center">
+              <div v-if="action === 'deposits'" key="deposits" class="py-3">
+                <div v-for="(deposit, index) in issue.deposits" :key="index" class="d-flex mb-2 justify-content-between align-items-center">
                   <div class="d-flex flex-column">
                     <h5 class="mb-0">{{ Number($web3.utils.fromWei(deposit.amount, 'ether')) }} <small>ETH</small></h5>
                     <small class="text-muted">
@@ -119,7 +118,7 @@
                   </button>
                 </div>
               </div>
-              <div v-if="action === 'pin'" key="pin" class="py-2">
+              <div v-if="action === 'pin'" key="pin" class="py-3">
                 <div class="d-flex align-items-center">
                   <div class="select-input flex-fill mr-2">
                     <input type="number" min="0" step="0.01" novalidate class="form-control" placeholder="0.00" v-model="pinAmount" />
