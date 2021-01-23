@@ -24,7 +24,8 @@ export const state = () => ({
   showModal: false,
   modalComponent: null,
   modalData: null,
-  twitterAccountId: null
+  twitterAccountId: null,
+  twitterFollowers: 0
 })
 
 export const getters = {
@@ -118,6 +119,9 @@ export const getters = {
   },
   twitterAccountId(state) {
     return state.twitterAccountId
+  },
+  twitterFollowers(state) {
+    return state.twitterFollowers
   }
 }
 
@@ -230,6 +234,9 @@ export const mutations = {
   },
   setTwitterAccountId(state, id) {
     state.twitterAccountId = id
+  },
+  setTwitterFollowers(state, followers) {
+    state.twitterFollowers = followers
   }
 }
 
@@ -255,7 +262,7 @@ export const actions = {
       })
 
       this.$octoBay.methods.twitterFollowers().call().then(followers => {
-        console.log('OctoBay Followers:', followers)
+        commit('setTwitterFollowers', followers)
       })
     }
 
