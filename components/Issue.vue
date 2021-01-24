@@ -114,7 +114,7 @@
                   </div>
                   <button class="btn btn-primary shadow-sm" v-if="deposit.from === account" @click="refundIssueDeposit(deposit.id)" :disabled="refundingDeposit">
                     <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="refundingDeposit === deposit.id" />
-                    <span v-else>refund</span>
+                    <span v-else>withdraw</span>
                   </button>
                 </div>
               </div>
