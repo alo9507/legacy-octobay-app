@@ -46,24 +46,21 @@
       <transition name="fade">
         <div :class="['d-flex flex-column justify-content-start align-items-center', { action: !!action, deposits: action == 'deposits' }]" @click.stop v-if="showDetails" style="cursor: default">
           <div class="border-top border-bottom w-100 py-2 text-nowrap d-flex justify-content-between align-items-center px-4">
-            <button class="btn btn-sm btn-light text-muted" @click="fundIssue()">
+            <button class="btn btn-sm btn-light text-muted" @click="fundIssue()" v-tooltip="{ content: 'Fund issue', trigger: 'hover' }">
               <font-awesome-icon :icon="['fas', 'plus']" />
             </button>
-            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'deposits' }]" @click="changeAction('deposits')">
+            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'deposits' }]" @click="changeAction('deposits')" v-tooltip="{ content: 'Deposits', trigger: 'hover' }">
               <font-awesome-icon :icon="['fas', 'coins']" />
             </button>
-            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'release' }]" @click="changeAction('release')" v-if="isRepoAdmin">
-              <font-awesome-icon :icon="['fas', 'gavel']" />
-            </button>
-            <button class="btn btn-sm btn-light text-muted" @click="twitterPost()">
+            <button class="btn btn-sm btn-light text-muted" @click="twitterPost()" v-tooltip="{ content: 'Post via @OctoBayApp', trigger: 'hover' }">
               <font-awesome-icon :icon="['fab', 'twitter']" />
             </button>
-            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'pin' }]" @click="changeAction('pin')">
+            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'pin' }]" @click="changeAction('pin')" v-tooltip="{ content: 'Pin issue', trigger: 'hover' }">
               <svg style="width:18px;height:18px" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z" />
               </svg>
             </button>
-            <a class="btn btn-sm btn-light text-muted" @click :href="'https://github.com/' + issueNode.owner + '/' + issueNode.repository + '/issues/' + issueNode.number" target="_blank">
+            <a class="btn btn-sm btn-light text-muted" @click :href="'https://github.com/' + issueNode.owner + '/' + issueNode.repository + '/issues/' + issueNode.number" target="_blank" v-tooltip="{ content: 'Open on GitHub', trigger: 'hover' }">
               <font-awesome-icon :icon="['fab', 'github']" />
               <font-awesome-icon :icon="['fas', 'external-link-alt']" class="text-muted-light ml-1" />
             </a>
