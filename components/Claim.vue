@@ -36,36 +36,6 @@
       You can now delete the repository again and start claiming funds.
     </small>
   </div>
-  <div class="alert alert-danger border-0" v-if="showRegistrationError">
-    <button type="button" class="close text-danger" @click="showRegistrationError = 0">
-      <span>&times;</span>
-    </button>
-    <font-awesome-icon :icon="['far', 'frown']" />
-    Registration failed!<br>
-    <small v-if="showRegistrationError == 1">
-      We were able to confirm that you are the owner of the right repository but sending the confirmation to the Ethereum blockchain failed. Wait a moment and click on "Retry".
-      If the problem still occurs, please let us know on <a href="https://twitter.com/OctoBayApp" target="_blank">Twitter</a> or <a href="https://discord.gg/DhKgHrFeCD" target="_blank">Discord</a>.
-    </small>
-    <small v-if="showRegistrationError == 2">
-      It seems you did not create the repository with your address as its name. You can create the repository and then click on "Retry".
-      If you did and the error still occurs, please let us know on <a href="https://twitter.com/OctoBayApp" target="_blank">Twitter</a> or <a href="https://discord.gg/DhKgHrFeCD" target="_blank">Discord</a>.
-    </small>
-    <small v-if="showRegistrationError == 3">
-      It seems there was a problem with the GitHub API. Check if GitHub is currently available, wait a moment and then click on "Retry".
-      If the error still occurs, please let us know on <a href="https://twitter.com/OctoBayApp" target="_blank">Twitter</a> or <a href="https://discord.gg/DhKgHrFeCD" target="_blank">Discord</a>.
-    </small>
-    <small v-if="showRegistrationError == 4">
-      It seems this GitHub account is already registered. If you forgot the Ethereum address you connected to this GitHub account, simply go to the send page and enter your account name.
-      If you still have problems, please let us know on <a href="https://twitter.com/OctoBayApp" target="_blank">Twitter</a> or <a href="https://discord.gg/DhKgHrFeCD" target="_blank">Discord</a>.
-    </small>
-    <small v-if="showRegistrationError == 5">
-      It seems there was a problem with the Ethereum network. Please wait a moment and click on "Retry".
-      If the problem still occurs, please let us know on <a href="https://twitter.com/OctoBayApp" target="_blank">Twitter</a> or <a href="https://discord.gg/DhKgHrFeCD" target="_blank">Discord</a>.
-    </small>
-    <div class="text-center mt-2" v-if="[1,2,3,5].includes(showRegistrationError)">
-      <button class="btn btn-sm btn-primary" @click="registerRetry()">Retry</button>
-    </div>
-  </div>
   <div v-if="connected">
     <div v-if="registeredAccount === account">
       <small class="text-muted d-flex justify-content-between">
@@ -214,7 +184,6 @@ export default {
       contribution: null,
       loadingRegistration: false,
       showRegistrationSuccess: false,
-      showRegistrationError: 0,
       score: 0,
       withdrawingFromIssue: false,
       showWithdrawalSuccess: false,
@@ -332,20 +301,6 @@ export default {
       }).then(registerRequest => {
         this.registerRequestID = registerRequest.events.ChainlinkRequested.returnValues.id
       }).catch(() => this.loadingRegistration = false)
-    },
-    registerRetry() {
-      this.showRegistrationError = 0
-      this.loadingRegistration = true
-      // trigger oracle confirmation
-      this.$axios.$get(`${process.env.API_URL}/oracle/register/${this.githubUser.login}/${this.account}`).then(response => {
-        if (response.error) {
-          this.loadingRegistration = false
-          this.showRegistrationError = response.error
-        }
-      }).catch(() => {
-        this.loadingRegistration = false
-        this.showRegistrationError = 0
-      })
     },
     getAge(createdAt) {
       return (new Date().getTime() - new Date(createdAt).getTime()) / (60 * 60 * 24 * 1000);
