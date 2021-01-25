@@ -60,6 +60,11 @@
                 <path fill="currentColor" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z" />
               </svg>
             </button>
+            <button :class="['btn btn-sm btn-light text-muted', { active: action === 'pull-requests' }]" @click="changeAction('pull-requests')" v-tooltip="{ content: 'Pull Requests', trigger: 'hover' }">
+              <svg style="width:19px;height:19px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M6,3A3,3 0 0,1 9,6C9,7.31 8.17,8.42 7,8.83V15.17C8.17,15.58 9,16.69 9,18A3,3 0 0,1 6,21A3,3 0 0,1 3,18C3,16.69 3.83,15.58 5,15.17V8.83C3.83,8.42 3,7.31 3,6A3,3 0 0,1 6,3M6,5A1,1 0 0,0 5,6A1,1 0 0,0 6,7A1,1 0 0,0 7,6A1,1 0 0,0 6,5M6,17A1,1 0 0,0 5,18A1,1 0 0,0 6,19A1,1 0 0,0 7,18A1,1 0 0,0 6,17M21,18A3,3 0 0,1 18,21A3,3 0 0,1 15,18C15,16.69 15.83,15.58 17,15.17V7H15V10.25L10.75,6L15,1.75V5H17A2,2 0 0,1 19,7V15.17C20.17,15.58 21,16.69 21,18M18,17A1,1 0 0,0 17,18A1,1 0 0,0 18,19A1,1 0 0,0 19,18A1,1 0 0,0 18,17Z" />
+              </svg>
+            </button>
             <a class="btn btn-sm btn-light text-muted" @click :href="'https://github.com/' + issueNode.owner + '/' + issueNode.repository + '/issues/' + issueNode.number" target="_blank" v-tooltip="{ content: 'Open on GitHub', trigger: 'hover' }">
               <font-awesome-icon :icon="['fab', 'github']" />
               <font-awesome-icon :icon="['fas', 'external-link-alt']" class="text-muted-light ml-1" />
@@ -132,6 +137,23 @@
                   </button>
                 </div>
               </div>
+              <div v-if="action === 'pull-requests'" key="pull-requests" class="py-3">
+                <div v-if="linkedPullRequests.length">
+                  <a :href="pullRequest.url" target="_blank" v-for="pullRequest in sortedLinkedPullRequests" class="btn btn-light btn-sm btn-block mb-2 d-flex align-items-center">
+                    <svg style="width:19px;height:19px" viewBox="0 0 24 24" :class="'text-' + (pullRequest.state == 'MERGED' ? 'merged' : (pullRequest.state == 'CLOSED' ? 'danger' : 'success'))">
+                      <path fill="currentColor" d="M6,3A3,3 0 0,1 9,6C9,7.31 8.17,8.42 7,8.83V15.17C8.17,15.58 9,16.69 9,18A3,3 0 0,1 6,21A3,3 0 0,1 3,18C3,16.69 3.83,15.58 5,15.17V8.83C3.83,8.42 3,7.31 3,6A3,3 0 0,1 6,3M6,5A1,1 0 0,0 5,6A1,1 0 0,0 6,7A1,1 0 0,0 7,6A1,1 0 0,0 6,5M6,17A1,1 0 0,0 5,18A1,1 0 0,0 6,19A1,1 0 0,0 7,18A1,1 0 0,0 6,17M21,18A3,3 0 0,1 18,21A3,3 0 0,1 15,18C15,16.69 15.83,15.58 17,15.17V7H15V10.25L10.75,6L15,1.75V5H17A2,2 0 0,1 19,7V15.17C20.17,15.58 21,16.69 21,18M18,17A1,1 0 0,0 17,18A1,1 0 0,0 18,19A1,1 0 0,0 19,18A1,1 0 0,0 18,17Z" />
+                    </svg>
+                    <span class="mr-auto ml-2 pr-2 text-truncate">{{ pullRequest.title }}</span>
+                    {{ pullRequest.comments.totalCount }}
+                    <font-awesome-icon :icon="['far', 'comment-alt']" class="ml-1 mr-2 text-muted" />
+                    <font-awesome-icon :icon="['fab', 'github']" class="text-muted" />
+                    <font-awesome-icon :icon="['fas', 'external-link-alt']" class="text-muted-light ml-1" />
+                  </a>
+                </div>
+                <small v-else class="text-muted d-block text-center">
+                  No linked pull requests yet.
+                </small>
+              </div>
             </transition>
           </div>
         </div>
@@ -201,7 +223,8 @@ export default {
       releaseToUser: null,
       releaseRequestID: null,
       isRepoAdmin: false,
-      fundingGoal: Math.floor(Math.random() * 5) + 1
+      fundingGoal: Math.floor(Math.random() * 5) + 1,
+      linkedPullRequests: []
     }
   },
   watch: {
@@ -230,12 +253,26 @@ export default {
         this.$axios.$get(
           `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`
         ).then(isRepoAdmin => this.isRepoAdmin = isRepoAdmin).catch(() => this.isRepoAdmin = false)
+
+        this.linkedPullRequests = []
+        this.$axios.$get(`${process.env.API_URL}/github/linked-pullrequests/${this.issueNode.id}`).then(activePullRequestIds => {
+          activePullRequestIds.forEach(prId => {
+            this.$axios.$get(`${process.env.API_URL}/github/pullrequest-by-id/${prId}`).then(pr => {
+              this.linkedPullRequests.push(pr)
+            })
+          })
+        }).catch(() => this.linkedPullRequests = [])
       }
     }
   },
   computed: {
     ...mapGetters(['account', 'registeredAccount', 'oracles']),
-    ...mapGetters('github', { githubUser: 'user' })
+    ...mapGetters('github', { githubUser: 'user' }),
+    sortedLinkedPullRequests() {
+      return this.linkedPullRequests.sort((a, b) => {
+        return a.state === 'MERGED' ? -1 : 1
+      })
+    }
   },
   methods: {
     fundIssue() {
