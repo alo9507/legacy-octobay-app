@@ -89,7 +89,7 @@ export default {
     ...mapGetters({ issue: 'modalData' })
   },
   mounted() {
-    this.$axios.$get(process.env.API_URL + '/twitter-user/1333035957805862915').then(account => {
+    this.$axios.$get(process.env.API_URL + '/twitter/user/1333035957805862915').then(account => {
       this.octobayTwitterAccount = account
     })
 

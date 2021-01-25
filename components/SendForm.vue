@@ -361,7 +361,7 @@ export default {
           let number = parts[3]
           this.loading = true
           this.issue = null
-          this.$axios.$get(`${process.env.API_URL}/github-issue/${owner}/${repo}/${number}`).then(issue => {
+          this.$axios.$get(`${process.env.API_URL}/github/issue/${owner}/${repo}/${number}`).then(issue => {
             this.issue = issue
           })
           .catch(() => {
@@ -383,7 +383,7 @@ export default {
           let repo = parts[2]
           this.loading = true
           this.repository = null
-          this.$axios.$get(`${process.env.API_URL}/github-repository/${owner}/${repo}`).then(repository => {
+          this.$axios.$get(`${process.env.API_URL}/github/repository/${owner}/${repo}`).then(repository => {
             this.repository = repository
           })
           .catch(() => {

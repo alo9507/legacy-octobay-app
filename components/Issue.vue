@@ -228,7 +228,7 @@ export default {
     showDetails(show) {
       if (show) {
         this.$axios.$get(
-          `${process.env.API_URL}/github-is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`
+          `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`
         ).then(isRepoAdmin => this.isRepoAdmin = isRepoAdmin).catch(() => this.isRepoAdmin = false)
       }
     }
