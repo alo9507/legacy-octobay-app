@@ -400,33 +400,10 @@ export default {
   methods: {
     confirm() {
       if (this.selectedRecipientType == 'User') {
-        if (this.userEthAddress) {
-          this.sendToUser()
-        } else {
-          this.depositForUser()
-        }
+        this.depositForUser()
       } else if (this.selectedRecipientType == 'Issue') {
         this.depositForIssue()
       }
-    },
-    sendToUser() {
-      this.sending = true
-      this.$octoBay.methods.depositEthForGithubUser(this.user.login.toLowerCase()).send({
-        // useGSN: false,
-        from: this.account,
-        value: this.$web3.utils.toWei(this.amount, "ether")
-      }).then(result => {
-        this.amount = 0
-        this.showSendSuccess = true
-        this.updateUserDeposits()
-        this.$store.dispatch('updateOctoPinBalance')
-        this.$web3.eth.getBalance(this.account).then(balance => this.$store.commit('setBalance', balance))
-      }).catch(e => {
-        console.log(e)
-      }).finally(() => {
-        this.loading = false
-        this.sending = false
-      })
     },
     depositForUser() {
       this.sending = true
