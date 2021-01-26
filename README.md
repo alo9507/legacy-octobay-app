@@ -46,3 +46,5 @@ After you made your adjustments, run `yarn app:generate` to generate a static si
 ## Local Development Setup
 
 See: https://github.com/octobay/install
+
+![mindmap](https://user-images.githubusercontent.com/6792578/105842763-fe5bc800-5fd6-11eb-81b6-0bf30d503067.png)
