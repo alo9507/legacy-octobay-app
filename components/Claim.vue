@@ -26,16 +26,6 @@
     <font-awesome-icon :icon="['far', 'smile']" />
     Withdrawal successful!
   </div>
-  <div class="alert alert-success border-0" v-if="showRegistrationSuccess">
-    <button type="button" class="close text-success" @click="showRegistrationSuccess = false">
-      <span>&times;</span>
-    </button>
-    <font-awesome-icon :icon="['far', 'smile']" />
-    Registration successfull! :)<br>
-    <small>
-      You can now delete the repository again and start claiming funds.
-    </small>
-  </div>
   <div v-if="connected">
     <div v-if="registeredAccount === account">
       <small class="text-muted d-flex justify-content-between">
@@ -45,7 +35,7 @@
       <input type="text" class="form-control form-control-lg form-control-with-embed mb-2" placeholder="https://github.com/..." v-model="url" />
       <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="loadingContribution" class="text-muted-light" />
       <PullRequestEmbed :contribution="contribution" v-else-if="contribution && type == 'pr'" />
-      <IssueEmbed :contribution="contribution" v-else-if="contribution && type == 'issue'" />
+      <IssueEmbed :issue="contribution" v-else-if="contribution && type == 'issue'" />
 
       <div v-if="contribution && type == 'pr'">
         <div class="alert alert-warning border-0 mt-2 mb-2" v-if="githubUser && contribution.repository.owner.login === githubUser.login">
@@ -79,14 +69,9 @@
       </div>
 
       <div v-if="contribution && type == 'issue'">
-        <div class="text-center">
-          <small class="text-muted">Amount:</small>
-          <h3>{{ issueDepositsAmount.toFixed(2) }} ETH</h3>
-        </div>
-        <div class="alert alert-warning border-0 mt-2 mb-2" v-if="githubUser && githubUser.login != issueReleasedTo">
-          <font-awesome-icon :icon="['fas', 'info-circle']" />
+        <div class="alert alert-warning border-0 mb-2 mt-3" v-if="!this.canWithdrawIssue">
           <small>
-            This issue was not released to you.
+            In order to withdraw from this issue, it must have been closed by one of your pull requests or explicitly released to you by the maintainer.
           </small>
         </div>
       </div>
@@ -122,42 +107,6 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <div class="alert alert-primary border-0 mb-0">
-        <small>
-          To withdraw deposits or receive funds with your GitHub account,
-          you need to verify your account by creating a repository
-          named after your Ethereum address and then registering below.
-          Afterwards you can remove this repository again and also update your
-          address at any time.
-          <div v-if="!githubUser" class="mt-3">Connect to your GitHub account first to register.</div>
-        </small>
-      </div>
-      <div v-if="githubUser">
-        <div class="d-flex justify-content-between align-items-center btn btn-light mt-2" v-clipboard="account" v-clipboard:success="copiedAddress">
-          <transition name="fade" mode="out-in">>
-            <font-awesome-icon :icon="['fas', 'check']" class="text-success" v-if="copyAddressSuccess" key="check" />
-            <font-awesome-icon :icon="['far', 'copy']" v-else key="copy" />
-          </transition>
-          <i class="my-auto">
-            <AddressShort :address="account" length="medium" /></i>
-          <i></i>
-        </div>
-        <a href="https://github.com/new" target="_blank" class="d-flex justify-content-between align-items-center btn btn-dark btn-block mt-2">
-          <font-awesome-icon :icon="['fab', 'github']" />
-          Create Repository
-          <i></i>
-        </a>
-      </div>
-      <button class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-3" v-if="githubUser" @click="register()" :disabled="loadingRegistration || checkingRepo">
-        <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="loadingRegistration || checkingRepo" />
-        {{ loadingRegistration ? 'Waiting for confirmation...' : (checkingRepo ? 'Waiting for repository' : 'Register') }}
-      </button>
-      <a v-else :href="'https://github.com/login/oauth/authorize?scope=user:email&client_id=' + githubClientId" class="btn btn-lg btn-dark shadow-sm d-block mt-4">
-        <font-awesome-icon :icon="['fab', 'github']" />
-        Connect
-      </a>
-    </div>
   </div>
   <button class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-4" v-else-if="$web3" @click="connect()">
     Connect
@@ -176,14 +125,11 @@ export default {
   mixins: [connect, loadFromGithub],
   data() {
     return {
-      githubClientId: process.env.GITHUB_CLIENT_ID,
       maxClaimPrAge: process.env.MAX_CLAIMPR_AGE,
       url: '',
       type: null,
       loadingContribution: false,
       contribution: null,
-      loadingRegistration: false,
-      showRegistrationSuccess: false,
       score: 0,
       withdrawingFromIssue: false,
       showWithdrawalSuccess: false,
@@ -193,12 +139,7 @@ export default {
       showClaimSuccess: false,
       showClaimError: false,
       issueDepositsAmount: 0,
-      issueReleasedTo: '',
-      copyAddressSuccess: false,
-      checkingRepo: true,
-      repoExists: false,
-      checkRepoInterval: null,
-      registerRequestID: null,
+      canWithdrawIssue: false,
       claimRequestID: null
     }
   },
@@ -225,23 +166,12 @@ export default {
           this.type = 'issue'
           this.loadingContribution = true
           this.issueDepositsAmount = 0
-          this.issueReleasedTo = ''
+          this.canWithdrawIssue = false
           this.loadIssue(owner, repo, number)
-            .then(repo => {
-              this.contribution = repo
-              this.$octoBay.methods.getIssueDepositIdsForIssueId(this.contribution.id).call().then(depositIds => {
-                depositIds.forEach(depositId => {
-                  this.$octoBay.methods.issueDeposits(depositId).call().then(deposit => {
-                    this.issueDepositsAmount += Number(this.$web3.utils.fromWei(deposit.amount, 'ether'))
-                  })
-                })
-              })
-              this.$octoBay.methods.issueReleaseIDsByIssueId(this.contribution.id).call().then(releaseId => {
-                this.$octoBay.methods.releasedIssues(releaseId).call().then(release => {
-                  if (release.status === '2') {
-                    this.issueReleasedTo = release.githubUser
-                  }
-                })
+            .then(issue => {
+              this.contribution = issue
+              this.$axios.$get(process.env.API_URL + `/github/can-withdraw-from-issue/${this.githubUser.login}/${this.contribution.id}`).then(can => {
+                this.canWithdrawIssue = can
               })
             })
             .finally(() => this.loadingContribution = false)
@@ -258,50 +188,8 @@ export default {
   },
   mounted() {
     this.updateUserDeposits()
-    this.checkRepo()
-    this.checkRepoInterval = setInterval(() => this.checkRepo(), 10000)
   },
   methods: {
-    checkRepo() {
-      if (this.connected && this.githubUser) {
-        const repoUrl = `https://api.github.com/repos/${this.githubUser.login}/${this.account}`
-        this.$axios.get(repoUrl, {
-          headers: {
-            Authorization: 'bearer ' + this.githubAccessToken
-          }
-        }).then(res => {
-          this.repoExists = true
-          this.checkingRepo = false
-          clearInterval(this.checkRepoInterval)
-        }).catch(e => {
-          this.repoExists = false
-        })
-      }
-    },
-    register() {
-      this.loadingRegistration = true
-      // listening for request confirmation
-      const confirmListener = this.$octoBay.events.ChainlinkFulfilled().on('data', event => {
-        if (event.returnValues.id === this.registerRequestID) {
-          // stop listening and finish process
-          confirmListener.unsubscribe()
-          this.$store.commit("setRegisteredAccount", this.account)
-          this.showRegistrationSuccess = true
-          this.loadingRegistration = false
-          this.registerRequestID = null
-        }
-      })
-
-      this.$octoBay.methods.register(
-        this.oracles[0].address,
-        this.githubUser.login
-      ).send({
-        // useGSN: false,
-        from: this.account
-      }).then(registerRequest => {
-        this.registerRequestID = registerRequest.events.ChainlinkRequested.returnValues.id
-      }).catch(() => this.loadingRegistration = false)
-    },
     getAge(createdAt) {
       return (new Date().getTime() - new Date(createdAt).getTime()) / (60 * 60 * 24 * 1000);
     },
@@ -376,8 +264,7 @@ export default {
         this.showWithdrawalSuccess = true
         this.contribution = null
         this.url = ''
-        this.issueDepositsAmount = 0
-        this.issueReleasedTo = ''
+        this.canWithdrawIssue = false
       }).catch(e => console.log(e))
     },
     withdrawUserDeposit(id) {
@@ -408,12 +295,6 @@ export default {
     },
     formatAmount(amount) {
       return Number(this.$web3.utils.fromWei(amount.toString(), "ether")).toFixed(2)
-    },
-    copiedAddress() {
-      this.copyAddressSuccess = true
-      setTimeout(() => {
-        this.copyAddressSuccess = false
-      }, 1000)
     }
   }
 }
