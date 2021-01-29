@@ -163,7 +163,7 @@
       <font-awesome-icon :icon="['fas', 'circle-notch']" spin class="text-muted-light" />
     </div>
     <div v-else-if="!loading && !issueNode" class="d-flex justify-content-center p-3 rounded-lg">
-      <small class="text-muted d-block text-center">
+      <small class="text-muted d-block text-center border rounded-xl px-3 py-1">
         <small><font-awesome-icon :icon="['fas', 'exclamation-triangle']" /></small>
         Issue not found.
       </small>
