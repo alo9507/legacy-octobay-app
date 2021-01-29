@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="issueNode" :class="['issue d-flex flex-column', { 'pinned': issue.boostAmount > 0, showDetails }]" @click="showDetails = !showDetails">
+    <div v-if="!loading && issueNode" :class="['issue d-flex flex-column', { 'pinned': issue.boostAmount > 0, showDetails }]" @click="showDetails = !showDetails">
       <div>
         <div class="bg-success" :style="`height: 5px; width: ${(Math.min(issue.depositAmount / fundingGoal * 100, 100)).toFixed(2)}%`"></div>
       </div>
@@ -159,8 +159,14 @@
         </div>
       </transition>
     </div>
-    <div v-else-if="!issueNode" class="d-flex justify-content-center p-4 m-3 rounded-lg">
+    <div v-else-if="loading" class="d-flex justify-content-center p-4 m-3 rounded-lg">
       <font-awesome-icon :icon="['fas', 'circle-notch']" spin class="text-muted-light" />
+    </div>
+    <div v-else-if="!loading && !issueNode" class="d-flex justify-content-center p-3 rounded-lg">
+      <small class="text-muted d-block text-center">
+        <small><font-awesome-icon :icon="['fas', 'exclamation-triangle']" /></small>
+        Issue not found.
+      </small>
     </div>
   </div>
 </template>
@@ -224,7 +230,8 @@ export default {
       releaseRequestID: null,
       isRepoAdmin: false,
       fundingGoal: Math.floor(Math.random() * 5) + 1,
-      linkedPullRequests: []
+      linkedPullRequests: [],
+      loading: false
     }
   },
   watch: {
@@ -355,19 +362,22 @@ export default {
     }
   },
   mounted() {
+    this.loading = true
     this.loadIssueById(this.issue.id).then(issue => {
-      this.issueNode = {
-        id: issue.id,
-        number: issue.number,
-        title: issue.title,
-        owner: issue.repository.owner.login,
-        repository: issue.repository.name,
-        repositoryOwner: issue.repository.owner.login,
-        primaryLanguage: issue.repository.primaryLanguage,
-        labels: issue.labels.edges.map(label => label.node),
-        closed: issue.closed
+      if (issue) {
+        this.issueNode = {
+          id: issue.id,
+          number: issue.number,
+          title: issue.title,
+          owner: issue.repository.owner.login,
+          repository: issue.repository.name,
+          repositoryOwner: issue.repository.owner.login,
+          primaryLanguage: issue.repository.primaryLanguage,
+          labels: issue.labels.edges.map(label => label.node),
+          closed: issue.closed
+        }
       }
-    })
+    }).finally(() => this.loading = false)
   }
 }
 </script>
