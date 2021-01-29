@@ -197,13 +197,17 @@ export default {
       })
     },
     updateJobId(oracle, type, jobId, jobFee) {
+      if (!jobFee) {
+        jobFee = '10000000000000000'
+      }
+
       this.oracleUpdating = oracle
       this.jobUpdating = type
       this.$octoBay.methods.setOracleJob(
         oracle,
         type,
         this.$web3.utils.toHex(jobId),
-        jobFee || '10000000000000000'
+        jobFee
       ).send({ from: this.account }).then(() => {
         this.oracleUpdating = false
         this.jobUpdating = false
