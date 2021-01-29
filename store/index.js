@@ -86,13 +86,6 @@ export const getters = {
   activeOracle(state) {
     return state.activeOracle
   },
-  getOracle(state) {
-    if (state.activeOracle) {
-      return state.activeOracle
-    }
-
-    return state.oracles[Math.floor(Math.random() * (state.oracles.length - 0 + 1) + 0)]
-  },
   showOracleList(state) {
     return state.showOracleList
   },

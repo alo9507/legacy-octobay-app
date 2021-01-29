@@ -70,9 +70,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import connect from '@/mixins/connect'
+import helpers from '@/mixins/helpers'
 
 export default {
-  mixins: [connect],
+  mixins: [connect, helpers],
   data() {
     return {
       githubClientId: process.env.GITHUB_CLIENT_ID,
@@ -91,7 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'registeredAccount', 'oracles']),
+    ...mapGetters(['connected', 'account', 'registeredAccount', 'oracles', 'activeOracle']),
     ...mapGetters("github", {
       githubUser: 'user',
       githubAccessToken: 'accessToken'
@@ -158,7 +159,7 @@ export default {
       })
 
       this.$octoBay.methods.register(
-        this.oracles[0].address,
+        this.nextOracle().address,
         this.githubUser.login
       ).send({
         // useGSN: false,

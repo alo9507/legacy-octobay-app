@@ -28,6 +28,13 @@ export default {
         if (m) var r = m[0], g = m[1], b = m[2];
       }
       if (typeof r != "undefined") return ((r*299)+(g*587)+(b*114))/1000;
-    }
+    },
+    nextOracle() {
+      if (this.activeOracle) {
+        return this.activeOracle
+      }
+
+      return this.oracles[Math.floor(Math.random() * this.oracles.length)]
+    },
   }
 }
