@@ -30,7 +30,7 @@
                 </small>
               </small>
               <div>
-                {{ issue.depositAmount }} ETH
+                {{ $web3.utils.fromWei(issue.depositAmount, 'ether') }} ETH
               </div>
             </div>
           </div>

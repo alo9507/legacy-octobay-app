@@ -143,13 +143,6 @@ export const mutations = {
       state.issues.splice(existingIssueIndex, 1)
     }
   },
-  addDeposit(state, { issue, deposit }) {
-    let existingIssue = state.issues.find(i => i.id === issue.id)
-    if (existingIssue) {
-      existingIssue.depositAmount += Number(this.$web3.utils.fromWei(deposit.amount, 'ether'))
-      existingIssue.deposits.push(deposit)
-    }
-  },
   removeDeposit(state, { issueId, depositId }) {
     let existingIssueIndex = state.issues.findIndex(issue => issue.id === issueId)
     if (existingIssueIndex != -1) {
@@ -293,35 +286,20 @@ export const actions = {
   },
   updateIssues({ state, commit }) {
     if (this.$octoBay) {
-      this.$octoBay.methods.nextIssueDepositId().call().then(async maxId => {
-        maxId = Number(maxId)
-        if (maxId) {
-          let id = maxId
-          while (id) {
-            const deposit = await this.$octoBay.methods.issueDeposits(id).call()
-            deposit.id = id
-            if (deposit.amount > 0) {
-              let existingIssue = state.issues.find(issue => issue.id == deposit.issueId)
-              if (existingIssue) {
-                let depositExists = existingIssue.deposits.findIndex(d => d.id == id)
-                if (depositExists === -1) {
-                  commit('addDeposit', { issue: existingIssue, deposit })
-                }
-              } else {
-                const newIssue = {
-                  id: deposit.issueId,
-                  deposits: [deposit],
-                  depositAmount: Number(this.$web3.utils.fromWei(deposit.amount, 'ether')),
-                  boostAmount: 0
-                }
-                const boostAmount = await this.$octoBay.methods.issuePins(newIssue.id).call()
-                newIssue.boostAmount = Number(this.$web3.utils.fromWei(boostAmount, 'ether'))
-                commit('addIssue', newIssue)
-              }
-            }
-            id--
+      this.$axios.$get(process.env.API_URL + '/graph/issues').then(issues => {
+        issues.forEach(async issue => {
+          // TODO: this all has to go to graph as well
+          let depositAmount = BigInt(0)
+          issue.deposits.forEach(deposit => {
+            depositAmount += BigInt(deposit.amount)
+          })
+          issue.depositAmount = depositAmount.toString()
+          if (issue.depositAmount) {
+            const boostAmount = await this.$octoBay.methods.issuePins(issue.id).call()
+            issue.boostAmount = Number(this.$web3.utils.fromWei(boostAmount, 'ether'))
+            commit('addIssue', issue)
           }
-        }
+        })
       })
     }
   },
