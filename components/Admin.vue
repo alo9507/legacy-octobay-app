@@ -1,6 +1,12 @@
 <template>
     <div class="card-body" style="max-width: 360px">
       <div>
+        <b>OctoBay Contract</b>
+        <div>
+          <input type="text" :value="$octoBay.options.address" class="form-control" readonly />
+        </div>
+      </div>
+      <div class="mt-3">
         <b>OctoPin Token</b>
         <div class="input-with-button">
           <small class="text-muted">Address:</small>
