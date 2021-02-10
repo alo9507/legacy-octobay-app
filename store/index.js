@@ -347,8 +347,7 @@ export const actions = {
   updateOctoPinBalance({ state, commit }) {
     this.$octoPin.methods.balanceOf(state.accounts[0]).call().then(balance => commit('setOctoPinBalance', balance))
   },
-  async updatePins({ commit }, issueId) {
-    const pins = await this.$octoBay.methods.issuePins(issueId).call()
-    commit('updatePins', { issueId, pins })
+  updatePins({ commit }, issueId) {
+    this.$octoBay.methods.issuePins(issueId).call().then(pins => commit('updatePins', { issueId, pins }))
   }
 }
