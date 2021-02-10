@@ -6,7 +6,7 @@
       <!-- <a href="#" :class="'mx-2 text-' + (view === 'contributors' ? 'primary' : 'muted')" @click="$store.commit('setView', 'contributors')">Contributors</a> -->
       <a href="#" :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')" @click="$store.commit('setView', 'claim')" v-if="registeredAccount === account">Claim</a>
       <a href="#" :class="'mx-2 text-' + (view === 'register' ? 'primary' : 'muted')" @click="$store.commit('setView', 'register')" v-else>Register</a>
-      <a href="#" :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')" @click="$store.commit('setView', 'admin')" v-if="account && account === owner">
+      <a href="#" :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')" @click="$store.commit('setView', 'admin')" v-if="account && account === octoBayOwner">
         <font-awesome-icon :icon="['fas', 'sliders-h']" />
       </a>
     </div>
@@ -17,7 +17,7 @@
         <Contributors v-else-if="view == 'contributors'" />
         <Claim v-else-if="view == 'claim'" />
         <Register v-else-if="view == 'register'" />
-        <Admin v-else-if="account && account === owner && view == 'admin'" />
+        <Admin v-else-if="account && account === octoBayOwner && view == 'admin'" />
       </keep-alive>
     </transition>
   </div>
@@ -29,7 +29,7 @@ import { mapGetters } from "vuex"
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'registeredAccount', 'redirectPrefills', 'owner']),
+    ...mapGetters(['view', 'account', 'registeredAccount', 'redirectPrefills', 'octoBayOwner']),
     ...mapGetters('github', { githubUser: 'user' })
   },
   created() {

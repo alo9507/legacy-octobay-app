@@ -1,5 +1,5 @@
 export const state = () => ({
-  owner: null,
+  octoBayOwner: null,
   networkId: null,
   accounts: [],
   registeredAccount: null,
@@ -104,8 +104,8 @@ export const getters = {
   modalData(state) {
     return state.modalData
   },
-  owner(state) {
-    return state.owner
+  octoBayOwner(state) {
+    return state.octoBayOwner
   },
   octoPinAddress(state) {
     return state.octoPinAddress
@@ -212,8 +212,8 @@ export const mutations = {
   setModalData(state, data) {
     state.modalData = data
   },
-  setOwner(state, owner) {
-    state.owner = owner
+  setOctoBayOwner(state, owner) {
+    state.octoBayOwner = owner
   },
   setOctoPinAddress(state, address) {
     state.octoPinAddress = address
