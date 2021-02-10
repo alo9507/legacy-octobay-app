@@ -28,7 +28,7 @@
       <a
         v-if="!githubUser"
         :href="
-          'https://github.com/login/oauth/authorize?scope=user:email&client_id=' +
+          'https://github.com/login/oauth/authorize?scope=user:email,public_repo&client_id=' +
             githubClientId
         "
         class="ml-2 btn btn-lg btn-light shadow-sm"
