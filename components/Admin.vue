@@ -9,7 +9,6 @@
       <div class="mt-3">
         <b>OctoPin Token</b>
         <div class="input-with-button">
-          <small class="text-muted">Address:</small>
           <input type="text" v-model="octoPinAddress" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateOctoPinToken()" :disabled="updatingOctoPinToken">
             <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="updatingOctoPinToken" />
@@ -20,7 +19,6 @@
       <div class="mt-3">
         <b>Twitter Account ID</b>
         <div class="input-with-button">
-          <small class="text-muted">ID:</small>
           <input type="text" v-model="twitterAccountId" class="form-control" />
           <button class="btn btn-primary btn-sm shadow-sm" @click="updateTwitterAccountId()" :disabled="updatingTwitterAccountId">
             <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="updatingTwitterAccountId" />
