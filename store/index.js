@@ -241,63 +241,6 @@ export const mutations = {
 }
 
 export const actions = {
-  load({ commit, dispatch, state, rootState }) {
-    this.$axios.$get('https://tokens.coingecko.com/uniswap/all.json').then(list => {
-      commit('setTokenList', list)
-    })
-
-    if (this.$octoBay) {
-      this.$octoBay.methods.owner().call().then(owner => {
-        commit('setOwner', owner)
-      })
-
-      this.$octoBay.methods.octoPin().call().then(address => {
-        commit('setOctoPinAddress', address)
-      })
-
-      dispatch('updateOracles')
-
-      this.$octoBay.methods.twitterAccountId().call().then(id => {
-        commit('setTwitterAccountId', id)
-      })
-
-      this.$octoBay.methods.twitterFollowers().call().then(followers => {
-        commit('setTwitterFollowers', followers)
-      })
-    }
-
-    this.$axios.$get(`${process.env.API_URL}/github/forks/octobay/app`).then(forks => {
-      forks.forEach(fork => {
-        commit('setFork', fork)
-      })
-    })
-
-    return dispatch("github/login").then((result) => {
-      if (rootState.github.user && this.$octoBay) {
-        this.$octoBay.methods.userIDsByGithubUser(rootState.github.user.login).call().then(userId => {
-          this.$octoBay.methods.users(userId).call().then(result => {
-            commit("setRegisteredAccount", result.ethAddress !== "0x0000000000000000000000000000000000000000" && result.status === '2' ? result.ethAddress : null)
-          }).catch(() => {
-            commit("setRegisteredAccount", null)
-          })
-        }).catch(() => {
-          commit("setRegisteredAccount", null)
-        })
-      }
-      if (this.$web3 && this.$octoBay) {
-        this.$web3.eth.getAccounts().then(accounts => {
-          if (accounts.length) {
-            commit('setAccounts', accounts)
-            this.$web3.eth.getBalance(accounts[0]).then(balance => commit('setBalance', balance))
-            dispatch('updateOctoPinBalance')
-          }
-        })
-        this.$web3.eth.net.getId().then(result => {
-          commit('setNetworkId', result)
-        })
-      }
-    })
-  },
   updateIssues({ state, commit }) {
     if (this.$octoBay) {
       this.$axios.$get(process.env.API_URL + '/graph/issues').then(issues => {

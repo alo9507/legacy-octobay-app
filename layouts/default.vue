@@ -45,6 +45,7 @@
 
 <script>
 export default {
+  middleware: 'load',
   data() {
     return {
       showWarning: true
