@@ -202,8 +202,8 @@ export const mutations = {
   setView(state, view) {
     state.view = view
   },
-  setOracle(state, oracle) {
-    state.oracles.push(oracle)
+  setOracles(state, oracles) {
+    state.oracles = oracles
   },
   setActiveOracle(state, oracle) {
     state.activeOracle = oracle
@@ -261,44 +261,8 @@ export const actions = {
     }
   },
   updateOracles({ commit }) {
-    return this.$octoBay.methods.getOracles().call().then(oracleAddresses => {
-      const oracleRequests = []
-      oracleAddresses.forEach(oracleAddress => {
-        const jobRequests = []
-        jobRequests.push(this.$octoBay.methods.oracleNames(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.registerJobIds(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.registerJobFees(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.releaseJobIds(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.releaseJobFees(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.claimJobIds(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.claimJobFees(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.twitterPostJobIds(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.twitterPostJobFees(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.twitterFollowersJobIds(oracleAddress).call())
-        jobRequests.push(this.$octoBay.methods.twitterFollowersJobFees(oracleAddress).call())
-        oracleRequests.push(Promise.all(jobRequests).then(values => {
-          const oracle =  {
-            address: oracleAddress,
-            name: values[0],
-            registerJobId: this.$web3.utils.hexToAscii(values[1]),
-            registerJobFee: values[2],
-            releaseJobId: this.$web3.utils.hexToAscii(values[3]),
-            releaseJobFee: values[4],
-            claimJobId: this.$web3.utils.hexToAscii(values[5]),
-            claimJobFee: values[6],
-            twitterPostJobId: this.$web3.utils.hexToAscii(values[7]),
-            twitterPostJobFee: values[8],
-            twitterFollowersJobId: this.$web3.utils.hexToAscii(values[9]),
-            twitterFollowersJobFee: values[10],
-          }
-          console.log('Oracle', oracle.address)
-          console.log('- Register Job ID', oracle.registerJobId)
-          console.log('- Twitter Post Job ID', oracle.twitterPostJobId)
-          commit('setOracle', oracle)
-          return oracle
-        }))
-      })
-      return Promise.all(oracleRequests).then(oracles => oracles)
+    this.$axios.$get(process.env.API_URL + '/graph/oracles').then(oracles => {
+      commit('setOracles', oracles)
     })
   },
   updateOctoPinBalance({ state, commit }) {
