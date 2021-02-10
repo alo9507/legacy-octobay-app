@@ -2,7 +2,7 @@
   <div>
     <div v-if="!loading && issueNode" :class="['issue d-flex flex-column', { 'pinned': issue.boostAmount > 0, showDetails }]" @click="showDetails = !showDetails">
       <div>
-        <div class="bg-success" :style="`height: 5px; width: ${(Math.min(issue.depositAmount / fundingGoal * 100, 100)).toFixed(2)}%`"></div>
+        <div class="bg-success" :style="`height: 5px; width: ${(Math.min(Number($web3.utils.fromWei(issue.depositAmount, 'ether')) / fundingGoal * 100, 100)).toFixed(2)}%`"></div>
       </div>
       <div class="d-flex align-items-top px-3 py-2">
         <div :class="{ 'text-truncate': !showDetails }">
