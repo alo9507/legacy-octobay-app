@@ -54,9 +54,10 @@ export default {
   plugins: [
     '@/plugins/moment',
     '@/plugins/tooltips',
-    '@/plugins/web3',
     '@/plugins/load',
     '@/plugins/clipboard',
+    '@/plugins/web3',
+    '@/plugins/octobay',
   ],
   /*
   ** Auto import components

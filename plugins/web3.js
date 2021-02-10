@@ -5,6 +5,7 @@ export default async ({ app }, inject) => {
   if (window.ethereum) {
     const plainWeb3 = new Web3(window.ethereum)
 
+    // GSN integration currently disabled
     // const gsnRelayProvider = await RelayProvider.newProvider({
     //   provider: plainWeb3.currentProvider,
     //   config: {
@@ -19,8 +20,6 @@ export default async ({ app }, inject) => {
     // }).init()
 
     const web3 = plainWeb3 // new Web3(gsnRelayProvider)
-    const octoBay = new web3.eth.Contract(process.env.OCTOBAY_ABI, process.env.OCTOBAY_ADDRESS)
-    const octoPin = new web3.eth.Contract(process.env.OCTOPIN_ABI, process.env.OCTOPIN_ADDRESS)
 
     window.ethereum.on('accountsChanged', accounts => {
       app.store.dispatch('load')
@@ -30,8 +29,10 @@ export default async ({ app }, inject) => {
       app.store.dispatch('load')
     })
 
-    inject('octoBay', octoBay)
-    inject('octoPin', octoPin)
+    /**
+     * Exposes Web3 as a nuxt plugin.
+     * in components: this.$web3
+     */
     inject('web3', web3)
   }
 }
