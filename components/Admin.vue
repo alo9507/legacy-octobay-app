@@ -36,6 +36,26 @@
           <small class="text-muted">Name</small>
           <input type="text" v-model="newOracle.name" class="form-control" />
         </div>
+        <div class="input-with-button">
+          <small class="text-muted">Register Job ID</small>
+          <input type="text" v-model="newOracle.registerJobId" class="form-control" />
+        </div>
+        <div class="input-with-button">
+          <small class="text-muted">Release Job ID</small>
+          <input type="text" v-model="newOracle.releaseJobId" class="form-control" />
+        </div>
+        <div class="input-with-button">
+          <small class="text-muted">Claim Job ID</small>
+          <input type="text" v-model="newOracle.claimJobId" class="form-control" />
+        </div>
+        <div class="input-with-button">
+          <small class="text-muted">Twitter Post Job ID</small>
+          <input type="text" v-model="newOracle.twitterPostJobId" class="form-control" />
+        </div>
+        <div class="input-with-button">
+          <small class="text-muted">Twitter Followers Job ID</small>
+          <input type="text" v-model="newOracle.twitterFollowersJobId" class="form-control" />
+        </div>
         <button class="btn btn-primary mt-3 w-100 shadow-sm" @click="addNewOracle()" :disabled="!isNewOracleValid()">
           <font-awesome-icon :icon="['fas', 'circle-notch']" spin v-if="addingNewOracle" />
           <span v-else>Add new Oracle</span>
@@ -184,16 +204,40 @@ export default {
       })
     },
     isNewOracleValid() {
-      return this.newOracle.address.length == 42 && this.newOracle.address.startsWith('0x') && this.newOracle.name
+      return (
+        this.newOracle.address.length === 42 &&
+        this.newOracle.address.startsWith('0x') &&
+        this.newOracle.name &&
+        this.newOracle.registerJobId.length === 32 &&
+        this.newOracle.releaseJobId.length === 32 &&
+        this.newOracle.claimJobId.length === 32 &&
+        this.newOracle.twitterPostJobId.length === 32 &&
+        this.newOracle.twitterFollowersJobId.length === 32
+      )
     },
     addNewOracle() {
       this.addingNewOracle = true
-      this.$octoBay.methods.setOracle(
+      const jobFee = '10000000000000000'
+      console.log(this.$octoBay)
+      this.$octoBay.methods.addOracle(
         this.newOracle.address,
         this.newOracle.name,
+        [0, 1, 2, 3, 4],
+        [
+          [this.$web3.utils.toHex(this.newOracle.registerJobId), jobFee],
+          [this.$web3.utils.toHex(this.newOracle.releaseJobId), jobFee],
+          [this.$web3.utils.toHex(this.newOracle.claimJobId), jobFee],
+          [this.$web3.utils.toHex(this.newOracle.twitterPostJobId), jobFee],
+          [this.$web3.utils.toHex(this.newOracle.twitterFollowersJobId), jobFee]
+        ]
       ).send({ from: this.account }).then(() => {
         this.newOracle.address = ''
         this.newOracle.name = ''
+        this.newOracle.registerJobId = ''
+        this.newOracle.releaseJobId = ''
+        this.newOracle.claimJobId = ''
+        this.newOracle.twitterPostJobId = ''
+        this.newOracle.twitterFollowersJobId = ''
         this.$store.dispatch('updateOracles').then(oracles => {
           this.oracleForms = oracles
           this.addingNewOracle = false
