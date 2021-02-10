@@ -258,7 +258,12 @@ export default {
     showDetails(show) {
       if (show) {
         this.$axios.$get(
-          `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`
+          `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`,
+          {
+            headers: {
+              Authorization: "bearer " + this.githubAccessToken
+            }
+          }
         ).then(isRepoAdmin => this.isRepoAdmin = isRepoAdmin).catch(() => this.isRepoAdmin = false)
 
         this.linkedPullRequests = []
@@ -274,7 +279,7 @@ export default {
   },
   computed: {
     ...mapGetters(['account', 'registeredAccount', 'oracles']),
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters('github', { githubUser: 'user', githubAccessToken: 'accessToken' }),
     sortedLinkedPullRequests() {
       return this.linkedPullRequests.sort((a, b) => {
         return a.state === 'MERGED' ? -1 : 1
