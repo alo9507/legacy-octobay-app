@@ -5,16 +5,26 @@ export default function ({ store, redirect, app }) {
       app.$octoBay.methods.octoPin().call(),
       app.$octoBay.methods.twitterAccountId().call(),
       app.$octoBay.methods.twitterFollowers().call(),
+      app.$web3.eth.net.getId(),
+      app.$web3.eth.getAccounts(),
       store.dispatch("github/login")
     ]).then(values => {
       store.commit('setOctoBayOwner', values[0])
       store.commit('setOctoPinAddress', values[1])
       store.commit('setTwitterAccountId', values[2])
       store.commit('setTwitterFollowers', values[3])
+      store.commit('setNetworkId', values[4])
+      const accounts = values[5]
+
+      if (accounts.length) {
+        store.commit('setAccounts', accounts)
+        app.$web3.eth.getBalance(accounts[0]).then(balance => store.commit('setBalance', balance))
+        store.dispatch('updateOctoPinBalance')
+      }
 
       if (store.state.github.user) {
-        this.$octoBay.methods.userIDsByGithubUser(rootState.github.user.login).call().then(userId => {
-          this.$octoBay.methods.users(userId).call().then(result => {
+        app.$octoBay.methods.userIDsByGithubUser(store.state.github.user.login).call().then(userId => {
+          app.$octoBay.methods.users(userId).call().then(result => {
             store.commit("setRegisteredAccount", result.ethAddress !== "0x0000000000000000000000000000000000000000" && result.status === '2' ? result.ethAddress : null)
           }).catch(() => {
             store.commit("setRegisteredAccount", null)
@@ -24,18 +34,8 @@ export default function ({ store, redirect, app }) {
         })
       }
 
-      app.$web3.eth.getAccounts().then(accounts => {
-        if (accounts.length) {
-          store.commit('setAccounts', accounts)
-          this.$web3.eth.getBalance(accounts[0]).then(balance => commit('setBalance', balance))
-          store.dispatch('updateOctoPinBalance')
-        }
-      })
-      app.$web3.eth.net.getId().then(result => {
-        store.commit('setNetworkId', result)
-      })
-
     }).catch(e => {
+      console.log(e)
       store.commit('setLoadError', e)
     }).finally(() => store.commit('setLoaded', true))
   }
