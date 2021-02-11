@@ -2,7 +2,12 @@
 
 OctoBay is a decentralized bounty and promotion platform for open source projects on GitHub.
 
-[Docs](https://octobay.github.io/docs)
+- [Demo](https://octobay.github.io/app)
+- [Docs](https://octobay.github.io/docs)
+- [API](https://github.com/OctoBay/api)
+- [Contracts](https://github.com/OctoBay/contracts)
+- [Chainlink Adapters](https://github.com/OctoBay/chainlink-adapters)
+- [Subgraph](https://github.com/OctoBay/subgraph)
 
 ## Run a fork
 
