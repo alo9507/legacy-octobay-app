@@ -1,5 +1,9 @@
 # OctoBay
 
+OctoBay is a decentralized bounty and promotion platform for open source projects on GitHub.
+
+[Docs](https://github.com/OctoBay/docs)
+
 ## Run a fork
 
 If you want to run your own instance of OctoBay you need to...
