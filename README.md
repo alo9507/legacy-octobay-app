@@ -2,7 +2,7 @@
 
 OctoBay is a decentralized bounty and promotion platform for open source projects on GitHub.
 
-[Docs](https://github.com/OctoBay/docs)
+[Docs](https://octobay.github.io/docs)
 
 ## Run a fork
 
