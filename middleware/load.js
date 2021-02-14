@@ -7,6 +7,7 @@ export default function ({ store, redirect, app }) {
       app.$octoBay.methods.twitterFollowers().call(),
       app.$web3.eth.net.getId(),
       app.$web3.eth.getAccounts(),
+      app.$axios.$get('https://tokens.coingecko.com/uniswap/all.json'),
       store.dispatch("github/login")
     ]).then(values => {
       store.commit('setOctoBayOwner', values[0])
@@ -15,6 +16,7 @@ export default function ({ store, redirect, app }) {
       store.commit('setTwitterFollowers', values[3])
       store.commit('setNetworkId', values[4])
       const accounts = values[5]
+      store.commit('setTokenList', values[6])
 
       if (accounts.length) {
         store.commit('setAccounts', accounts)
