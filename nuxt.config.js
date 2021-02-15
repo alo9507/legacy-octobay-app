@@ -146,7 +146,9 @@ export default {
         'faStar',
         'faUsers',
         'faDice',
-        'faSlidersH'
+        'faSlidersH',
+        'faHandHoldingUsd',
+        'faExchangeAlt'
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },

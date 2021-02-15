@@ -178,8 +178,8 @@
     <button class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-4" v-else-if="$web3" @click="connect()">
       Connect
     </button>
+    <TokenList :select="tokenListSelectCallback" :show="showTokenList" :hide="tokenListHideCallback" />
   </div>
-</div>
 </template>
 
 <style lang="sass">
@@ -243,7 +243,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'selectedToken', 'selectedRecipientType', 'selectedInterval', 'tokenList', 'redirectPrefills']),
+    ...mapGetters(['connected', 'account', 'selectedToken', 'selectedRecipientType', 'selectedInterval', 'showTokenList', 'tokenList', 'redirectPrefills']),
     amountPerInstallment() {
       if (this.releaseInstallments) {
         return this.amount / this.releaseInstallments
@@ -398,6 +398,12 @@ export default {
     },
   },
   methods: {
+    tokenListSelectCallback(token) {
+      this.$store.commit('setSelectedToken', token)
+    },
+    tokenListHideCallback() {
+      this.$store.commit('setShowTokenList', false)
+    },
     confirm() {
       if (this.selectedRecipientType == 'User') {
         this.depositForUser()

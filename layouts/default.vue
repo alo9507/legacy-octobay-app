@@ -34,7 +34,6 @@
     <Header />
     <Nuxt />
     <Footer />
-    <TokenList />
     <RecipientTypeList />
     <IntervalSelect />
     <OracleList />

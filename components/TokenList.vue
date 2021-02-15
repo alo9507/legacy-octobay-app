@@ -1,18 +1,18 @@
 <template>
   <transition name="fade" mode="in-out">
-    <div class="overlay" v-if="showTokenList" @click="$store.commit('setShowTokenList', false); showNum = 25">
+    <div class="overlay" v-if="show" @click="hide(); showNum = 25">
       <div class="card shadow-sm token-list" @click.stop>
         <div class="card-header border-0 p-2">
           <input type="text" class="form-control form-control-lg" placeholder="Enter token name or address" v-model="tokenSearch" />
         </div>
         <div class="card-body p-2">
-          <div class="btn btn-outline-light text-dark mt-2 text-left d-flex align-items-center" @click="$store.commit('setSelectedToken', null); $store.commit('setShowTokenList', false); showNum = 25">
+          <div class="btn btn-outline-light text-dark mt-2 text-left d-flex align-items-center" @click="select(null); hide(); showNum = 25">
             <img :src="'./eth-logo.png'" width="25" height="25" class="rounded-circle" />
             <div class="ml-2 text-truncate d-flex flex-column">
               Ether (ETH)
             </div>
           </div>
-          <div v-for="token in filteredTokenList" class="btn btn-outline-light text-dark mt-2 text-left d-flex align-items-center" @click="$store.commit('setSelectedToken', token); $store.commit('setShowTokenList', false); showNum = 25">
+          <div v-for="token in filteredTokenList" class="btn btn-outline-light text-dark mt-2 text-left d-flex align-items-center" @click="select(token); hide(); showNum = 25">
             <img :src="token.logoURI" width="25" height="25" class="rounded-circle" />
             <div class="ml-2 text-truncate d-flex flex-column">
               {{ token.name }} ({{ token.symbol }})
@@ -59,6 +59,11 @@ import {
 } from "vuex"
 
 export default {
+  props: {
+    select: Function,
+    show: Boolean,
+    hide: Function,
+  },
   data() {
     return {
       tokenSearch: '',
