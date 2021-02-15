@@ -6,7 +6,8 @@
   "scripts": {
     "app:dev": "nuxt",
     "app:generate": "nuxt generate --force-build",
-    "app:deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
+    "app:deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
+    "lint": "eslint --fix"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
@@ -29,8 +30,10 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/fontawesome": "^1.1.2",
+    "eslint": "^7.20.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-vue": "^7.6.0",
     "prettier": "^2.0.5",
     "push-dir": "^0.4.1"
   }

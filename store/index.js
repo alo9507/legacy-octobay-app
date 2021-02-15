@@ -241,7 +241,7 @@ export const mutations = {
 }
 
 export const actions = {
-  updateIssues({ state, commit }) {
+  updateIssues({ commit }) {
     if (this.$octoBay) {
       this.$axios.$get(process.env.API_URL + '/graph/issues').then(issues => {
         issues.forEach(async issue => {
