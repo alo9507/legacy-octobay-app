@@ -256,7 +256,7 @@
                     :key="pullRequest.id"
                     :href="pullRequest.url"
                     target="_blank"
-                    class="btn btn-light btn-sm btn-block mb-2 d-flex align-items-center"
+                    class="btn btn-light btn-sm btn-block mb-2 d-flex align-items-center border-light"
                   >
                     <svg
                       style="width: 19px; height: 19px"
@@ -278,18 +278,26 @@
                     <span class="mr-auto ml-2 pr-2 text-truncate">{{
                       pullRequest.title
                     }}</span>
+                    <span
+                      v-if="pullRequest.autoMergeRequest"
+                      v-tooltip="{
+                        trigger: 'hover',
+                        content: 'AutoMerge enabled',
+                      }"
+                      class="badge badge-light mr-2 rounded-xl"
+                    >
+                      <font-awesome-icon
+                        :icon="['fas', 'check']"
+                        class="text-success"
+                      />
+                      <font-awesome-icon
+                        :icon="['fas', 'angle-double-right']"
+                      />
+                    </span>
                     {{ pullRequest.comments.totalCount }}
                     <font-awesome-icon
                       :icon="['far', 'comment-alt']"
                       class="ml-1 mr-2 text-muted"
-                    />
-                    <font-awesome-icon
-                      :icon="['fab', 'github']"
-                      class="text-muted"
-                    />
-                    <font-awesome-icon
-                      :icon="['fas', 'external-link-alt']"
-                      class="text-muted-light ml-1"
                     />
                   </a>
                 </div>
