@@ -52,8 +52,3 @@ You **can** adjust the following parameters in your `.env` file:
 
 After you made your adjustments, run `yarn app:generate` to generate a static site build and then `yarn app:deploy` to push it to your remote `gh-pages` branch to update your OctoBay instance. To test your changes run `yarn app:dev` to start a local server.
 
-## Local Development Setup
-
-See: https://github.com/octobay/install
-
-![mindmap](https://user-images.githubusercontent.com/6792578/105842763-fe5bc800-5fd6-11eb-81b6-0bf30d503067.png)
