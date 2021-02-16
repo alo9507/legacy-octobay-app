@@ -133,11 +133,14 @@ a:hover
 .rounded-xl
   border-radius: 2rem !important
 
-@media screen and (max-width: 480px)
-  .main
-    padding-left: 0 !important
-    padding-right: 0 !important
-    .content
-      border-radius: 0 !important
-      max-width: 100%
-      width: 100%
+=fix-postcss-bug
+  @media screen and (max-width: 480px)
+    .main
+      padding-left: 0 !important
+      padding-right: 0 !important
+      .content
+        border-radius: 0 !important
+        max-width: 100%
+        width: 100%
++fix-postcss-bug
+  
