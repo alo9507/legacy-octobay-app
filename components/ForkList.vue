@@ -1,28 +1,63 @@
 <template>
   <transition name="fade" mode="in-out">
-    <div class="overlay" v-if="showForkList" @click="$store.commit('setShowForkList', false)">
+    <div
+      v-if="showForkList"
+      class="overlay"
+      @click="$store.commit('setShowForkList', false)"
+    >
       <div class="card shadow-sm fork-list" @click.stop>
         <div class="card-body px-2 pt-2 pb-0">
-          <h5 class="text-center text-muted-light py-3 px-4 m-0">Explore the ecosystem. Here's a list of all OctoBay forks.</h5>
+          <h5 class="text-center text-muted-light py-3 px-4 m-0">
+            Explore the ecosystem. Here's a list of all OctoBay forks.
+          </h5>
           <div class="text-right">
             <small>
-              <a href="https://github.com/octobay/app/fork" target="_blank" class="font-weight-bold">create fork</a>
+              <a
+                href="https://github.com/octobay/app/fork"
+                target="_blank"
+                class="font-weight-bold"
+                >create fork</a
+              >
             </small>
           </div>
         </div>
         <div class="card-header border-0 p-2">
-          <input type="text" class="form-control form-control-lg" placeholder="Search" v-model="forkSearch" />
+          <input
+            v-model="forkSearch"
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Search"
+          />
         </div>
         <div class="card-body p-2">
-          <a :class="'mt-2 text-left d-flex align-items-center btn btn-outline-light text-dark'" href="https://octobay.github.io/">
-            <img :src="'./icon.png'" width="32" height="32" class="rounded-circle shadow-sm" />
+          <a
+            :class="'mt-2 text-left d-flex align-items-center btn btn-outline-light text-dark'"
+            href="https://octobay.github.io/"
+          >
+            <img
+              :src="'./icon.png'"
+              width="32"
+              height="32"
+              class="rounded-circle shadow-sm"
+            />
             <div class="ml-2 d-flex flex-column">
               OctoBay
-              <small :class="'text-muted'">Ethereum payment service for GitHub users.</small>
+              <small :class="'text-muted'"
+                >Ethereum payment service for GitHub users.</small
+              >
             </div>
           </a>
-          <a v-for="fork in filteredForkList" :class="'mt-2 text-left d-flex align-items-center btn btn-outline-light text-dark'" :href="`https://${fork.username}.github.io/${fork.repository}`">
-            <div target="_blank" class="rounded-circle shadow-sm avatar border" :style="'background-image: url(' + fork.logo + ')'"></div>
+          <a
+            v-for="fork in filteredForkList"
+            :key="fork.username"
+            :class="'mt-2 text-left d-flex align-items-center btn btn-outline-light text-dark'"
+            :href="`https://${fork.username}.github.io/${fork.repository}`"
+          >
+            <div
+              target="_blank"
+              class="rounded-circle shadow-sm avatar border"
+              :style="'background-image: url(' + fork.logo + ')'"
+            ></div>
             <div class="ml-2 mr-auto d-flex flex-column">
               <div class="d-flex justify-content-between">
                 {{ fork.username }}
@@ -34,7 +69,11 @@
               <small>{{ fork.description }}</small>
             </div>
           </a>
-          <button class="btn btn-outline-light text-dark btn-block my-2" @click="showNum += 25" v-if="!forkSearch && forks.length > 25">
+          <button
+            v-if="!forkSearch && forks.length > 25"
+            class="btn btn-outline-light text-dark btn-block my-2"
+            @click="showNum += 25"
+          >
             Show more
           </button>
         </div>
@@ -42,6 +81,32 @@
     </div>
   </transition>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+  data() {
+    return {
+      forkSearch: '',
+      showNum: 25,
+    }
+  },
+  computed: {
+    ...mapGetters(['showForkList', 'forks']),
+    filteredForkList() {
+      const search = this.forkSearch.toLowerCase()
+      const forkList = this.forkSearch
+        ? this.forks
+            .filter((fork) => fork.username.toLowerCase().includes(search))
+            .splice(0, this.showNum)
+        : this.forks.filter((fork) => fork).splice(0, this.showNum)
+      forkList.sort((a, b) => a.stars < b.stars)
+      return forkList
+    },
+  },
+}
+</script>
 
 <style lang="sass" scoped>
 .avatar
@@ -69,29 +134,3 @@
   .card-body
     overflow: auto
 </style>
-
-<script>
-import {
-  mapGetters
-} from "vuex"
-
-export default {
-  data() {
-    return {
-      forkSearch: '',
-      showNum: 25
-    }
-  },
-  computed: {
-    ...mapGetters(['showForkList', 'forks']),
-    filteredForkList() {
-      const search = this.forkSearch.toLowerCase()
-      const forkList = this.forkSearch ?
-        this.forks.filter(fork => fork.username.toLowerCase().includes(search)).splice(0, this.showNum) :
-        this.forks.filter(fork => fork).splice(0, this.showNum)
-      forkList.sort((a, b) => a.stars < b.stars)
-      return forkList
-    }
-  }
-}
-</script>

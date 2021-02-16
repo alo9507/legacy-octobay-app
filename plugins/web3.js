@@ -1,7 +1,7 @@
-const Web3 = require("web3")
+const Web3 = require('web3')
 // const { RelayProvider } = require('@opengsn/gsn')
 
-export default async ({ app }, inject) => {
+export default ({ app }, inject) => {
   if (window.ethereum) {
     const plainWeb3 = new Web3(window.ethereum)
 
@@ -21,11 +21,11 @@ export default async ({ app }, inject) => {
 
     const web3 = plainWeb3 // new Web3(gsnRelayProvider)
 
-    window.ethereum.on('accountsChanged', accounts => {
+    window.ethereum.on('accountsChanged', (accounts) => {
       app.store.dispatch('load')
     })
 
-    window.ethereum.on('chainChanged', network => {
+    window.ethereum.on('chainChanged', (network) => {
       app.store.dispatch('load')
     })
 

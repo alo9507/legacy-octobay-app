@@ -1,12 +1,39 @@
 <template>
   <div class="content card overflow-hidden border-0 shadow-sm">
     <div class="d-flex justify-content-around mt-4 px-2">
-      <a href="#" :class="'mx-2 text-' + (view === 'send' ? 'primary' : 'muted')" @click="$store.commit('setView', 'send')">Send</a>
-      <a href="#" :class="'mx-2 text-' + (view === 'issues' ? 'primary' : 'muted')" @click="$store.commit('setView', 'issues')">Pinboard</a>
+      <a
+        href="#"
+        :class="'mx-2 text-' + (view === 'send' ? 'primary' : 'muted')"
+        @click="$store.commit('setView', 'send')"
+        >Send</a
+      >
+      <a
+        href="#"
+        :class="'mx-2 text-' + (view === 'issues' ? 'primary' : 'muted')"
+        @click="$store.commit('setView', 'issues')"
+        >Pinboard</a
+      >
       <!-- <a href="#" :class="'mx-2 text-' + (view === 'contributors' ? 'primary' : 'muted')" @click="$store.commit('setView', 'contributors')">Contributors</a> -->
-      <a href="#" :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')" @click="$store.commit('setView', 'claim')" v-if="registeredAccount === account">Claim</a>
-      <a href="#" :class="'mx-2 text-' + (view === 'register' ? 'primary' : 'muted')" @click="$store.commit('setView', 'register')" v-else>Register</a>
-      <a href="#" :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')" @click="$store.commit('setView', 'admin')" v-if="account && account === octoBayOwner">
+      <a
+        v-if="registeredAccount === account"
+        href="#"
+        :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')"
+        @click="$store.commit('setView', 'claim')"
+        >Claim</a
+      >
+      <a
+        v-else
+        href="#"
+        :class="'mx-2 text-' + (view === 'register' ? 'primary' : 'muted')"
+        @click="$store.commit('setView', 'register')"
+        >Register</a
+      >
+      <a
+        v-if="account && account === octoBayOwner"
+        href="#"
+        :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')"
+        @click="$store.commit('setView', 'admin')"
+      >
         <font-awesome-icon :icon="['fas', 'sliders-h']" />
       </a>
     </div>
@@ -17,20 +44,68 @@
         <Contributors v-else-if="view == 'contributors'" />
         <Claim v-else-if="view == 'claim'" />
         <Register v-else-if="view == 'register'" />
-        <Admin v-else-if="account && account === octoBayOwner && view == 'admin'" />
+        <Admin
+          v-else-if="account && account === octoBayOwner && view == 'admin'"
+        />
       </keep-alive>
     </transition>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters } from 'vuex'
 
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'registeredAccount', 'redirectPrefills', 'octoBayOwner']),
-    ...mapGetters('github', { githubUser: 'user' })
+    ...mapGetters([
+      'view',
+      'account',
+      'registeredAccount',
+      'redirectPrefills',
+      'octoBayOwner',
+    ]),
+    ...mapGetters('github', { githubUser: 'user' }),
+  },
+  watch: {
+    githubUser() {
+      if (this.githubUser) {
+        this.$octoBay.methods
+          .userIDsByGithubUser(this.githubUser.login)
+          .call()
+          .then((userId) => {
+            if (userId) {
+              this.$octoBay.methods
+                .users(userId)
+                .call()
+                .then((result) => {
+                  if (
+                    result.ethAddress !==
+                      '0x0000000000000000000000000000000000000000' &&
+                    result.status === '2'
+                  ) {
+                    this.$store.commit(
+                      'setRegisteredAccount',
+                      result.ethAddress
+                    )
+                  } else {
+                    this.$store.commit('setRegisteredAccount', null)
+                  }
+                })
+                .catch(() => {
+                  this.$store.commit('setRegisteredAccount', null)
+                })
+            } else {
+              this.$store.commit('setRegisteredAccount', null)
+            }
+          })
+          .catch(() => {
+            this.$store.commit('setRegisteredAccount', null)
+          })
+      } else {
+        this.$store.commit('setRegisteredAccount', null)
+      }
+    },
   },
   created() {
     if (this.redirectPrefills) {
@@ -39,30 +114,5 @@ export default {
       }
     }
   },
-  watch: {
-    githubUser() {
-      if (this.githubUser) {
-        this.$octoBay.methods.userIDsByGithubUser(this.githubUser.login).call().then(userId => {
-          if (userId) {
-            this.$octoBay.methods.users(userId).call().then(result => {
-              if (result.ethAddress !== "0x0000000000000000000000000000000000000000" && result.status === '2') {
-                this.$store.commit('setRegisteredAccount', result.ethAddress)
-              } else {
-                this.$store.commit('setRegisteredAccount', null)
-              }
-            }).catch(() => {
-              this.$store.commit('setRegisteredAccount', null)
-            })
-          } else {
-            this.$store.commit('setRegisteredAccount', null)
-          }
-        }).catch(() => {
-          this.$store.commit('setRegisteredAccount', null)
-        })
-      } else {
-        this.$store.commit('setRegisteredAccount', null)
-      }
-    }
-  }
 }
 </script>

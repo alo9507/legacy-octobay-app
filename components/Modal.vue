@@ -1,10 +1,32 @@
 <template>
   <transition name="fade" mode="in-out">
-    <div class="overlay d-flex justify-content-center align-items-center" v-if="showModal" @click="close()">
-      <component v-bind:is="modalComponent"></component>
+    <div
+      v-if="showModal"
+      class="overlay d-flex justify-content-center align-items-center"
+      @click="close()"
+    >
+      <component :is="modalComponent"></component>
     </div>
   </transition>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+import ModalTwitterPost from './ModalTwitterPost.vue'
+
+export default {
+  components: { ModalTwitterPost },
+  computed: {
+    ...mapGetters(['showModal', 'modalComponent']),
+  },
+  methods: {
+    close() {
+      this.$store.commit('setModalData', null)
+      this.$store.commit('setShowModal', false)
+    },
+  },
+}
+</script>
 
 <style lang="sass" scoped>
 .overlay
@@ -21,21 +43,3 @@
   max-height: 90%
   z-index: 6
 </style>
-
-<script>
-import { mapGetters } from 'vuex'
-import ModalTwitterPost from './ModalTwitterPost.vue'
-
-export default {
-  components: { ModalTwitterPost },
-  computed: {
-    ...mapGetters(['showModal', 'modalComponent'])
-  },
-  methods: {
-    close() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setShowModal', false)
-    }
-  }
-}
-</script>

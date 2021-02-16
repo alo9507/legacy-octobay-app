@@ -7,17 +7,26 @@
     "app:dev": "nuxt",
     "app:generate": "nuxt generate --force-build",
     "app:deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
-    "lint": "eslint --fix"
+    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
+    "lint": "yarn lint:js && yarn lint:style"
+  },
+  "lint-staged": {
+    "*.{js,vue}": "eslint",
+    "*.{css,vue}": "stylelint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "@opengsn/gsn": "^2.1.0",
     "bootstrap": "^4.5.2",
-    "node-sass": "^4.14.1",
-    "nodemailer": "^6.4.16",
-    "nuxt": "^2.14.0",
-    "sass-loader": "^10.0.1",
+    "core-js": "^3.8.3",
+    "nuxt": "^2.14.12",
     "v-clipboard": "^2.2.3",
     "v-tooltip": "^2.0.3",
     "vue-moment": "^4.1.0",
@@ -30,11 +39,25 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/fontawesome": "^1.1.2",
-    "eslint": "^7.20.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-vue": "^7.6.0",
-    "prettier": "^2.0.5",
-    "push-dir": "^0.4.1"
+    "@nuxtjs/eslint-config": "^5.0.0",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/stylelint-module": "^4.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^7.5.0",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1",
+    "stylelint": "^13.9.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^20.0.0",
+    "fibers": "^5.0.0",
+    "husky": "^5.0.9",
+    "pinst": "^2.1.4",
+    "push-dir": "^0.4.1",
+    "sass": "^1.32.7",
+    "sass-loader": "10"
   }
 }

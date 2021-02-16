@@ -6,9 +6,9 @@ export default {
       username: route.params.username,
       repository: route.params.repository,
       issue: route.params.issue,
-      amount: Number(route.params.amount)
+      amount: Number(route.params.amount),
     })
     return redirect('/')
-  }
+  },
 }
 </script>

@@ -1,19 +1,69 @@
 <template>
   <transition name="fade" mode="in-out">
-    <div class="overlay" v-if="showIntervalSelect" @click="$store.commit('setShowIntervalSelect', false);">
+    <div
+      v-if="showIntervalSelect"
+      class="overlay"
+      @click="$store.commit('setShowIntervalSelect', false)"
+    >
       <div class="card shadow-sm recipient-list" @click.stop>
         <div class="card-body p-2">
-          <h5 class="text-center text-muted-light py-3 px-5">In what interval do you want to release funds to the recipient?</h5>
-          <div :class="'mt-2 d-flex justify-content-center align-items-center btn btn-' + (selectedInterval == 'Days' ? 'primary' : 'outline-light text-dark')" @click="$store.commit('setSelectedInterval', 'Days'); $store.commit('setShowIntervalSelect', false)">
+          <h5 class="text-center text-muted-light py-3 px-5">
+            In what interval do you want to release funds to the recipient?
+          </h5>
+          <div
+            :class="
+              'mt-2 d-flex justify-content-center align-items-center btn btn-' +
+              (selectedInterval == 'Days'
+                ? 'primary'
+                : 'outline-light text-dark')
+            "
+            @click="
+              $store.commit('setSelectedInterval', 'Days')
+              $store.commit('setShowIntervalSelect', false)
+            "
+          >
             Daily
           </div>
-          <div :class="'mt-2 d-flex justify-content-center align-items-center btn btn-' + (selectedInterval == 'Weeks' ? 'primary' : 'outline-light text-dark')" @click="$store.commit('setSelectedInterval', 'Weeks'); $store.commit('setShowIntervalSelect', false)">
+          <div
+            :class="
+              'mt-2 d-flex justify-content-center align-items-center btn btn-' +
+              (selectedInterval == 'Weeks'
+                ? 'primary'
+                : 'outline-light text-dark')
+            "
+            @click="
+              $store.commit('setSelectedInterval', 'Weeks')
+              $store.commit('setShowIntervalSelect', false)
+            "
+          >
             Weekly
           </div>
-          <div :class="'mt-2 d-flex justify-content-center align-items-center btn btn-' + (selectedInterval == 'Months' ? 'primary' : 'outline-light text-dark')" @click="$store.commit('setSelectedInterval', 'Months'); $store.commit('setShowIntervalSelect', false)">
+          <div
+            :class="
+              'mt-2 d-flex justify-content-center align-items-center btn btn-' +
+              (selectedInterval == 'Months'
+                ? 'primary'
+                : 'outline-light text-dark')
+            "
+            @click="
+              $store.commit('setSelectedInterval', 'Months')
+              $store.commit('setShowIntervalSelect', false)
+            "
+          >
             Monthly
           </div>
-          <div :class="'mt-2 d-flex justify-content-center align-items-center btn btn-' + (selectedInterval == 'Years' ? 'primary' : 'outline-light text-dark')" @click="$store.commit('setSelectedInterval', 'Years'); $store.commit('setShowIntervalSelect', false)">
+          <div
+            :class="
+              'mt-2 d-flex justify-content-center align-items-center btn btn-' +
+              (selectedInterval == 'Years'
+                ? 'primary'
+                : 'outline-light text-dark')
+            "
+            @click="
+              $store.commit('setSelectedInterval', 'Years')
+              $store.commit('setShowIntervalSelect', false)
+            "
+          >
             Yearly
           </div>
         </div>
@@ -21,6 +71,22 @@
     </div>
   </transition>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+  data() {
+    return {
+      tokenSearch: '',
+      showNum: 25,
+    }
+  },
+  computed: {
+    ...mapGetters(['showIntervalSelect', 'selectedInterval']),
+  },
+}
+</script>
 
 <style lang="sass" scoped>
 .overlay
@@ -41,21 +107,3 @@
   .card-body
     overflow: auto
 </style>
-
-<script>
-import {
-  mapGetters
-} from "vuex"
-
-export default {
-  data() {
-    return {
-      tokenSearch: '',
-      showNum: 25
-    }
-  },
-  computed: {
-    ...mapGetters(['showIntervalSelect', 'selectedInterval'])
-  }
-}
-</script>

@@ -27,7 +27,7 @@ export const state = () => ({
   modalComponent: null,
   modalData: null,
   twitterAccountId: null,
-  twitterFollowers: 0
+  twitterFollowers: 0,
 })
 
 export const getters = {
@@ -123,7 +123,7 @@ export const getters = {
   },
   twitterFollowers(state) {
     return state.twitterFollowers
-  }
+  },
 }
 
 export const mutations = {
@@ -152,17 +152,24 @@ export const mutations = {
     state.issues.push(issue)
   },
   removeIssue(state, issueId) {
-    let existingIssueIndex = state.issues.findIndex(i => i.id === issueId)
-    if (existingIssueIndex != -1) {
+    const existingIssueIndex = state.issues.findIndex((i) => i.id === issueId)
+    if (existingIssueIndex !== -1) {
       state.issues.splice(existingIssueIndex, 1)
     }
   },
   removeDeposit(state, { issueId, depositId }) {
-    let existingIssueIndex = state.issues.findIndex(issue => issue.id === issueId)
-    if (existingIssueIndex != -1) {
-      let existingDepositIndex = state.issues[existingIssueIndex].deposits.findIndex(deposit => deposit.id === depositId)
-      if (existingDepositIndex != -1) {
-        state.issues[existingIssueIndex].deposits.splice(existingDepositIndex, 1)
+    const existingIssueIndex = state.issues.findIndex(
+      (issue) => issue.id === issueId
+    )
+    if (existingIssueIndex !== -1) {
+      const existingDepositIndex = state.issues[
+        existingIssueIndex
+      ].deposits.findIndex((deposit) => deposit.id === depositId)
+      if (existingDepositIndex !== -1) {
+        state.issues[existingIssueIndex].deposits.splice(
+          existingDepositIndex,
+          1
+        )
         if (!state.issues[existingIssueIndex].deposits.length) {
           state.issues.splice(existingIssueIndex, 1)
         }
@@ -170,9 +177,11 @@ export const mutations = {
     }
   },
   updatePins(state, { issueId, pins }) {
-    let existingIssue = state.issues.find(issue => issue.id === issueId)
+    const existingIssue = state.issues.find((issue) => issue.id === issueId)
     if (existingIssue) {
-      existingIssue.boostAmount = Number(this.$web3.utils.fromWei(pins, 'ether'))
+      existingIssue.boostAmount = Number(
+        this.$web3.utils.fromWei(pins, 'ether')
+      )
     }
   },
   setTokenList(state, list) {
@@ -237,23 +246,27 @@ export const mutations = {
   },
   setTwitterFollowers(state, followers) {
     state.twitterFollowers = followers
-  }
+  },
 }
 
 export const actions = {
   updateIssues({ commit }) {
     if (this.$octoBay) {
-      this.$axios.$get(process.env.API_URL + '/graph/issues').then(issues => {
-        issues.forEach(async issue => {
+      this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
+        issues.forEach(async (issue) => {
           // TODO: this all has to go to graph as well
           let depositAmount = BigInt(0)
-          issue.deposits.forEach(deposit => {
+          issue.deposits.forEach((deposit) => {
             depositAmount += BigInt(deposit.amount)
           })
           issue.depositAmount = depositAmount.toString()
           if (issue.depositAmount) {
-            const boostAmount = await this.$octoBay.methods.issuePins(issue.id).call()
-            issue.boostAmount = Number(this.$web3.utils.fromWei(boostAmount, 'ether'))
+            const boostAmount = await this.$octoBay.methods
+              .issuePins(issue.id)
+              .call()
+            issue.boostAmount = Number(
+              this.$web3.utils.fromWei(boostAmount, 'ether')
+            )
             commit('addIssue', issue)
           }
         })
@@ -261,14 +274,20 @@ export const actions = {
     }
   },
   updateOracles({ commit }) {
-    this.$axios.$get(process.env.API_URL + '/graph/oracles').then(oracles => {
+    this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
       commit('setOracles', oracles)
     })
   },
   updateOctoPinBalance({ state, commit }) {
-    this.$octoPin.methods.balanceOf(state.accounts[0]).call().then(balance => commit('setOctoPinBalance', balance))
+    this.$octoPin.methods
+      .balanceOf(state.accounts[0])
+      .call()
+      .then((balance) => commit('setOctoPinBalance', balance))
   },
   updatePins({ commit }, issueId) {
-    this.$octoBay.methods.issuePins(issueId).call().then(pins => commit('updatePins', { issueId, pins }))
-  }
+    this.$octoBay.methods
+      .issuePins(issueId)
+      .call()
+      .then((pins) => commit('updatePins', { issueId, pins }))
+  },
 }

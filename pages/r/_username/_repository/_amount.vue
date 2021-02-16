@@ -5,9 +5,9 @@ export default {
       type: 'send-repository',
       username: route.params.username,
       repository: route.params.repository,
-      amount: Number(route.params.amount)
+      amount: Number(route.params.amount),
     })
     return redirect('/')
-  }
+  },
 }
 </script>

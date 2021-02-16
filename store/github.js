@@ -1,28 +1,28 @@
 export const state = () => ({
   user: null, // steemconnect user
-  accessToken: null // steemconnect access token
-});
+  accessToken: null, // steemconnect access token
+})
 
 export const getters = {
   user(state) {
-    return state.user;
+    return state.user
   },
   accessToken(state) {
-    return state.accessToken;
-  }
-};
+    return state.accessToken
+  },
+}
 
 export const mutations = {
   login(state, user) {
-    state.user = user;
+    state.user = user
   },
   logout(state) {
-    state.user = null;
+    state.user = null
   },
   setAccessToken(state, accessToken) {
-    state.accessToken = accessToken;
-  }
-};
+    state.accessToken = accessToken
+  },
+}
 
 export const actions = {
   login({ commit, dispatch, state }) {
@@ -30,34 +30,34 @@ export const actions = {
       // don't do anything if user data is already set
       if (!state.user) {
         // in that case we look for an access token in localStorage
-        const accessToken = localStorage.getItem("github_access_token");
+        const accessToken = localStorage.getItem('github_access_token')
         if (accessToken) {
           // try to fetch user object
           this.$axios
-            .$get("https://api.github.com/user", {
+            .$get('https://api.github.com/user', {
               headers: {
-                Authorization: 'bearer ' + accessToken
-              }
+                Authorization: 'bearer ' + accessToken,
+              },
             })
-            .then(response => {
+            .then((response) => {
               // save user object in store
-              commit("login", response);
-              commit("setAccessToken", accessToken);
-              resolve();
+              commit('login', response)
+              commit('setAccessToken', accessToken)
+              resolve()
             })
-            .catch(e => reject(e));
+            .catch((e) => reject(e))
         } else {
-          resolve();
+          resolve()
         }
       } else {
-        resolve();
+        resolve()
       }
-    });
+    })
   },
   logout({ commit }) {
     // remove access token and unset user in store
-    localStorage.removeItem("github_access_token");
-    commit("logout");
-    commit("setAccessToken", null);
-  }
-};
+    localStorage.removeItem('github_access_token')
+    commit('logout')
+    commit('setAccessToken', null)
+  },
+}

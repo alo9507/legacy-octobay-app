@@ -1,40 +1,54 @@
-const fs = require("fs")
+import fs from 'fs'
 
 export default {
   /*
-  ** Nuxt rendering mode
-  ** See https://nuxtjs.org/api/configuration-mode
-  */
+   ** Nuxt rendering mode
+   ** See https://nuxtjs.org/api/configuration-mode
+   */
   ssr: false,
 
   /*
-  ** Nuxt target
-  ** See https://nuxtjs.org/api/configuration-target
-  */
+   ** Nuxt target
+   ** See https://nuxtjs.org/api/configuration-target
+   */
   target: 'static',
   router: {
-    base: process.env.BASE_PATH
+    base: process.env.BASE_PATH,
   },
 
   env: {
-    OCTOBAY_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoBay.json").toString()).abi,
-    OCTOPIN_ABI: JSON.parse(fs.readFileSync("./contract-abi/OctoPin.json").toString()).abi
+    OCTOBAY_ABI: JSON.parse(
+      fs.readFileSync('./contract-abi/OctoBay.json').toString()
+    ).abi,
+    OCTOPIN_ABI: JSON.parse(
+      fs.readFileSync('./contract-abi/OctoPin.json').toString()
+    ).abi,
   },
 
   /*
-  ** Headers of the page
-  ** See https://nuxtjs.org/api/configuration-head
-  */
+   ** Headers of the page
+   ** See https://nuxtjs.org/api/configuration-head
+   */
   head: {
     title: 'OctoBay',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: process.env.npm_package_description || '',
+      },
       { property: 'og:title', content: 'OctoBay' },
-      { property: 'og:image', content: 'https://octobay.github.io/app/cover.png' },
+      {
+        property: 'og:image',
+        content: 'https://octobay.github.io/app/cover.png',
+      },
       { property: 'twitter:title', content: 'OctoBay' },
-      { property: 'twitter:image', content: 'https://octobay.github.io/app/cover.png' },
+      {
+        property: 'twitter:image',
+        content: 'https://octobay.github.io/app/cover.png',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/png', href: './icon.png' },
@@ -42,15 +56,13 @@ export default {
     ],
   },
   /*
-  ** Global CSS
-  */
-  css: [
-    '@/assets/css/main.sass'
-  ],
+   ** Global CSS
+   */
+  css: ['@/assets/css/main.sass'],
   /*
-  ** Plugins to load before mounting the App
-  ** https://nuxtjs.org/guide/plugins
-  */
+   ** Plugins to load before mounting the App
+   ** https://nuxtjs.org/guide/plugins
+   */
   plugins: [
     '@/plugins/moment',
     '@/plugins/tooltips',
@@ -59,13 +71,13 @@ export default {
     '@/plugins/octobay',
   ],
   /*
-  ** Auto import components
-  ** See https://nuxtjs.org/api/configuration-components
-  */
+   ** Auto import components
+   ** See https://nuxtjs.org/api/configuration-components
+   */
   components: true,
   /*
-  ** Nuxt.js dev-modules
-  */
+   ** Nuxt.js dev-modules
+   */
   buildModules: [
     [
       '@nuxtjs/dotenv',
@@ -79,29 +91,28 @@ export default {
           'OCTOPIN_ADDRESS',
           'GSN_RELAYHUB_ADDRESS',
           'GSN_PAYMASTER_ADDRESS',
-          'MAX_CLAIMPR_AGE'
-        ]
-      }
+          'MAX_CLAIMPR_AGE',
+        ],
+      },
     ],
     '@nuxtjs/fontawesome',
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/stylelint-module',
   ],
   /*
-  ** Nuxt.js modules
-  */
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-  ],
+   ** Nuxt.js modules
+   */
+  modules: ['@nuxtjs/axios', '@nuxtjs/pwa'],
   /*
-  ** Build configuration
-  ** See https://nuxtjs.org/api/configuration-build/
-  */
+   ** Build configuration
+   ** See https://nuxtjs.org/api/configuration-build/
+   */
   build: {
-    extend (config, ctx) {
+    extend(config, ctx) {
       config.node = {
-          fs: "empty"
-      };
-    }
+        fs: 'empty',
+      }
+    },
   },
 
   fontawesome: {
@@ -112,7 +123,7 @@ export default {
         'faFlag',
         'faFrown',
         'faSmile',
-        'faCalendarAlt'
+        'faCalendarAlt',
       ],
       solid: [
         'faPlus',
@@ -148,7 +159,7 @@ export default {
         'faDice',
         'faSlidersH',
         'faHandHoldingUsd',
-        'faExchangeAlt'
+        'faExchangeAlt',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },
