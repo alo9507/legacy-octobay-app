@@ -1592,6 +1592,14 @@
     mustache "^2.3.0"
     stack-trace "0.0.10"
 
+"@octobay/adapters@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@octobay/adapters/-/adapters-0.0.8.tgz#a22cf4712cdaab7b8a567b290a3c6a70c78ae46d"
+  integrity sha512-BMCuA0dPxkG/Za9IphhctwoWFBvjpET+REnVV+da10Ek/iAKQdjA6JOXk6Iu6rnnMDYfjiQIGwrGkfjPy00CLw==
+  dependencies:
+    axios "^0.21.1"
+    axios-retry "^3.1.9"
+
 "@openeth/truffle-typings@0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@openeth/truffle-typings/-/truffle-typings-0.0.6.tgz#80bf9969d6287f7a86fad3439556fd59f3b0f67a"

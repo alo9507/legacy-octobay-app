@@ -145,6 +145,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { addressRepoExists } from '@octobay/adapters'
 import connect from '@/mixins/connect'
 import helpers from '@/mixins/helpers'
 
@@ -218,17 +219,17 @@ export default {
   methods: {
     checkRepo() {
       if (this.connected && this.githubUser) {
-        const repoUrl = `https://api.github.com/repos/${this.githubUser.login}/${this.account}`
-        this.$axios
-          .get(repoUrl, {
-            headers: {
-              Authorization: 'bearer ' + this.githubAccessToken,
-            },
-          })
-          .then((res) => {
-            this.repoExists = true
-            this.checkingRepo = false
-            clearInterval(this.checkRepoInterval)
+        addressRepoExists(
+          this.githubUser.login,
+          this.account,
+          this.githubAccessToken
+        )
+          .then((exists) => {
+            this.repoExists = exists
+            if (this.repoExists) {
+              this.checkingRepo = false
+              clearInterval(this.checkRepoInterval)
+            }
           })
           .catch((e) => {
             this.repoExists = false
