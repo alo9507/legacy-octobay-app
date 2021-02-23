@@ -69,6 +69,7 @@ export default {
     '@/plugins/clipboard',
     '@/plugins/web3',
     '@/plugins/octobay',
+    '@/plugins/octicons',
   ],
   /*
    ** Auto import components
