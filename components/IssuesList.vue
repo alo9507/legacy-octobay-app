@@ -1,17 +1,20 @@
 <template>
-  <div class="card-body pb-0">
-    <div v-if="issuesLazy.length" class="issue-list">
-      <Issue v-for="issue in issuesLazy" :key="issue.id" :issue="issue" />
+  <div>
+    <div class="card-body pb-0">
+      <div v-if="issuesLazy.length" class="issue-list">
+        <Issue v-for="issue in issuesLazy" :key="issue.id" :issue="issue" />
+      </div>
+      <div v-else class="text-center text-muted my-3">
+        Currently no pinned issues.
+      </div>
     </div>
-    <div v-else class="text-center text-muted my-3">
-      Currently no pinned issues.
-    </div>
-    <div v-if="issues.length > showIssuesNum" class="card-body pt-0">
+    <div v-if="issues.length > showIssuesNum" class="card-body p-0">
       <button
-        class="btn btn-primary text-center btn-block"
+        class="btn btn-lg btn-light text-center btn-block"
+        style="border-top-left-radius: 0; border-top-right-radius: 0"
         @click="showIssuesNum += 10"
       >
-        load more
+        more
       </button>
     </div>
   </div>
