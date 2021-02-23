@@ -14,6 +14,32 @@
         <b class="text-nowrap text-truncate">{{ user.name }}</b>
         <div class="text-nowrap">
           <div
+            v-clipboard="getDirectLink(user.login)"
+            v-clipboard:success="copiedDirectLink"
+            v-tooltip="{
+              content: 'Direct link',
+              trigger: 'hover',
+            }"
+            class="btn btn-sm btn-light"
+          >
+            <transition name="fade" mode="out-in">
+              <span v-if="copyDirectLinkSuccess" class="text-muted">
+                copied
+                <font-awesome-icon
+                  :icon="['fas', 'check']"
+                  class="text-success"
+                  fixed-width
+                />
+              </span>
+              <font-awesome-icon
+                v-else
+                :icon="['fas', 'share-alt']"
+                class="text-muted"
+                fixed-width
+              />
+            </transition>
+          </div>
+          <div
             v-if="address"
             v-clipboard="address"
             v-clipboard:success="copiedAddress"
@@ -92,13 +118,23 @@ export default {
   data() {
     return {
       copyAddressSuccess: false,
+      copyDirectLinkSuccess: false,
     }
   },
   methods: {
+    getDirectLink(username) {
+      return `${window.location.origin}${window.location.pathname}u/${username}`
+    },
     copiedAddress() {
       this.copyAddressSuccess = true
       setTimeout(() => {
         this.copyAddressSuccess = false
+      }, 1000)
+    },
+    copiedDirectLink() {
+      this.copyDirectLinkSuccess = true
+      setTimeout(() => {
+        this.copyDirectLinkSuccess = false
       }, 1000)
     },
   },

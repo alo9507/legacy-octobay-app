@@ -127,6 +127,7 @@ export default {
         'faCalendarAlt',
       ],
       solid: [
+        'faShareAlt',
         'faPlus',
         'faMinus',
         'faChevronUp',
