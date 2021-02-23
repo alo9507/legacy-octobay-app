@@ -8,21 +8,20 @@
       ]"
       @click="showDetails = !showDetails"
     >
-      <div>
-        <div
-          class="bg-success"
-          :style="`height: 5px; width: ${Math.min(
-            (Number($web3.utils.fromWei(issue.depositAmount, 'ether')) /
-              fundingGoal) *
-              100,
-            100
-          ).toFixed(2)}%`"
-        ></div>
-      </div>
-      <div class="d-flex align-items-top px-3 py-2">
-        <div :class="{ 'text-truncate': !showDetails }">
-          <small class="text-muted text-truncate">
-            <small>
+      <div class="position-relative">
+        <!-- header -->
+        <div class="d-flex align-items-top px-3 py-2">
+          <div :class="{ 'text-truncate': !showDetails }">
+            <small class="text-muted text-truncate">
+              <small>
+                <font-awesome-icon
+                  :icon="['fas', 'check-double']"
+                  class="text-muted-light"
+                />
+                {{ issueNode.owner }}/{{ issueNode.repository }}
+              </small>
+            </small>
+            <div :class="{ 'text-truncate': !showDetails }">
               <span v-if="issue.boostAmount">
                 <svg style="width: 14px; height: 14px" viewBox="0 0 24 24">
                   <path
@@ -31,62 +30,79 @@
                   />
                 </svg>
               </span>
-              {{ issueNode.owner }}/{{ issueNode.repository }}/issues/{{
-                issueNode.number
-              }}
-            </small>
-          </small>
-          <div :class="{ 'text-truncate': !showDetails }">
-            {{ issueNode.title }}
+              {{ issueNode.title }}
+            </div>
           </div>
-        </div>
-        <div class="text-nowrap text-right ml-auto pl-3">
-          <div class="mb-0 d-flex align-items-center" @click.stop>
-            <div class="text-center d-flex flex-column">
-              <small class="text-muted">
-                <small>
-                  <font-awesome-icon
-                    v-if="issue.depositAmount >= fundingGoal"
-                    :icon="['fas', 'check']"
-                    class="text-success mr-1"
-                  />
-                  {{ fundingGoal }} ETH Goal
-                </small>
-              </small>
-              <div>
-                {{ $web3.utils.fromWei(issue.depositAmount, 'ether') }} ETH
+          <div class="text-nowrap text-right ml-auto pl-3">
+            <div class="mb-0 d-flex align-items-center">
+              <div class="text-center d-flex flex-column align-items-end">
+                <div>
+                  {{ $web3.utils.fromWei(issue.depositAmount, 'ether') }}
+                  <img src="/eth-logo.png" width="16px" height="16" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        v-if="issueNode.primaryLanguage"
-        :class="['px-3 pb-3', { 'text-truncate': !showDetails }]"
-        style="text-overflow: ' ...'"
-      >
-        <span
-          :class="
-            'mr-1 badge badge-pill' +
-            (brightnessByColor(issueNode.primaryLanguage.color) < 180
-              ? ' text-white'
-              : '')
-          "
-          :style="'background-color: ' + issueNode.primaryLanguage.color"
+        <!-- tags -->
+        <div
+          v-if="issueNode.primaryLanguage"
+          :class="['px-3 pb-3', { 'text-truncate': !showDetails }]"
+          style="text-overflow: ' ...'"
         >
-          {{ issueNode.primaryLanguage.name }} </span
-        ><span
-          v-for="label in issueNode.labels"
-          :key="label.color"
-          :class="
-            'mr-1 badge badge-pill' +
-            (brightnessByColor('#' + label.color) < 180 ? ' text-white' : '')
-          "
-          :style="'background-color: #' + label.color"
+          <span
+            :class="
+              'mr-1 badge badge-pill' +
+              (brightnessByColor(issueNode.primaryLanguage.color) < 180
+                ? ' text-white'
+                : '')
+            "
+            :style="'background-color: ' + issueNode.primaryLanguage.color"
+          >
+            {{ issueNode.primaryLanguage.name }} </span
+          ><span
+            v-for="label in issueNode.labels"
+            :key="label.color"
+            :class="
+              'mr-1 badge badge-pill' +
+              (brightnessByColor('#' + label.color) < 180 ? ' text-white' : '')
+            "
+            :style="'background-color: #' + label.color"
+          >
+            {{ label.name }}
+          </span>
+        </div>
+        <!-- funding goal bar -->
+        <div
+          class="d-flex align-items-end position-absolute w-100"
+          style="bottom: 0"
         >
-          {{ label.name }}
-        </span>
+          <div class="flex-fill">
+            <div
+              class="bg-success"
+              :style="`height: 5px; width: ${Math.min(
+                (Number($web3.utils.fromWei(issue.depositAmount, 'ether')) /
+                  fundingGoal) *
+                  100,
+                100
+              ).toFixed(2)}%`"
+            ></div>
+          </div>
+          <small
+            :class="['px-2 text-muted', { 'bg-light': !showDetails }]"
+            style="border-top-left-radius: 1rem"
+          >
+            <small>
+              <font-awesome-icon
+                :icon="['fas', 'check']"
+                class="text-success mr-1"
+              />
+              {{ fundingGoal }} ETH Goal
+            </small>
+          </small>
+        </div>
       </div>
+      <!-- details -->
       <transition name="fade">
         <div
           v-if="showDetails"
@@ -97,9 +113,11 @@
           style="cursor: default"
           @click.stop
         >
+          <!-- details buttons -->
           <div
             class="border-top border-bottom w-100 py-2 text-nowrap d-flex justify-content-between align-items-center px-4"
           >
+            <!-- fund -->
             <button
               v-tooltip="{ content: 'Fund issue', trigger: 'hover' }"
               class="btn btn-sm btn-light text-muted"
@@ -107,6 +125,7 @@
             >
               <font-awesome-icon :icon="['fas', 'plus']" />
             </button>
+            <!-- deposits -->
             <button
               v-tooltip="{ content: 'Deposits', trigger: 'hover' }"
               :class="[
@@ -117,6 +136,7 @@
             >
               <font-awesome-icon :icon="['fas', 'coins']" />
             </button>
+            <!-- twitter -->
             <button
               v-tooltip="{ content: 'Post via @OctoBayApp', trigger: 'hover' }"
               class="btn btn-sm btn-light text-muted"
@@ -124,6 +144,7 @@
             >
               <font-awesome-icon :icon="['fab', 'twitter']" />
             </button>
+            <!-- pin -->
             <button
               v-tooltip="{ content: 'Pin issue', trigger: 'hover' }"
               :class="[
@@ -139,6 +160,7 @@
                 />
               </svg>
             </button>
+            <!-- pull requests -->
             <button
               v-tooltip="{ content: 'Pull Requests', trigger: 'hover' }"
               :class="[
@@ -147,13 +169,20 @@
               ]"
               @click="changeAction('pull-requests')"
             >
-              <svg style="width: 19px; height: 19px" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M6,3A3,3 0 0,1 9,6C9,7.31 8.17,8.42 7,8.83V15.17C8.17,15.58 9,16.69 9,18A3,3 0 0,1 6,21A3,3 0 0,1 3,18C3,16.69 3.83,15.58 5,15.17V8.83C3.83,8.42 3,7.31 3,6A3,3 0 0,1 6,3M6,5A1,1 0 0,0 5,6A1,1 0 0,0 6,7A1,1 0 0,0 7,6A1,1 0 0,0 6,5M6,17A1,1 0 0,0 5,18A1,1 0 0,0 6,19A1,1 0 0,0 7,18A1,1 0 0,0 6,17M21,18A3,3 0 0,1 18,21A3,3 0 0,1 15,18C15,16.69 15.83,15.58 17,15.17V7H15V10.25L10.75,6L15,1.75V5H17A2,2 0 0,1 19,7V15.17C20.17,15.58 21,16.69 21,18M18,17A1,1 0 0,0 17,18A1,1 0 0,0 18,19A1,1 0 0,0 19,18A1,1 0 0,0 18,17Z"
-                />
-              </svg>
+              <span v-html="$octicons['git-pull-request'].toSVG()"></span>
             </button>
+            <!-- project -->
+            <button
+              v-tooltip="{ content: 'Project', trigger: 'hover' }"
+              :class="[
+                'btn btn-sm btn-light text-muted',
+                { active: action === 'project' },
+              ]"
+              @click="changeAction('project')"
+            >
+              <span v-html="$octicons.repo.toSVG()"></span>
+            </button>
+            <!-- github -->
             <a
               v-tooltip="{ content: 'Open on GitHub', trigger: 'hover' }"
               class="btn btn-sm btn-light text-muted"
@@ -174,8 +203,10 @@
               />
             </a>
           </div>
+          <!-- details content -->
           <div class="w-100 px-3">
             <transition name="fade" mode="out-in">
+              <!-- deposits -->
               <div v-if="action === 'deposits'" key="deposits" class="py-3">
                 <div
                   v-for="(deposit, index) in issue.deposits"
@@ -206,6 +237,7 @@
                   </button>
                 </div>
               </div>
+              <!-- pin -->
               <div v-if="action === 'pin'" key="pin" class="py-3">
                 <div class="d-flex align-items-center">
                   <div class="select-input flex-fill mr-2">
@@ -245,18 +277,26 @@
                   </button>
                 </div>
               </div>
+              <!-- pull requests -->
               <div
                 v-if="action === 'pull-requests'"
                 key="pull-requests"
                 class="py-3"
               >
+                <a
+                  :href="`https://github.com/${issueNode.owner}/${issueNode.repository}/fork`"
+                  class="btn btn-sm btn-dark btn-block"
+                >
+                  <span v-html="$octicons['repo-forked'].toSVG()"></span>
+                  start working
+                </a>
                 <div v-if="linkedPullRequests.length">
                   <a
                     v-for="pullRequest in sortedLinkedPullRequests"
                     :key="pullRequest.id"
                     :href="pullRequest.url"
                     target="_blank"
-                    class="btn btn-light btn-sm btn-block mb-2 d-flex align-items-center border-light"
+                    class="btn btn-light btn-sm btn-block mt-2 d-flex align-items-center border-light"
                   >
                     <svg
                       style="width: 19px; height: 19px"
@@ -304,6 +344,66 @@
                 <small v-else class="text-muted d-block text-center">
                   No linked pull requests yet.
                 </small>
+              </div>
+              <!-- project -->
+              <div v-if="action === 'project'" key="project" class="py-3">
+                <div class="d-flex justify-content-around text-center">
+                  <div>
+                    <small class="text-muted d-block">Total released:</small>
+                    <h5 class="text-center">$46,500</h5>
+                  </div>
+                  <div>
+                    <small class="text-muted d-block">Past 12 months:</small>
+                    <h5 class="text-center">
+                      <small>$10,800</small>
+                    </h5>
+                  </div>
+                </div>
+                <div
+                  v-if="Math.floor(Math.random() * 3) + 1 === 1"
+                  class="d-flex flex-column text-center mt-3"
+                >
+                  <span
+                    class="d-flex align-items-center justify-content-center rounded-circle bg-success p-2 mb-2 mx-auto"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'check-double']"
+                      class="text-white fa-fw"
+                    />
+                  </span>
+                  <small class="text-muted d-block">
+                    This project has proven to be trustworthy.
+                  </small>
+                </div>
+                <div
+                  v-else-if="Math.floor(Math.random() * 3) + 1 === 2"
+                  class="d-flex flex-column text-center mt-3"
+                >
+                  <span
+                    class="d-flex align-items-center justify-content-center rounded-circle bg-muted-light p-2 mb-2 mx-auto"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'check']"
+                      class="text-white fa-fw"
+                    />
+                  </span>
+                  <small class="text-muted d-block">
+                    This project has just started out on Octobay.
+                  </small>
+                </div>
+                <div v-else class="d-flex flex-column text-center mt-3">
+                  <span
+                    class="d-flex align-items-center justify-content-center rounded-circle bg-danger p-2 mb-2 mx-auto"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'exclamation']"
+                      class="text-white fa-fw"
+                    />
+                  </span>
+                  <small class="text-muted d-block">
+                    People have flagged this project.
+                  </small>
+                </div>
               </div>
             </transition>
           </div>

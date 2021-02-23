@@ -134,6 +134,7 @@ export default {
         'faChevronDown',
         'faLongArrowAltUp',
         'faCheck',
+        'faCheckDouble',
         'faBan',
         'faInfoCircle',
         'faQuestion',
