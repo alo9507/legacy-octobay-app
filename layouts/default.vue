@@ -21,10 +21,14 @@
           the bugs) and share your thoughts. This is an open source project,
           open for ideas of any kind.
         </div>
-        <div class="d-flex mt-2">
-          <nuxt-link to="/about" class="flex-fill btn btn-sm btn-outline-light">
-            Read more
-          </nuxt-link>
+        <div class="d-flex mt-3">
+          <a
+            href="https://octobay.github.io/docs/"
+            target="_blank"
+            class="flex-fill btn btn-sm btn-outline-light"
+          >
+            learn more
+          </a>
           <a
             href="https://discord.gg/DhKgHrFeCD"
             target="_blank"

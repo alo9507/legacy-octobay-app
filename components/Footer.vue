@@ -56,14 +56,11 @@
       </button>
     </div>
     <div>
-      <nuxt-link
-        v-if="$route.path != '/about'"
-        to="/about"
+      <a
+        href="https://octobay.github.io/docs/"
+        target="_blank"
         class="text-white px-1"
-        >about</nuxt-link
-      >
-      <nuxt-link v-if="$route.path == '/about'" to="/" class="text-white px-1"
-        >go to app</nuxt-link
+        >learn more</a
       >
     </div>
   </footer>
