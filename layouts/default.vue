@@ -75,7 +75,7 @@
 
 <script>
 export default {
-  middleware: 'load',
+  middleware: ['load', 'deeplinks'],
   data() {
     return {
       showWarning: true,

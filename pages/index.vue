@@ -58,13 +58,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters([
-      'view',
-      'account',
-      'registeredAccount',
-      'redirectPrefills',
-      'octoBayOwner',
-    ]),
+    ...mapGetters(['view', 'account', 'registeredAccount', 'octoBayOwner']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   watch: {
@@ -106,13 +100,6 @@ export default {
         this.$store.commit('setRegisteredAccount', null)
       }
     },
-  },
-  created() {
-    if (this.redirectPrefills) {
-      if (this.redirectPrefills.type.startsWith('send')) {
-        this.$store.commit('setView', 'send')
-      }
-    }
   },
 }
 </script>
