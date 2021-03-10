@@ -1,6 +1,6 @@
 # OctoBay
 
-## Run a fork
+## How to Run a fork
 
 If you want to run your own instance of OctoBay you need to...
 
