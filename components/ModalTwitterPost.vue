@@ -46,7 +46,7 @@
         </div>
         <div>
           <small
-            v-if="octobayTwitterAccount.followers_count > octoPinBalance"
+            v-if="octobayTwitterAccount.followers_count > ovtBalance"
             class="text-muted text-center mb-2 d-block"
           >
             Insufficiant balance. You need
@@ -74,7 +74,7 @@
               :disabled="
                 requestingTweet ||
                 postingTweet ||
-                octobayTwitterAccount.followers_count > octoPinBalance
+                octobayTwitterAccount.followers_count > ovtBalance
               "
               @click="tweet()"
             >
@@ -133,7 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['octoPinBalance', 'oracles', 'account']),
+    ...mapGetters(['ovtBalance', 'oracles', 'account']),
     ...mapGetters({ issue: 'modalData' }),
   },
   mounted() {

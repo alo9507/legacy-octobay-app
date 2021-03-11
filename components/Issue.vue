@@ -563,7 +563,7 @@ export default {
           })
           .then((result) => {
             this.$store.dispatch('updatePins', this.issue.id)
-            this.$store.dispatch('updateOctoPinBalance')
+            this.$store.dispatch('updateOvtBalance')
             this.$web3.eth
               .getBalance(this.account)
               .then((balance) => this.$store.commit('setBalance', balance))

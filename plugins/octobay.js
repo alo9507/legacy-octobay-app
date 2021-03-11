@@ -4,16 +4,16 @@ export default ({ app }, inject) => {
       process.env.OCTOBAY_ABI,
       process.env.OCTOBAY_ADDRESS
     )
-    const octoPin = new app.$web3.eth.Contract(
-      process.env.OCTOPIN_ABI,
-      process.env.OCTOPIN_ADDRESS
+    const ovt = new app.$web3.eth.Contract(
+      process.env.OVT_ABI,
+      process.env.OVT_ADDRESS
     )
 
     /**
-     * Exposes the OctoBay and OctoPin contracts as nuxt plugins.
-     * in components: this.$octoBay and this.octoPin
+     * Exposes the OctoBay and OVT contracts as nuxt plugins.
+     * in components: this.$octoBay and this.ovt
      */
     inject('octoBay', octoBay)
-    inject('octoPin', octoPin)
+    inject('ovt', ovt)
   }
 }

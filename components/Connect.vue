@@ -39,7 +39,7 @@
       <div class="d-flex flex-column text-right">
         <b class="text-nowrap">{{ formattedBalance }} ETH</b>
         <small class="text-nowrap" style="margin-top: -3px"
-          >{{ formattedOctoPinBalance }} OPIN</small
+          >{{ formattedOvtBalance }} OVT</small
         >
       </div>
     </div>
@@ -115,7 +115,7 @@ export default {
       'connected',
       'account',
       'balance',
-      'octoPinBalance',
+      'ovtBalance',
       'registeredAccount',
       'networkId',
     ]),
@@ -125,9 +125,9 @@ export default {
         this.$web3.utils.fromWei(this.balance.toString(), 'ether')
       ).toFixed(2)
     },
-    formattedOctoPinBalance() {
+    formattedOvtBalance() {
       return Number(
-        this.$web3.utils.fromWei(this.octoPinBalance.toString(), 'ether')
+        this.$web3.utils.fromWei(this.ovtBalance.toString(), 'ether')
       ).toFixed(2)
     },
   },

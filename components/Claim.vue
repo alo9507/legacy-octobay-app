@@ -47,7 +47,7 @@
           Pull Request or Issue URL
           <HelpIcon
             v-tooltip="
-              'Paste the URL of a merged pull request to claim OctoPin tokens or an issue you want to withdraw a deposit from.'
+              'Paste the URL of a an issue or a related merged pull request to withdraw a bounty.'
             "
             width="18px"
             height="18px"
@@ -339,7 +339,7 @@ export default {
           if (event.returnValues.id === this.claimRequestID) {
             // stop listening and finish process
             confirmListener.unsubscribe()
-            this.$store.dispatch('updateOctoPinBalance')
+            this.$store.dispatch('updateOvtBalance')
             this.$web3.eth
               .getBalance(this.account)
               .then((balance) => this.$store.commit('setBalance', balance))

@@ -12,24 +12,6 @@
       </div>
     </div>
     <div class="mt-3">
-      <b>OctoPin Token</b>
-      <div class="input-with-button">
-        <input v-model="octoPinAddress" type="text" class="form-control" />
-        <button
-          class="btn btn-primary btn-sm shadow-sm"
-          :disabled="updatingOctoPinToken"
-          @click="updateOctoPinToken()"
-        >
-          <font-awesome-icon
-            v-if="updatingOctoPinToken"
-            :icon="['fas', 'circle-notch']"
-            spin
-          />
-          <font-awesome-icon v-else :icon="['fas', 'check']" />
-        </button>
-      </div>
-    </div>
-    <div class="mt-3">
       <b>Twitter Account ID</b>
       <div class="input-with-button">
         <input v-model="twitterAccountId" type="text" class="form-control" />
@@ -291,20 +273,11 @@ export default {
       jobUpdating: false,
       addingNewOracle: false,
       removingOralce: false,
-      updatingOctoPinToken: false,
       updatingTwitterAccountId: false,
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles', 'octoPinAddress', 'twitterAccountId']),
-    octoPinAddress: {
-      get() {
-        return this.$store.state.octoPinAddress
-      },
-      set(address) {
-        this.$store.commit('setOctoPinAddress', address)
-      },
-    },
+    ...mapGetters(['account', 'oracles', 'twitterAccountId']),
     twitterAccountId: {
       get() {
         return this.$store.state.twitterAccountId
@@ -328,15 +301,6 @@ export default {
     })
   },
   methods: {
-    updateOctoPinToken() {
-      this.updatingOctoPinToken = true
-      this.$octoBay.methods
-        .setOctoPin(this.octoPinAddress)
-        .send({ from: this.account })
-        .then(() => {
-          this.updatingOctoPinToken = false
-        })
-    },
     updateTwitterAccountId() {
       this.updatingTwitterAccountId = true
       this.$octoBay.methods

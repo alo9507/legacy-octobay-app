@@ -18,10 +18,10 @@ export default {
 
   env: {
     OCTOBAY_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/OctoBay.json').toString()
+      fs.readFileSync('./contract-abi/Octobay.json').toString()
     ).abi,
-    OCTOPIN_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/OctoPin.json').toString()
+    OVT_ABI: JSON.parse(
+      fs.readFileSync('./contract-abi/OctobayVisibilityToken.json').toString()
     ).abi,
   },
 
@@ -89,7 +89,7 @@ export default {
           'APP_NAME',
           'GITHUB_CLIENT_ID',
           'OCTOBAY_ADDRESS',
-          'OCTOPIN_ADDRESS',
+          'OVT_ADDRESS',
           'GSN_RELAYHUB_ADDRESS',
           'GSN_PAYMASTER_ADDRESS',
           'MAX_CLAIMPR_AGE',

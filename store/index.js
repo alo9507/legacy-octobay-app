@@ -6,8 +6,7 @@ export const state = () => ({
   accounts: [],
   registeredAccount: null,
   balance: 0,
-  octoPinAddress: null,
-  octoPinBalance: 0,
+  ovtBalance: 0,
   issues: [],
   tokenList: [],
   showTokenList: false,
@@ -49,8 +48,8 @@ export const getters = {
   balance(state) {
     return state.balance
   },
-  octoPinBalance(state) {
-    return state.octoPinBalance
+  ovtBalance(state) {
+    return state.ovtBalance
   },
   connected(state) {
     return !!state.accounts.length
@@ -115,9 +114,6 @@ export const getters = {
   octoBayOwner(state) {
     return state.octoBayOwner
   },
-  octoPinAddress(state) {
-    return state.octoPinAddress
-  },
   twitterAccountId(state) {
     return state.twitterAccountId
   },
@@ -142,8 +138,8 @@ export const mutations = {
   setBalance(state, balance) {
     state.balance = balance
   },
-  setOctoPinBalance(state, balance) {
-    state.octoPinBalance = balance
+  setOvtBalance(state, balance) {
+    state.ovtBalance = balance
   },
   setRegisteredAccount(state, registeredAccount) {
     state.registeredAccount = registeredAccount
@@ -238,9 +234,6 @@ export const mutations = {
   setOctoBayOwner(state, owner) {
     state.octoBayOwner = owner
   },
-  setOctoPinAddress(state, address) {
-    state.octoPinAddress = address
-  },
   setTwitterAccountId(state, id) {
     state.twitterAccountId = id
   },
@@ -278,11 +271,11 @@ export const actions = {
       commit('setOracles', oracles)
     })
   },
-  updateOctoPinBalance({ state, commit }) {
-    this.$octoPin.methods
+  updateOvtBalance({ state, commit }) {
+    this.$ovt.methods
       .balanceOf(state.accounts[0])
       .call()
-      .then((balance) => commit('setOctoPinBalance', balance))
+      .then((balance) => commit('setOvtBalance', balance))
   },
   updatePins({ commit }, issueId) {
     this.$octoBay.methods

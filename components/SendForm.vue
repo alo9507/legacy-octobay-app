@@ -530,35 +530,7 @@ export default {
           this.loadUser(username)
             .then((user) => {
               this.user = user
-              if (this.user && this.$octoBay) {
-                this.$octoBay.methods
-                  .userIDsByGithubUser(username)
-                  .call()
-                  .then((userId) => {
-                    if (userId) {
-                      this.$octoBay.methods
-                        .users(userId)
-                        .call()
-                        .then((result) => {
-                          if (
-                            result.ethAddress !==
-                              '0x0000000000000000000000000000000000000000' &&
-                            result.status === 2
-                          ) {
-                            this.userEthAddress = result.ethAddress
-                          } else {
-                            this.userEthAddress = null
-                          }
-                        })
-                        .catch((e) => console.log(e))
-                    } else {
-                      this.userEthAddress = null
-                    }
-                  })
-                  .catch((e) => console.log(e))
-              } else {
-                this.ethAddress = null
-              }
+              // TODO: fetch info from subgraph
             })
             .catch(() => {
               this.user = null
@@ -671,7 +643,7 @@ export default {
           this.amount = 0
           this.showSendSuccess = true
           this.updateUserDeposits()
-          this.$store.dispatch('updateOctoPinBalance')
+          this.$store.dispatch('updateOvtBalance')
           this.$web3.eth
             .getBalance(this.account)
             .then((balance) => this.$store.commit('setBalance', balance))
@@ -695,7 +667,7 @@ export default {
         })
         .then((tx) => {
           this.$store.dispatch('updateIssues')
-          this.$store.dispatch('updateOctoPinBalance')
+          this.$store.dispatch('updateOvtBalance')
           this.$web3.eth
             .getBalance(this.account)
             .then((balance) => this.$store.commit('setBalance', balance))
@@ -736,7 +708,7 @@ export default {
         })
         .then(() => {
           this.updateUserDeposits()
-          this.$store.dispatch('updateOctoPinBalance')
+          this.$store.dispatch('updateOvtBalance')
           this.$web3.eth
             .getBalance(this.account)
             .then((balance) => this.$store.commit('setBalance', balance))
