@@ -1,6 +1,6 @@
 ---
 name: Blank
-about: ''
+about: 'Anything not covered by the other issue templates.'
 title: ''
 labels: ''
 assignees: ''
