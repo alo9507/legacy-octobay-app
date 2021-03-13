@@ -9,7 +9,7 @@ assignees: ''
 
 <!---- Don't change these headers! -->
 Time Investment (h) | Timescale (d) | Difficulty | Project Value | Budget | Currency
-:---:|:---:|:---:|:---:|:---:
+:---:|:---:|:---:|:---:|:---:|:---:
 10 | 2 | low/medium/high | low/medium/high | 1000 | USD
 
 # Description
