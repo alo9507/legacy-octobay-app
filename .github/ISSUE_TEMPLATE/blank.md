@@ -7,4 +7,9 @@ assignees: ''
 
 ---
 
-For anything not directly related to development please head over to: **[Discussions](https://github.com/Octobay/app/discussions)**
+<!---
+
+For anything not directly related to development please head over to our discussions board:
+https://github.com/Octobay/app/discussions
+
+-->
