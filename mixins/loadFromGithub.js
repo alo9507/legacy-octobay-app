@@ -24,5 +24,12 @@ export default {
         .get(`${process.env.API_URL}/github/user/${username}`)
         .then((res) => res.data)
     },
+    loadProjectById(id) {
+      return new Promise((resolve) => {
+        resolve({
+          id: '123',
+        })
+      })
+    },
   },
 }

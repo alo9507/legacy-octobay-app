@@ -27,6 +27,14 @@ export const state = () => ({
   modalData: null,
   twitterAccountId: null,
   twitterFollowers: 0,
+  departments: [
+    {
+      address: '0x0000000000000000000000000000000000000001',
+      project: {
+        id: '123',
+      },
+    },
+  ],
 })
 
 export const getters = {
@@ -119,6 +127,9 @@ export const getters = {
   },
   twitterFollowers(state) {
     return state.twitterFollowers
+  },
+  departments(state) {
+    return state.departments
   },
 }
 

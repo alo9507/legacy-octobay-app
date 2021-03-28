@@ -163,6 +163,7 @@ export default {
         'faSlidersH',
         'faHandHoldingUsd',
         'faExchangeAlt',
+        'faCog',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },
