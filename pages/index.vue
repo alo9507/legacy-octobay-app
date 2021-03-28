@@ -1,6 +1,6 @@
 <template>
-  <div class="content card overflow-hidden border-0 shadow-sm">
-    <div class="d-flex justify-content-around mt-4 px-2">
+  <div class="content card overflow-hidden border-0 shadow-lg">
+    <div class="d-flex justify-content-around mt-4 px-2 font-weight-bold">
       <a
         href="#"
         :class="'mx-2 text-' + (view === 'send' ? 'primary' : 'muted')"

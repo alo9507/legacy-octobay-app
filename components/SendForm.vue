@@ -241,7 +241,7 @@
       />
       <span
         class="btn btn-primary shadow-sm"
-        style="width: 95px"
+        style="width: 103px"
         @click="$store.commit('setShowRecipientTypeList', true)"
       >
         <span>Project</span>

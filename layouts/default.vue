@@ -1,8 +1,8 @@
 <template>
-  <div class="container-fluid main d-flex flex-column align-items-center pb-5">
+  <div class="d-flex flex-column" style="min-height: 100vh">
     <div
       v-if="showWarning"
-      class="alert text-white border-0 mt-5"
+      class="alert text-white bg-secondary border-0 mt-5 mx-auto"
       style="max-width: 360px; background-color: rgba(255, 255, 255, 0.1)"
     >
       <button type="button" class="close p-1" @click="showWarning = false">
@@ -62,8 +62,12 @@
         </div>
       </div>
     </div>
-    <Header />
-    <Nuxt />
+    <div
+      class="container-fluid main d-flex flex-column align-items-center pb-5"
+    >
+      <Header />
+      <Nuxt />
+    </div>
     <Footer />
     <RecipientTypeList />
     <IntervalSelect />

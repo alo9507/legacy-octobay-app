@@ -1,26 +1,23 @@
-$theme-colors: ("primary": #0366d6)
+$theme-colors: ("primary": #ff006a, "secondary": #652FFF)
 $box-shadow-sm: 0 .125rem .3rem rgba(black, .25) !default
 
 @import "./../../node_modules/bootstrap/scss/bootstrap"
 @import "./tooltips"
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Cinzel&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap')
 
 body
-  background: rgb(0,23,85)
-  background: linear-gradient(0deg, rgba(255,0,0,0.15) 0%, rgba(255,0,0,0) 80%), linear-gradient(90deg, rgba(0,3,65,1) 0%, rgba(0,74,157,1) 40%, rgba(0,74,157,1) 60%, rgba(0,3,65,1) 100%)
-  background-attachment: fixed
-  background-repeat: no-repeat
-  background-size: 120%
-  background-position: center center
+  background: white
+  font-family: 'Montserrat', sans-serif
+
+body,
+#__nuxt,
+#__layout
   min-height: 100vh
-  font-family: 'Raleway', sans-serif
 
 .btn
   border: none
   border-radius: 2rem
+  font-weight: 800
   &.disabled,
   &:disabled
     opacity: 0.25
@@ -51,9 +48,6 @@ body
 .header
   border-bottom-left-radius: 2rem
   border-bottom-right-radius: 2rem
-
-  .connect
-    box-shadow: 0 0.125rem 0.3rem rgba(0, 0, 0, 0.25), 0 0 300px rgba(255, 255, 255, 1), 0 0 150px rgba(255, 255, 255, 0.5) !important
 
 .content
   min-width: 320px
@@ -105,7 +99,7 @@ a:hover
     top: 6px
   &.select-input-left
     > input
-      padding-left: 110px
+      padding-left: 115px
     > span
       right: auto
       left: 6px

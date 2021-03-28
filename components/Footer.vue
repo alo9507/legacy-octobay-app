@@ -1,5 +1,7 @@
 <template>
-  <footer class="pt-3 pb-5 text-center">
+  <footer
+    class="d-flex flex-column justify-content-end p-5 text-center mt-auto"
+  >
     <div class="mb-3">
       <a
         href="https://twitter.com/OctoBayApp"
@@ -34,20 +36,9 @@
       >
         <img
           :src="'./chainlink-icon.png'"
-          width="20px"
+          width="36px"
           class="rounded-circle py-1 pl-1"
         />
-        <small
-          ><font-awesome-icon
-            :icon="['fas', 'chevron-down']"
-            style="opacity: 0.5"
-        /></small>
-      </button>
-      <button
-        class="align-items-center btn btn-link text-white btn-sm oracle-button"
-        @click="$store.commit('setShowForkList', true)"
-      >
-        <font-awesome-icon :icon="['fas', 'code-branch']" />
         <small
           ><font-awesome-icon
             :icon="['fas', 'chevron-down']"
@@ -57,10 +48,10 @@
     </div>
     <div>
       <a
-        href="https://octobay.github.io/docs/"
+        href="https://octobay.github.io"
         target="_blank"
         class="text-white px-1"
-        >learn more</a
+        >about</a
       >
     </div>
   </footer>
@@ -84,18 +75,21 @@ export default {
 
 <style lang="sass" scoped>
 footer
+  font-size: 2rem
+  background-color: #652FFF
+  background-image: url('/wave-footer.svg')
+  background-size: 110%
+  background-repeat: no-repeat
+  background-position: top
+  height: 22vw
+  min-height: 360px
+  font-weight: 800
   .oracle-button
-    opacity: 0.5
     transition: opacity .2s ease
     &:hover,
     &:active,
     &:focus
       text-decoration: none
-      opacity: 1
-  a
-    opacity: 0.5
-    &:hover
-      opacity: 1
   .donate-btn
     position: relative
     z-index: 1

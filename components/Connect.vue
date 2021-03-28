@@ -4,7 +4,7 @@
       <a
         :href="githubUser.html_url"
         target="_blank"
-        class="rounded-circle shadow-sm avatar border"
+        class="rounded-circle avatar border"
         :style="'background-image: url(' + githubUser.avatar_url + ')'"
       ></a>
       <a
@@ -107,7 +107,7 @@ export default {
       githubClientId: process.env.GITHUB_CLIENT_ID,
       connectedGithub: false,
       cssClasses:
-        'd-flex justify-content-between align-items-center text-muted bg-white shadow-sm rounded-xl p-1 connect',
+        'd-flex justify-content-between align-items-center text-muted bg-white rounded-xl p-1 connect',
     }
   },
   computed: {
