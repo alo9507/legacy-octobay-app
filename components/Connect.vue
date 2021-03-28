@@ -75,14 +75,13 @@
         key="disconnected"
         class="d-flex align-items-center"
       >
-        <a
+        <button
           v-if="$web3"
-          href="#"
           class="ml-2 btn btn-lg btn-light shadow-sm"
           @click="connect()"
         >
           Connect Wallet
-        </a>
+        </button>
         <a
           v-else
           href="https://metamask.io"
