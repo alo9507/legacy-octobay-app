@@ -52,7 +52,7 @@
         <b>Permission NFT</b><br />
         <small>This NFT can be copied and handed out to others.</small>
         <div class="d-flex mt-2">
-          <input type="checkbox" class="mr-2" />
+          <input type="checkbox" class="mr-2" checked disabled />
           <div class="d-flex flex-column">
             Manage Settings
             <small class="text-muted">includes creating/revoking NFTs</small>
