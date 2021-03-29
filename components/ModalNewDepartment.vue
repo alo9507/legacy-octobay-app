@@ -11,13 +11,12 @@
         />
       </div>
       <div>
-        <b>Token Details</b>
         <div class="d-flex">
           <div class="mr-1">
             <input
               type="text"
               class="form-control form-control-lg form-control-with-embed mb-2"
-              placeholder="Name"
+              placeholder="Token Name"
             />
           </div>
           <div class="ml-1">
@@ -54,7 +53,10 @@
         <small>This NFT can be copied and handed out to others.</small>
         <div class="d-flex mt-2">
           <input type="checkbox" class="mr-2" />
-          <div class="d-flex flex-column">Change Token Settings</div>
+          <div class="d-flex flex-column">
+            Manage Settings
+            <small class="text-muted">includes creating/revoking NFTs</small>
+          </div>
         </div>
         <div class="d-flex">
           <input type="checkbox" class="mr-2" />
@@ -65,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div class="card-body">
+    <div class="card-body pt-0">
       <button class="btn btn-lg btn-primary w-100 shadow-sm">
         Create new Department
       </button>

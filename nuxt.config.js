@@ -164,6 +164,8 @@ export default {
         'faHandHoldingUsd',
         'faExchangeAlt',
         'faCog',
+        'faKey',
+        'faComments',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },

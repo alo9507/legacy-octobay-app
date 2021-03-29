@@ -39,14 +39,43 @@
           <div
             class="border-top border-bottom w-100 py-2 text-nowrap d-flex justify-content-between align-items-center px-4"
           >
-            <!-- deposits -->
+            <!-- Proposals -->
             <button
-              v-tooltip="{ content: 'Deposits', trigger: 'hover' }"
+              v-tooltip="{ content: 'Proposals', trigger: 'hover' }"
+              class="btn btn-sm btn-light text-muted"
+            >
+              <font-awesome-icon :icon="['fas', 'comments']" />
+            </button>
+            <!-- Holders -->
+            <button
+              v-tooltip="{ content: 'Token Holders', trigger: 'hover' }"
               :class="[
                 'btn btn-sm btn-light text-muted',
-                { active: action === 'deposits' },
+                { active: action === 'holders' },
               ]"
-              @click="changeAction('deposits')"
+              @click="changeAction('holders')"
+            >
+              <font-awesome-icon :icon="['fas', 'users']" />
+            </button>
+            <!-- Permissions NFTs -->
+            <button
+              v-tooltip="{ content: 'Permission NFTs', trigger: 'hover' }"
+              :class="[
+                'btn btn-sm btn-light text-muted',
+                { active: action === 'nfts' },
+              ]"
+              @click="changeAction('nfts')"
+            >
+              <font-awesome-icon :icon="['fas', 'key']" />
+            </button>
+            <!-- Settings -->
+            <button
+              v-tooltip="{ content: 'Settings', trigger: 'hover' }"
+              :class="[
+                'btn btn-sm btn-light text-muted',
+                { active: action === 'settings' },
+              ]"
+              @click="changeAction('settings')"
             >
               <font-awesome-icon :icon="['fas', 'cog']" />
             </button>
@@ -54,9 +83,17 @@
           <!-- details content -->
           <div class="w-100 px-3">
             <transition name="fade" mode="out-in">
-              <!-- deposits -->
-              <div v-if="action === 'deposits'" key="deposits" class="py-3">
-                some details
+              <!-- holders -->
+              <div v-if="action === 'holders'" key="holders" class="py-3">
+                List of token holders
+              </div>
+              <!-- nfts -->
+              <div v-if="action === 'nfts'" key="nfts" class="py-3">
+                List of permission NFTs
+              </div>
+              <!-- settings -->
+              <div v-if="action === 'settings'" key="settings" class="py-3">
+                Token settings
               </div>
             </transition>
           </div>
