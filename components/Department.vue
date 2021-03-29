@@ -122,7 +122,50 @@
               </div>
               <!-- nfts -->
               <div v-if="action === 'nfts'" key="nfts" class="py-3">
-                List of permission NFTs
+                <div v-if="department.nfts.length">
+                  <small class="d-block">
+                    <table class="w-100">
+                      <tr>
+                        <th></th>
+                        <th class="text-center">Manage<br />Settings</th>
+                        <th class="text-center">Create<br />Proposals</th>
+                        <th></th>
+                      </tr>
+                      <tr v-for="nft in department.nfts" :key="nft.id">
+                        <td>
+                          <b>{{ nft.githubUserId }}</b>
+                          <br />
+                          <AddressShort
+                            :address="nft.owner"
+                            class="text-muted"
+                          />
+                        </td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-right">
+                          <button
+                            v-tooltip="{ content: 'Save', trigger: 'hover' }"
+                            class="btn btn-sm btn-primary shadow-sm"
+                          >
+                            <font-awesome-icon :icon="['fas', 'check']" />
+                          </button>
+                          <button
+                            v-tooltip="{ content: 'Burn', trigger: 'hover' }"
+                            class="btn btn-sm btn-primary shadow-sm"
+                          >
+                            <font-awesome-icon :icon="['fas', 'fire']" />
+                          </button>
+                        </td>
+                      </tr>
+                    </table>
+                  </small>
+                </div>
+                <div v-else class="text-muted text-center">
+                  <small>No Permission-NFTs yet.</small>
+                </div>
+                <button class="btn btn-sm btn-primary w-100 mt-2 shadow-sm">
+                  New Permission-NFT
+                </button>
               </div>
               <!-- settings -->
               <div v-if="action === 'settings'" key="settings" class="py-3">

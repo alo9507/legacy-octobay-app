@@ -57,6 +57,14 @@ export const state = () => ({
           balance: '4000000000000000000000',
         },
       ],
+      nfts: [
+        {
+          id: '12321',
+          githubUserId: 'klhdjgsbkg',
+          owner: '0x0000000000000000000000000000000000000012',
+          permissions: ['manageSettings', 'createProposals'],
+        },
+      ],
     },
     {
       id: 'ghijkl',
@@ -67,6 +75,7 @@ export const state = () => ({
         id: '123',
       },
       holders: [],
+      nfts: [],
     },
   ],
   proposals: [

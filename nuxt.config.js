@@ -169,6 +169,7 @@ export default {
         'faKey',
         'faComments',
         'faVoteYea',
+        'faFire',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },
