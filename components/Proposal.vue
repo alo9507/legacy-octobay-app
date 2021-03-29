@@ -17,11 +17,37 @@
             <div :class="{ 'text-truncate': !showDetails }">
               <b>Use GPL3 License for all repositories.</b>
             </div>
-            <div class="flex-fill rounded-lg" style="background-color: #ddd">
+            <div
+              class="flex-fill rounded-lg position-relative"
+              style="background-color: #ddd"
+            >
               <div
-                class="bg-success rounded-lg"
-                style="height: 5px; width: 25%"
+                class="bg-success rounded-lg position-relative"
+                :style="`height: 5px; width: ${(
+                  proposal.votes.reduce((a, b) => a + b.percentage, 0) / 100
+                ).toFixed(2)}%; z-index: 2`"
               ></div>
+              <div
+                class="bg-warning rounded-lg position-absolute"
+                :style="`height: 5px; width: ${(proposal.quorum / 100).toFixed(
+                  2
+                )}%; top: 0; z-index: 1`"
+              ></div>
+            </div>
+            <div class="d-flex justify-content-between">
+              <small class="text-muted"
+                >Quorum: {{ (proposal.quorum / 100).toFixed(2) }} %</small
+              >
+              <small class="text-muted"
+                >Current:
+                {{
+                  (
+                    proposal.votes.reduce((a, b) => a + b.percentage, 0) / 100
+                  ).toFixed(2)
+                }}
+                %</small
+              >
+              <small class="text-muted">Days left: 2</small>
             </div>
           </div>
         </div>
@@ -92,7 +118,23 @@
             <transition name="fade" mode="out-in">
               <!-- votes -->
               <div v-if="action === 'votes'" key="holders" class="py-3">
-                List of votes
+                <div
+                  v-for="vote in proposal.votes"
+                  :key="vote.id"
+                  class="d-flex justify-content-between"
+                >
+                  <small>
+                    <b>{{ vote.githubUser }}</b
+                    ><br />
+                    <AddressShort :address="vote.address" class="text-muted" />
+                  </small>
+                  <small
+                    :class="
+                      'text-' + (vote.percentage > 0 ? 'success' : 'danger')
+                    "
+                    >{{ (vote.percentage / 100).toFixed(2) }} %</small
+                  >
+                </div>
               </div>
             </transition>
           </div>

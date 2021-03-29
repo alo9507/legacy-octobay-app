@@ -40,9 +40,22 @@ export const state = () => ({
   proposals: [
     {
       id: '1231321',
+      quorum: 2500,
       discussion: {
         id: '2342342',
       },
+      votes: [
+        {
+          address: '0x1230000000000000000000000000000000000456',
+          githubUser: 'mktcode',
+          percentage: 1260,
+        },
+        {
+          address: '0x7890000000000000000000000000000000000abc',
+          githubUser: 'rikkce',
+          percentage: -280,
+        },
+      ],
     },
   ],
 })
