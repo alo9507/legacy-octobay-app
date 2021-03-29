@@ -10,6 +10,14 @@
       </div>
       <div v-else class="text-center text-muted my-3">No departments.</div>
     </div>
+    <div class="card-body">
+      <button
+        class="btn btn-lg btn-primary w-100 shadow-sm"
+        @click="newDepartment()"
+      >
+        New Department
+      </button>
+    </div>
   </div>
 </template>
 
@@ -22,6 +30,13 @@ export default {
   },
   mounted() {
     this.$store.dispatch('updateDepartments')
+  },
+  methods: {
+    newDepartment() {
+      this.$store.commit('setModalData', null)
+      this.$store.commit('setModalComponent', 'ModalNewDepartment')
+      this.$store.commit('setShowModal', true)
+    },
   },
 }
 </script>
