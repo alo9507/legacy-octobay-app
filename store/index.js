@@ -27,11 +27,22 @@ export const state = () => ({
   modalData: null,
   twitterAccountId: null,
   twitterFollowers: 0,
+  selectedDepartment: null,
   departments: [
     {
+      id: 'abcdef',
       name: 'Octobay Strategy',
       address: '0x0000000000000000000000000000000000000001',
-      symbol: 'OSG',
+      symbol: 'OSTRG',
+      project: {
+        id: '123',
+      },
+    },
+    {
+      id: 'ghijkl',
+      name: 'Octobay Security',
+      address: '0x0000000000000000000000000000000000000002',
+      symbol: 'OSECG',
       project: {
         id: '123',
       },
@@ -40,6 +51,7 @@ export const state = () => ({
   proposals: [
     {
       id: '1231321',
+      department: 'abcdef',
       quorum: 2500,
       discussion: {
         id: '2342342',
@@ -150,6 +162,9 @@ export const getters = {
   },
   twitterFollowers(state) {
     return state.twitterFollowers
+  },
+  selectedDepartment(state) {
+    return state.selectedDepartment
   },
   departments(state) {
     return state.departments
@@ -276,6 +291,9 @@ export const mutations = {
   },
   setTwitterFollowers(state, followers) {
     state.twitterFollowers = followers
+  },
+  setSelectedDepartment(state, department) {
+    state.selectedDepartment = department
   },
 }
 

@@ -9,9 +9,15 @@
       </button>
     </div>
     <div class="card-body border-top">
-      <select class="custom-select rounded-xl">
-        <option>All Departments</option>
-        <option>Octobay Strategy</option>
+      <select v-model="selectedDepartment" class="custom-select rounded-xl">
+        <option :value="null">All Departments</option>
+        <option
+          v-for="department in departments"
+          :key="department.address"
+          :value="department"
+        >
+          {{ department.name }}
+        </option>
       </select>
     </div>
     <div class="card-body pt-0">
@@ -34,7 +40,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['proposals']),
+    ...mapGetters(['proposals', 'departments', 'selectedDepartment']),
   },
   mounted() {
     this.$store.dispatch('updateProposals')

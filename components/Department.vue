@@ -53,6 +53,7 @@
             <button
               v-tooltip="{ content: 'Proposals', trigger: 'hover' }"
               class="btn btn-sm btn-light text-muted"
+              @click="showProposals()"
             >
               <font-awesome-icon :icon="['fas', 'comments']" />
             </button>
@@ -178,6 +179,10 @@ export default {
       .finally(() => (this.loading = false))
   },
   methods: {
+    showProposals() {
+      this.$store.commit('setView', 'proposals')
+      this.$store.commit('setSelectedDepartment', this.department)
+    },
     changeAction(action) {
       if (this.action === action) {
         this.action = null
