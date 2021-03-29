@@ -37,6 +37,26 @@ export const state = () => ({
       project: {
         id: '123',
       },
+      holders: [
+        {
+          id: 'akjdhakjdf',
+          githubUserId: 'anjkgfnlag=',
+          address: '0x0000000000000000000000000000000000000004',
+          balance: '315000000000000000000',
+        },
+        {
+          id: 'akgjglsf',
+          githubUserId: 'rkjugslrhjd',
+          address: '0x0000000000000000000000000000000000000005',
+          balance: '315000000000000000000',
+        },
+        {
+          id: 'hdlsnujeg=',
+          githubUserId: 'klhdjgsbkg',
+          address: '0x0000000000000000000000000000000000000006',
+          balance: '4000000000000000000000',
+        },
+      ],
     },
     {
       id: 'ghijkl',
@@ -46,6 +66,7 @@ export const state = () => ({
       project: {
         id: '123',
       },
+      holders: [],
     },
   ],
   proposals: [

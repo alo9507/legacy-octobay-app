@@ -96,7 +96,29 @@
             <transition name="fade" mode="out-in">
               <!-- holders -->
               <div v-if="action === 'holders'" key="holders" class="py-3">
-                List of token holders
+                <div v-if="department.holders.length">
+                  <div
+                    v-for="holder in department.holders"
+                    :key="holder.id"
+                    class="d-flex justify-content-between"
+                  >
+                    <small>
+                      <b>{{ holder.githubUserId }}</b
+                      ><br />
+                      <AddressShort
+                        :address="holder.address"
+                        class="text-muted"
+                      />
+                    </small>
+                    <small>
+                      {{ $web3.utils.fromWei(holder.balance, 'ether') }}
+                      {{ department.symbol }}
+                    </small>
+                  </div>
+                </div>
+                <div v-else class="text-muted text-center">
+                  <small>No token holders yet.</small>
+                </div>
               </div>
               <!-- nfts -->
               <div v-if="action === 'nfts'" key="nfts" class="py-3">
