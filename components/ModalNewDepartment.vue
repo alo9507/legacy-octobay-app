@@ -63,13 +63,6 @@
             <small class="text-muted">regardless of token holdings</small>
           </div>
         </div>
-        <div class="d-flex">
-          <input type="checkbox" class="mr-2" />
-          <div class="d-flex flex-column">
-            Cast Votes equal to
-            <small class="text-muted">regardless of token holdings</small>
-          </div>
-        </div>
       </div>
     </div>
     <div class="card-body">
