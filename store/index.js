@@ -29,7 +29,9 @@ export const state = () => ({
   twitterFollowers: 0,
   departments: [
     {
+      name: 'Octobay Security',
       address: '0x0000000000000000000000000000000000000001',
+      symbol: 'OSG',
       project: {
         id: '123',
       },

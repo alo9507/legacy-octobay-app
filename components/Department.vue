@@ -7,21 +7,31 @@
     >
       <div class="position-relative">
         <!-- header -->
-        <div class="d-flex align-items-top px-3 py-2">
-          <div :class="{ 'text-truncate': !showDetails }">
+        <div class="d-flex flex-column align-items-top px-3 py-2">
+          <div
+            :class="['d-flex flex-column', { 'text-truncate': !showDetails }]"
+          >
             <small class="text-muted text-truncate">
               <small>
                 {{ projectNode.owner }}/{{ projectNode.repository }}
               </small>
             </small>
             <div :class="{ 'text-truncate': !showDetails }">
-              <b>{{ projectNode.title }}</b>
+              <b>{{ department.name }}</b>
+              <small class="text-muted">({{ department.symbol }})</small>
             </div>
+          </div>
+          <div v-if="showDetails" class="d-flex flex-column">
             <small class="text-muted text-truncate">
-              <small>
-                {{ department.address }}
-              </small>
+              {{ department.address }}
             </small>
+            <div class="mt-2 d-flex justify-content-between">
+              <small class="text-muted text-center">
+                Current supply: 10,000
+              </small>
+              <small class="text-muted text-center">Holders: 20</small>
+              <small class="text-muted text-center">Median holdings: 315</small>
+            </div>
           </div>
         </div>
       </div>
