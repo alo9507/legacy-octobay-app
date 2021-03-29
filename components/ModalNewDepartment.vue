@@ -31,7 +31,7 @@
       <div>
         <div class="d-flex align-items-end">
           <div class="mr-1">
-            <small class="d-flex">Share to create proposals</small>
+            <small class="d-flex">Shares to create proposals</small>
             <input
               type="text"
               class="form-control form-control-lg form-control-with-embed mb-2"
