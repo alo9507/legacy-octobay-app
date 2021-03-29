@@ -10,10 +10,20 @@
       >
         Departments
       </button>
+      <button
+        :class="
+          'btn btn-link mx-2 text-' +
+          (view === 'proposals' ? 'primary' : 'muted')
+        "
+        @click="$store.commit('setView', 'proposals')"
+      >
+        Proposals
+      </button>
     </div>
     <transition name="fade" mode="out-in">
       <keep-alive>
         <Departments v-if="view == 'departments'" />
+        <Proposals v-if="view == 'proposals'" />
       </keep-alive>
     </transition>
   </div>

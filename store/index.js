@@ -29,11 +29,19 @@ export const state = () => ({
   twitterFollowers: 0,
   departments: [
     {
-      name: 'Octobay Security',
+      name: 'Octobay Strategy',
       address: '0x0000000000000000000000000000000000000001',
       symbol: 'OSG',
       project: {
         id: '123',
+      },
+    },
+  ],
+  proposals: [
+    {
+      id: '1231321',
+      discussion: {
+        id: '2342342',
       },
     },
   ],
@@ -132,6 +140,9 @@ export const getters = {
   },
   departments(state) {
     return state.departments
+  },
+  proposals(state) {
+    return state.proposals
   },
 }
 

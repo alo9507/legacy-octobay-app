@@ -31,5 +31,12 @@ export default {
         })
       })
     },
+    loadDiscussionById(id) {
+      return new Promise((resolve) => {
+        resolve({
+          id: '123',
+        })
+      })
+    },
   },
 }
