@@ -34,6 +34,8 @@ export const state = () => ({
       name: 'Octobay Strategy',
       address: '0x0000000000000000000000000000000000000001',
       symbol: 'OSTRG',
+      defaultQuorum: 5150,
+      requiredSharesToCreateProposals: 5100,
       project: {
         id: '123',
       },
@@ -71,6 +73,8 @@ export const state = () => ({
       name: 'Octobay Security',
       address: '0x0000000000000000000000000000000000000002',
       symbol: 'OSECG',
+      defaultQuorum: 5100,
+      requiredSharesToCreateProposals: 5100,
       project: {
         id: '123',
       },

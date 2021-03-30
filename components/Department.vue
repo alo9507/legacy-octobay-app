@@ -169,7 +169,29 @@
               </div>
               <!-- settings -->
               <div v-if="action === 'settings'" key="settings" class="py-3">
-                Token settings
+                <div class="d-flex align-items-end">
+                  <div class="mr-1">
+                    <small class="d-flex">Shares to create proposals</small>
+                    <input
+                      v-model="requiredSharesToCreateProposals"
+                      type="text"
+                      class="form-control form-control-sm form-control-with-embed mb-2"
+                      placeholder="1-100 %"
+                    />
+                  </div>
+                  <div class="ml-1">
+                    <small class="d-flex">Default Quorum</small>
+                    <input
+                      v-model="defaultQuorum"
+                      type="text"
+                      class="form-control form-control-sm form-control-with-embed mb-2"
+                      placeholder="1-100 %"
+                    />
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-primary w-100 mt-2 shadow-sm">
+                  Save
+                </button>
               </div>
             </transition>
           </div>
@@ -219,6 +241,8 @@ export default {
       showDetails: false,
       action: null,
       loading: false,
+      requiredShareToCreateProposals: 0,
+      defaultQuorum: 0,
     }
   },
   computed: {
@@ -229,6 +253,9 @@ export default {
     }),
   },
   mounted() {
+    this.requiredSharesToCreateProposals =
+      this.department.requiredSharesToCreateProposals / 100
+    this.defaultQuorum = this.department.defaultQuorum / 100
     this.loading = true
     this.loadProjectById(this.department.project.id)
       .then((project) => {
