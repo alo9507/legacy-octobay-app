@@ -163,7 +163,10 @@
                 <div v-else class="text-muted text-center">
                   <small>No Permission-NFTs yet.</small>
                 </div>
-                <button class="btn btn-sm btn-primary w-100 mt-2 shadow-sm">
+                <button
+                  class="btn btn-sm btn-primary w-100 mt-2 shadow-sm"
+                  @click="newNFT()"
+                >
                   New Permission-NFT
                 </button>
               </div>
@@ -274,6 +277,11 @@ export default {
     showProposals() {
       this.$store.commit('setView', 'proposals')
       this.$store.commit('setSelectedDepartment', this.department)
+    },
+    newNFT() {
+      this.$store.commit('setModalData', null)
+      this.$store.commit('setModalComponent', 'ModalNewNFT')
+      this.$store.commit('setShowModal', true)
     },
     changeAction(action) {
       if (this.action === action) {
