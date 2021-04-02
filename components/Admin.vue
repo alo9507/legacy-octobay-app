@@ -329,7 +329,7 @@ export default {
         .addOracle(
           this.newOracle.address,
           this.newOracle.name,
-          [0, 1, 2, 3, 4],
+          ['register', 'release', 'claim', 'twitterPost', 'twitterFollowers'],
           [
             [this.$web3.utils.toHex(this.newOracle.registerJobId), jobFee],
             [this.$web3.utils.toHex(this.newOracle.releaseJobId), jobFee],
