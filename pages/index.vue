@@ -61,14 +61,5 @@ export default {
     ...mapGetters(['view', 'account', 'registeredAccount', 'octoBayOwner']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
-  watch: {
-    githubUser() {
-      if (this.githubUser) {
-        // TODO: fetch info from subgraph
-      } else {
-        this.$store.commit('setRegisteredAccount', null)
-      }
-    },
-  },
 }
 </script>

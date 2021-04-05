@@ -253,7 +253,10 @@ export default {
         })
 
       this.$octoBay.methods
-        .register(this.nextOracle().address, this.githubUser.login)
+        .registerUserAddress(
+          this.nextOracle().ethAddress,
+          this.githubUser.node_id
+        )
         .send({
           // useGSN: false,
           from: this.account,

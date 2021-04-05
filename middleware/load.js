@@ -7,6 +7,7 @@ export default function ({ store, redirect, app }) {
       app.$web3.eth.net.getId(),
       app.$web3.eth.getAccounts(),
       app.$axios.$get('https://tokens.coingecko.com/uniswap/all.json'),
+      app.$axios.$get(process.env.API_URL + '/graph/oracles'),
       store.dispatch('github/login'),
     ])
       .then((values) => {
@@ -16,6 +17,7 @@ export default function ({ store, redirect, app }) {
         store.commit('setNetworkId', values[3])
         const accounts = values[4]
         store.commit('setTokenList', values[5])
+        store.commit('setOracles', values[6])
 
         if (accounts.length) {
           store.commit('setAccounts', accounts)
@@ -26,7 +28,15 @@ export default function ({ store, redirect, app }) {
         }
 
         if (store.state.github.user) {
-          // TODO: fetch info from subgraph
+          app.$axios
+            .$get(
+              process.env.API_URL +
+                '/graph/user/' +
+                store.state.github.user.node_id
+            )
+            .then((user) => {
+              store.commit('setRegisteredAccounts', user.addresses)
+            })
         }
       })
       .catch((e) => {

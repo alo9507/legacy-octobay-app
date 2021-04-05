@@ -4,7 +4,7 @@ export const state = () => ({
   octoBayOwner: null,
   networkId: null,
   accounts: [],
-  registeredAccount: null,
+  registeredAccounts: [],
   balance: 0,
   ovtBalance: 0,
   issues: [],
@@ -120,7 +120,7 @@ export const getters = {
     return state.accounts
   },
   account(state) {
-    return state.accounts.length ? state.accounts[0] : null
+    return state.accounts.length ? state.accounts[0].toLowerCase() : null
   },
   balance(state) {
     return state.balance
@@ -131,8 +131,13 @@ export const getters = {
   connected(state) {
     return !!state.accounts.length
   },
+  registeredAccounts(state) {
+    return state.registeredAccounts
+  },
   registeredAccount(state) {
-    return state.registeredAccount
+    return state.registeredAccounts.length
+      ? state.registeredAccounts[0].address.toLowerCase()
+      : null
   },
   issues(state) {
     return state.issues
@@ -227,8 +232,8 @@ export const mutations = {
   setOvtBalance(state, balance) {
     state.ovtBalance = balance
   },
-  setRegisteredAccount(state, registeredAccount) {
-    state.registeredAccount = registeredAccount
+  setRegisteredAccounts(state, registeredAccounts) {
+    state.registeredAccounts = registeredAccounts
   },
   addIssue(state, issue) {
     state.issues.push(issue)
