@@ -51,38 +51,6 @@
           class="form-control"
         />
       </div>
-      <div class="input-with-button">
-        <small class="text-muted">Release Job ID</small>
-        <input
-          v-model="newOracle.releaseJobId"
-          type="text"
-          class="form-control"
-        />
-      </div>
-      <div class="input-with-button">
-        <small class="text-muted">Claim Job ID</small>
-        <input
-          v-model="newOracle.claimJobId"
-          type="text"
-          class="form-control"
-        />
-      </div>
-      <div class="input-with-button">
-        <small class="text-muted">Twitter Post Job ID</small>
-        <input
-          v-model="newOracle.twitterPostJobId"
-          type="text"
-          class="form-control"
-        />
-      </div>
-      <div class="input-with-button">
-        <small class="text-muted">Twitter Followers Job ID</small>
-        <input
-          v-model="newOracle.twitterFollowersJobId"
-          type="text"
-          class="form-control"
-        />
-      </div>
       <button
         class="btn btn-primary mt-3 w-100 shadow-sm"
         :disabled="!isNewOracleValid()"
@@ -136,6 +104,44 @@
         <span v-else>Remove Oracle</span>
       </button>
     </div>
+    <div class="mt-2">
+      <b>New Oracle Job</b>
+      <input
+        v-model="newOracleJob.oracle"
+        type="text"
+        class="form-control mb-1"
+        placeholder="Oracle Address"
+      />
+      <input
+        v-model="newOracleJob.jobName"
+        type="text"
+        class="form-control mb-1"
+        placeholder="Oracle Job Name"
+      />
+      <input
+        v-model="newOracleJob.jobId"
+        type="text"
+        class="form-control mb-1"
+        placeholder="Oracle Job ID"
+      />
+      <input
+        v-model="newOracleJob.jobFee"
+        type="text"
+        class="form-control"
+        placeholder="Oracle Job Fee"
+      />
+      <button
+        class="btn btn-primary mt-3 w-100 shadow-sm"
+        @click="addOracleJob()"
+      >
+        <font-awesome-icon
+          v-if="addingOracleJob"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
+        <span v-else>Add Oracle Job</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -149,16 +155,19 @@ export default {
         ethAddress: '',
         name: '',
         registerJobId: '',
-        releaseJobId: '',
-        claimJobId: '',
-        twitterPostJobId: '',
-        twitterFollowersJobId: '',
       },
       oracleUpdating: false,
       jobUpdating: false,
       addingNewOracle: false,
       removingOralce: false,
       updatingTwitterAccountId: false,
+      newOracleJob: {
+        oracle: null,
+        jobName: null,
+        jobId: null,
+        jobFee: null,
+      },
+      addingOracleJob: false,
     }
   },
   computed: {
@@ -187,11 +196,7 @@ export default {
         this.newOracle.ethAddress.length === 42 &&
         this.newOracle.ethAddress.startsWith('0x') &&
         this.newOracle.name &&
-        this.newOracle.registerJobId.length === 32 &&
-        this.newOracle.releaseJobId.length === 32 &&
-        this.newOracle.claimJobId.length === 32 &&
-        this.newOracle.twitterPostJobId.length === 32 &&
-        this.newOracle.twitterFollowersJobId.length === 32
+        this.newOracle.registerJobId.length === 32
       )
     },
     addNewOracle() {
@@ -201,27 +206,14 @@ export default {
         .addOracle(
           this.newOracle.ethAddress,
           this.newOracle.name,
-          ['register', 'release', 'claim', 'twitterPost', 'twitterFollowers'],
-          [
-            [this.$web3.utils.toHex(this.newOracle.registerJobId), jobFee],
-            [this.$web3.utils.toHex(this.newOracle.releaseJobId), jobFee],
-            [this.$web3.utils.toHex(this.newOracle.claimJobId), jobFee],
-            [this.$web3.utils.toHex(this.newOracle.twitterPostJobId), jobFee],
-            [
-              this.$web3.utils.toHex(this.newOracle.twitterFollowersJobId),
-              jobFee,
-            ],
-          ]
+          ['register'],
+          [[this.$web3.utils.toHex(this.newOracle.registerJobId), jobFee]]
         )
         .send({ from: this.account })
         .then(() => {
           this.newOracle.ethAddress = ''
           this.newOracle.name = ''
           this.newOracle.registerJobId = ''
-          this.newOracle.releaseJobId = ''
-          this.newOracle.claimJobId = ''
-          this.newOracle.twitterPostJobId = ''
-          this.newOracle.twitterFollowersJobId = ''
           this.$store.dispatch('updateOracles').then((oracles) => {
             this.addingNewOracle = false
           })
@@ -251,6 +243,22 @@ export default {
           this.$store.dispatch('updateOracles').then((oracles) => {
             this.removingOralce = false
           })
+        })
+    },
+    addOracleJob() {
+      this.addingOracleJob = true
+      this.$octoBay.methods
+        .addOracleJob(this.newOracleJob.oracle, this.newOracleJob.jobName, [
+          this.$web3.utils.toHex(this.newOracleJob.jobId),
+          this.newOracleJob.jobFee,
+        ])
+        .send({ from: this.account })
+        .then(() => {
+          this.addingOracleJob = false
+          this.newOracleJob.oracle = null
+          this.newOracleJob.jobName = null
+          this.newOracleJob.jobId = null
+          this.newOracleJob.jobFee = null
         })
     },
   },
