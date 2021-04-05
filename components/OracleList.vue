@@ -32,7 +32,7 @@
           </div>
           <div
             v-for="oracle in oracles"
-            :key="oracle.address"
+            :key="oracle.ethAddress"
             :class="
               'mt-2 text-left d-flex align-items-center btn btn-' +
               (activeOracle == oracle ? 'primary' : 'outline-light text-dark')

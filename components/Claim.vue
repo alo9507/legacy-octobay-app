@@ -354,7 +354,7 @@ export default {
       // trigger claim (get gas price first)
       this.$octoBay.methods
         .claimPullRequest(
-          this.oracles[0].address,
+          this.oracles[0].ethAddress,
           this.contribution.id,
           this.githubUser.login
         )

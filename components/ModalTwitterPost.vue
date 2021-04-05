@@ -167,7 +167,10 @@ export default {
 
       this.requestingTweet = true
       this.$octoBay.methods
-        .updateTwitterFollowersAndPost(this.oracles[0].address, this.issue.id)
+        .updateTwitterFollowersAndPost(
+          this.oracles[0].ethAddress,
+          this.issue.id
+        )
         .send({
           // useGSN: false,
           from: this.account,
