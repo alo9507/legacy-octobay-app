@@ -11,7 +11,7 @@ export default function ({ store, redirect, app }) {
       store.dispatch('github/login'),
     ])
       .then((values) => {
-        store.commit('setOctoBayOwner', values[0])
+        store.commit('setOctoBayOwner', values[0].toLowerCase())
         store.commit('setTwitterAccountId', values[1])
         store.commit('setTwitterFollowers', values[2])
         store.commit('setNetworkId', values[3])
