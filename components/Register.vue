@@ -245,7 +245,7 @@ export default {
           if (event.returnValues.id === this.registerRequestID) {
             // stop listening and finish process
             confirmListener.unsubscribe()
-            this.$store.commit('setRegisteredAccount', this.account)
+            // this.$store.commit('setRegisteredAccount', this.account)
             this.showRegistrationSuccess = true
             this.loadingRegistration = false
             this.registerRequestID = null

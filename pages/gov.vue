@@ -43,7 +43,7 @@ export default {
       if (this.githubUser) {
         // TODO: fetch info from subgraph
       } else {
-        this.$store.commit('setRegisteredAccount', null)
+        // this.$store.commit('setRegisteredAccount', null)
       }
     },
   },
