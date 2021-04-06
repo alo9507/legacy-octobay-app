@@ -35,7 +35,9 @@ export default function ({ store, redirect, app }) {
                 store.state.github.user.node_id
             )
             .then((user) => {
-              store.commit('setRegisteredAccounts', user.addresses)
+              if (user) {
+                store.commit('setRegisteredAccounts', user.addresses)
+              }
             })
         }
       })
