@@ -360,6 +360,15 @@ export const actions = {
       })
     }
   },
+  updateDepartments({ commit }) {
+    if (this.$octoBay) {
+      this.$axios
+        .$get(process.env.API_URL + '/graph/departments')
+        .then((departments) => {
+          // commit('setDepartments', departments)
+        })
+    }
+  },
   updateOracles({ commit }) {
     this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
       commit('setOracles', oracles)
