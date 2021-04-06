@@ -5,15 +5,19 @@
       <div>
         <b>Link to Repository or Organization</b>
         <input
+          v-model="projectUrl"
           type="text"
           class="form-control form-control-lg form-control-with-embed mb-2"
           placeholder="https://github.com/..."
         />
+        <small v-if="repository">{{ repository.id }}</small>
+        <small v-if="organization">{{ organization.id }}</small>
       </div>
       <div>
         <div class="d-flex">
           <div class="mr-1">
             <input
+              v-model="tokenName"
               type="text"
               class="form-control form-control-lg form-control-with-embed mb-2"
               placeholder="Token Name"
@@ -21,6 +25,7 @@
           </div>
           <div class="ml-1">
             <input
+              v-model="tokenSymbol"
               type="text"
               class="form-control form-control-lg form-control-with-embed mb-2"
               placeholder="Symbol"
@@ -33,6 +38,7 @@
           <div class="mr-1">
             <small class="d-flex">Shares to create proposals</small>
             <input
+              v-model="newProposalShare"
               type="text"
               class="form-control form-control-lg form-control-with-embed mb-2"
               placeholder="1-100 %"
@@ -41,6 +47,7 @@
           <div class="ml-1">
             <small class="d-flex">Default Quorum</small>
             <input
+              v-model="minQuorum"
               type="text"
               class="form-control form-control-lg form-control-with-embed mb-2"
               placeholder="1-100 %"
@@ -68,7 +75,10 @@
       </div>
     </div>
     <div class="card-body pt-0">
-      <button class="btn btn-lg btn-primary w-100 shadow-sm">
+      <button
+        class="btn btn-lg btn-primary w-100 shadow-sm"
+        @click="createNewDepartment()"
+      >
         Create new Department
       </button>
     </div>
@@ -81,11 +91,88 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      loading: false,
+      loadingProject: false,
+      tokenName: null,
+      tokenSymbol: null,
+      projectUrl: null,
+      repository: null,
+      organization: null,
+      newProposalShare: null,
+      minQuorum: null,
     }
   },
   computed: {
     ...mapGetters(['oracles', 'account']),
+    ...mapGetters('github', { githubUser: 'user' }),
+  },
+  watch: {
+    projectUrl(url) {
+      clearTimeout(this.loadProjectTimeout)
+      this.loadProjectTimeout = setTimeout(() => {
+        const repoParts = url.match(
+          /^https:\/\/github\.com\/([\w-]+)\/([\w-]+)$/
+        )
+        const orgParts = url.match(/^https:\/\/github\.com\/([\w-]+)$/)
+        if (repoParts) {
+          const owner = repoParts[1]
+          const repo = repoParts[2]
+          this.loadingProject = true
+          this.repository = null
+          this.$axios
+            .$get(`${process.env.API_URL}/github/repository/${owner}/${repo}`)
+            .then((repository) => {
+              this.repository = repository
+            })
+            .catch(() => {
+              this.repository = null
+              this.organization = null
+            })
+            .finally(() => (this.loadingProject = false))
+        } else if (orgParts) {
+          const name = orgParts[1]
+          this.loadingProject = true
+          this.organization = null
+          this.$axios
+            .$get(`${process.env.API_URL}/github/organization/${name}`)
+            .then((organization) => {
+              this.organization = organization
+            })
+            .catch(() => {
+              this.repository = null
+              this.organization = null
+            })
+            .finally(() => (this.loadingProject = false))
+        } else {
+          this.repository = null
+          this.organization = null
+          this.loadingProject = false
+        }
+      }, 500)
+    },
+  },
+  methods: {
+    createNewDepartment() {
+      const projectId = this.repository
+        ? this.repository.id
+        : this.organization
+        ? this.organization.id
+        : null
+      if (projectId) {
+        this.$octoBay.methods
+          .createGovernanceToken(this.oracles[0].ethAddress, [
+            true,
+            this.githubUser.node_id,
+            this.tokenName,
+            this.tokenSymbol,
+            projectId,
+            Number(this.newProposalShare) * 100,
+            Number(this.minQuorum) * 100,
+            '0x0000000000000000000000000000000000000000',
+          ])
+          .send({ from: this.account })
+          .then((result) => {})
+      }
+    },
   },
 }
 </script>
