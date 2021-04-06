@@ -23,6 +23,16 @@ export default {
     OVT_ABI: JSON.parse(
       fs.readFileSync('./contract-abi/OctobayVisibilityToken.json').toString()
     ).abi,
+    /*
+     ** for Vercel
+     */
+    API_URL: 'https://octobay.uber.space',
+    APP_NAME: 'Octobay',
+    GITHUB_CLIENT_ID: '3462fb03655aa9c60846',
+    OCTOBAY_ADDRESS: '0xC3cCf49F476F5F43Cf63590cE0F1894304267E7E',
+    OVT_ADDRESS: '0x2b02FD53F6282c5431AdE59f7649c6f674D38cF7',
+    GSN_RELAYHUB_ADDRESS: '0xE9dcD2CccEcD77a92BA48933cb626e04214Edb92',
+    GSN_PAYMASTER_ADDRESS: '0x083082b7Eada37dbD8f263050570B31448E61c94',
   },
 
   /*
@@ -92,7 +102,6 @@ export default {
           'OVT_ADDRESS',
           'GSN_RELAYHUB_ADDRESS',
           'GSN_PAYMASTER_ADDRESS',
-          'MAX_CLAIMPR_AGE',
         ],
       },
     ],
