@@ -1,5 +1,6 @@
 export default function ({ store, redirect, app }) {
   if (app.$octoBay) {
+    console.log(window.location.href)
     Promise.all([
       app.$octoBay.methods.owner().call(),
       app.$octoBay.methods.twitterAccountId().call(),
