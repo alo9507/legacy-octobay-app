@@ -159,16 +159,16 @@ export default {
         : null
       if (projectId) {
         this.$octoBay.methods
-          .createGovernanceToken(this.oracles[0].ethAddress, [
-            true,
-            this.githubUser.node_id,
-            this.tokenName,
-            this.tokenSymbol,
+          .createGovernanceToken(this.oracles[0].ethAddress, {
+            isValue: true,
+            githubUserId: this.githubUser.node_id,
+            name: this.tokenName,
+            symbol: this.tokenSymbol,
             projectId,
-            Number(this.newProposalShare) * 100,
-            Number(this.minQuorum) * 100,
-            '0x0000000000000000000000000000000000000000',
-          ])
+            newProposalShare: Number(this.newProposalShare) * 100,
+            minQuorum: Number(this.minQuorum) * 100,
+            creator: '0x0000000000000000000000000000000000000000',
+          })
           .send({ from: this.account })
           .then((result) => {})
       }
