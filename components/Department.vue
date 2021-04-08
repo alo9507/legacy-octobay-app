@@ -23,7 +23,7 @@
           </div>
           <div v-if="showDetails" class="d-flex flex-column">
             <small class="text-muted text-truncate">
-              {{ department.address }}
+              {{ department.tokenAddress }}
             </small>
             <div class="mt-2 d-flex justify-content-between">
               <small class="text-muted text-center">
@@ -136,7 +136,7 @@
                           <b>{{ nft.githubUserId }}</b>
                           <br />
                           <AddressShort
-                            :address="nft.owner"
+                            :address="nft.ownerAddress"
                             class="text-muted"
                           />
                         </td>
@@ -183,9 +183,9 @@
                     />
                   </div>
                   <div class="ml-1">
-                    <small class="d-flex">Default Quorum</small>
+                    <small class="d-flex">Minimum Quorum</small>
                     <input
-                      v-model="defaultQuorum"
+                      v-model="minQuorum"
                       type="text"
                       class="form-control form-control-sm form-control-with-embed mb-2"
                       placeholder="1-100 %"
@@ -245,7 +245,7 @@ export default {
       action: null,
       loading: false,
       requiredShareToCreateProposals: 0,
-      defaultQuorum: 0,
+      minQuorum: 0,
     }
   },
   computed: {
@@ -258,9 +258,9 @@ export default {
   mounted() {
     this.requiredSharesToCreateProposals =
       this.department.requiredSharesToCreateProposals / 100
-    this.defaultQuorum = this.department.defaultQuorum / 100
+    this.minQuorum = this.department.minQuorum / 100
     this.loading = true
-    this.loadProjectById(this.department.project.id)
+    this.loadProjectById(this.department.projectId)
       .then((project) => {
         if (project) {
           this.projectNode = {

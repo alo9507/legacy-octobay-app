@@ -28,60 +28,7 @@ export const state = () => ({
   twitterAccountId: null,
   twitterFollowers: 0,
   selectedDepartment: null,
-  departments: [
-    {
-      id: 'abcdef',
-      name: 'Octobay Strategy',
-      address: '0x0000000000000000000000000000000000000001',
-      symbol: 'OSTRG',
-      defaultQuorum: 5150,
-      requiredSharesToCreateProposals: 5100,
-      project: {
-        id: '123',
-      },
-      holders: [
-        {
-          id: 'akjdhakjdf',
-          githubUserId: 'anjkgfnlag=',
-          address: '0x0000000000000000000000000000000000000004',
-          balance: '315000000000000000000',
-        },
-        {
-          id: 'akgjglsf',
-          githubUserId: 'rkjugslrhjd',
-          address: '0x0000000000000000000000000000000000000005',
-          balance: '315000000000000000000',
-        },
-        {
-          id: 'hdlsnujeg=',
-          githubUserId: 'klhdjgsbkg',
-          address: '0x0000000000000000000000000000000000000006',
-          balance: '4000000000000000000000',
-        },
-      ],
-      nfts: [
-        {
-          id: '12321',
-          githubUserId: 'klhdjgsbkg',
-          owner: '0x0000000000000000000000000000000000000012',
-          permissions: ['manageSettings', 'createProposals'],
-        },
-      ],
-    },
-    {
-      id: 'ghijkl',
-      name: 'Octobay Security',
-      address: '0x0000000000000000000000000000000000000002',
-      symbol: 'OSECG',
-      defaultQuorum: 5100,
-      requiredSharesToCreateProposals: 5100,
-      project: {
-        id: '123',
-      },
-      holders: [],
-      nfts: [],
-    },
-  ],
+  departments: [],
   proposals: [
     {
       id: '1231321',
@@ -331,6 +278,9 @@ export const mutations = {
   setTwitterFollowers(state, followers) {
     state.twitterFollowers = followers
   },
+  setDepartments(state, departments) {
+    state.departments = departments
+  },
   setSelectedDepartment(state, department) {
     state.selectedDepartment = department
   },
@@ -365,7 +315,7 @@ export const actions = {
       this.$axios
         .$get(process.env.API_URL + '/graph/departments')
         .then((departments) => {
-          // commit('setDepartments', departments)
+          commit('setDepartments', departments)
         })
     }
   },
