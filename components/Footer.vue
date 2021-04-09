@@ -47,12 +47,9 @@
       </button>
     </div>
     <div>
-      <a
-        href="https://octobay.github.io"
-        target="_blank"
-        class="text-white px-1"
-        >about</a
-      >
+      <a href="https://octobay.org" target="_blank" class="text-white px-1">
+        about
+      </a>
     </div>
   </footer>
 </template>
