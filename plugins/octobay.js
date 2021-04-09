@@ -8,6 +8,10 @@ export default ({ app }, inject) => {
       process.env.OVT_ABI,
       process.env.OVT_ADDRESS
     )
+    const octobayGovernor = new app.$web3.eth.Contract(
+      process.env.OCTOBAY_GOVERNOR_ABI,
+      process.env.OCTOBAY_GOVERNOR_ADDRESS
+    )
 
     /**
      * Exposes the OctoBay and OVT contracts as nuxt plugins.
@@ -15,5 +19,6 @@ export default ({ app }, inject) => {
      */
     inject('octoBay', octoBay)
     inject('ovt', ovt)
+    inject('octobayGovernor', octobayGovernor)
   }
 }

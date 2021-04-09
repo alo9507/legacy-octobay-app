@@ -23,6 +23,9 @@ export default {
     OVT_ABI: JSON.parse(
       fs.readFileSync('./contract-abi/OctobayVisibilityToken.json').toString()
     ).abi,
+    OCTOBAY_GOVERNOR_ABI: JSON.parse(
+      fs.readFileSync('./contract-abi/OctobayGovernor.json').toString()
+    ).abi,
     /*
      ** for Vercel
      */
@@ -30,6 +33,7 @@ export default {
     APP_NAME: process.env.APP_NAME,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
+    OCTOBAY_GOVERNOR_ADDRESS: process.env.OCTOBAY_GOVERNOR_ADDRESS,
     OVT_ADDRESS: process.env.OVT_ADDRESS,
     GSN_RELAYHUB_ADDRESS: process.env.GSN_RELAYHUB_ADDRESS,
     GSN_PAYMASTER_ADDRESS: process.env.GSN_PAYMASTER_ADDRESS,
@@ -99,6 +103,7 @@ export default {
           'APP_NAME',
           'GITHUB_CLIENT_ID',
           'OCTOBAY_ADDRESS',
+          'OCTOBAY_GOVERNOR_ADDRESS',
           'OVT_ADDRESS',
           'GSN_RELAYHUB_ADDRESS',
           'GSN_PAYMASTER_ADDRESS',
