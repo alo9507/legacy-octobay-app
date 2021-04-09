@@ -195,7 +195,7 @@ export default {
   },
   mounted() {
     this.loading = true
-    this.loadDiscussionById(this.proposal.discussion.id)
+    this.loadDiscussionById(this.proposal.id)
       .then((discussion) => {
         if (discussion) {
           this.discussionNode = {

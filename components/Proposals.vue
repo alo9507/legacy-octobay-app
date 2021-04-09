@@ -3,6 +3,7 @@
     <div class="card-body">
       <button
         class="btn btn-lg btn-primary w-100 shadow-sm"
+        :disabled="!selectedDepartment"
         @click="newProposal()"
       >
         New Proposal
@@ -10,7 +11,7 @@
     </div>
     <div class="card-body border-top">
       <select v-model="selectedDepartment" class="custom-select rounded-xl">
-        <option :value="null">All Departments</option>
+        <option :value="null">Select Departments</option>
         <option
           v-for="department in departments"
           :key="department.address"
@@ -21,9 +22,12 @@
       </select>
     </div>
     <div class="card-body pt-0">
-      <div v-if="proposals.length" class="proposal-list">
+      <div
+        v-if="selectedDepartment && selectedDepartment.proposals.length"
+        class="proposal-list"
+      >
         <Proposal
-          v-for="proposal in proposals"
+          v-for="proposal in selectedDepartment.proposals"
           :key="proposal.id"
           :proposal="proposal"
         />
@@ -40,10 +44,15 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['proposals', 'departments', 'selectedDepartment']),
-  },
-  mounted() {
-    this.$store.dispatch('updateProposals')
+    ...mapGetters(['departments']),
+    selectedDepartment: {
+      get() {
+        return this.$store.state.selectedDepartment
+      },
+      set(value) {
+        this.$store.commit('setSelectedDepartment', value)
+      },
+    },
   },
   methods: {
     newProposal() {
