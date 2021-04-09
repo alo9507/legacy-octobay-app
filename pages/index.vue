@@ -61,5 +61,8 @@ export default {
     ...mapGetters(['view', 'account', 'registeredAccount', 'octoBayOwner']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
+  mounted() {
+    this.$store.commit('setView', 'send')
+  },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="d-flex flex-column justify-content-end p-5 text-center mt-auto"
+    class="d-flex flex-column justify-content-end pt-5 px-5 pb-4 text-center mt-auto"
   >
     <div class="mb-3">
       <a
@@ -46,8 +46,14 @@
         /></small>
       </button>
     </div>
-    <div>
-      <a href="https://octobay.org" target="_blank" class="text-white px-1">
+    <div class="d-flex flex-column">
+      <nuxt-link v-if="$route.name === 'index'" to="/gov" class="text-white">
+        governance
+      </nuxt-link>
+      <nuxt-link v-if="$route.name === 'gov'" to="/" class="text-white">
+        payments
+      </nuxt-link>
+      <a href="https://octobay.org" target="_blank" class="text-white">
         about
       </a>
     </div>
@@ -72,7 +78,7 @@ export default {
 
 <style lang="sass" scoped>
 footer
-  font-size: 2rem
+  font-size: 1.9rem
   background-color: #652FFF
   background-image: url('/wave-footer.svg')
   background-size: 110%
