@@ -36,11 +36,11 @@
             </div>
             <div class="d-flex justify-content-between">
               <small class="text-muted text-center">
-                Quorum:<br />
+                Quorum<br />
                 <b>{{ (proposal.quorum / 100).toFixed(2) }} %</b>
               </small>
               <small class="text-muted text-center">
-                Current:<br />
+                Current<br />
                 <b>
                   {{
                     (
@@ -51,7 +51,7 @@
                 </b>
               </small>
               <small class="text-muted text-center">
-                Days left:<br />
+                Days left<br />
                 <b>
                   {{
                     (
