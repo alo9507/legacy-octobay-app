@@ -24,8 +24,7 @@
           v-clipboard:success="copiedAddress"
           class="d-flex justify-content-between align-items-center btn btn-light mt-3"
         >
-          <transition name="fade" mode="out-in"
-            >>
+          <transition name="fade" mode="out-in">
             <font-awesome-icon
               v-if="copyAddressSuccess"
               key="check"
