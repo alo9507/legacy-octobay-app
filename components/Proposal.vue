@@ -223,12 +223,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'account',
-      'registeredAccount',
-      'selectedDepartment',
-      'oracles',
-    ]),
+    ...mapGetters(['account', 'registeredAccount', 'oracles']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',
@@ -257,7 +252,7 @@ export default {
     },
     castVote(against) {
       this.waitingForVoteTransaction = true
-      this.$octobayGovToken(this.selectedDepartment.tokenAddress)
+      this.$octobayGovToken(this.proposal.department.tokenAddress)
         .methods.balanceOfAsPercentAt(
           this.account,
           this.proposal.balanceSnapshotId
@@ -266,13 +261,14 @@ export default {
         .then((percentage) => {
           this.$octobayGovernor.methods
             .castVote(
-              this.selectedDepartment.projectId,
+              this.proposal.department.projectId,
               this.proposal.count,
               against ? percentage * -1 : percentage
             )
             .send({ from: this.account })
             .then(() => {
               this.waitingForVoteTransaction = false
+              this.$store.dispatch('updateDepartments')
             })
         })
     },

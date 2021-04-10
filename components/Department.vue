@@ -25,7 +25,7 @@
             <div
               v-clipboard="department.tokenAddress"
               v-clipboard:success="copiedAddress"
-              class="text-muted text-truncate btn btn-sm btn-light font-weight-normal border mt-2 mb-1"
+              class="text-muted text-truncate btn btn-sm bg-white shadow-xs font-weight-normal mt-2 mb-1"
               @click.stop
             >
               <small class="d-flex justify-content-between align-items-center">
@@ -68,7 +68,7 @@
               </small>
               <small class="text-muted text-center">
                 Average holdings<br />
-                <b>
+                <b v-if="department.holders.length">
                   {{
                     (
                       Number($web3.utils.fromWei(totalSupply, 'ether')) /
@@ -76,6 +76,7 @@
                     ).toFixed(0)
                   }}
                 </b>
+                <b v-else>0</b>
               </small>
             </div>
           </div>
