@@ -226,6 +226,24 @@
               </button>
             </span>
           </div>
+          <div v-if="departments.length" class="border-top mt-2 py-2">
+            <small class="text-muted">
+              Mint governance token for contributor.
+            </small>
+            <select
+              v-model="departmentForIssue"
+              class="custom-select rounded-xl"
+            >
+              <option :value="null">No Governance Minting</option>
+              <option
+                v-for="department in departments"
+                :key="department.id"
+                :value="department"
+              >
+                {{ department.name }} ({{ department.symbol }})
+              </option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -454,6 +472,7 @@ export default {
       showSchedule: false,
       releaseDate: new Date(),
       showDatepicker: false,
+      departmentForIssue: null,
     }
   },
   computed: {
@@ -466,6 +485,7 @@ export default {
       'showTokenList',
       'tokenList',
       'redirectPrefills',
+      'departments',
     ]),
     amountPerInstallment() {
       if (this.releaseInstallments) {
@@ -658,23 +678,47 @@ export default {
     },
     depositForIssue() {
       this.sending = true
-      this.$octoBay.methods
-        .depositEthForIssue(this.issue.id)
-        .send({
-          // useGSN: false,
-          from: this.account,
-          value: this.$web3.utils.toWei(this.amount, 'ether'),
-        })
-        .then((tx) => {
-          this.$store.dispatch('updateIssues')
-          this.$store.dispatch('updateOvtBalance')
-          this.$web3.eth
-            .getBalance(this.account)
-            .then((balance) => this.$store.commit('setBalance', balance))
-          this.sending = false
-          this.showIssueDepositSuccess = true
-          this.amount = 0
-        })
+      if (this.departmentForIssue) {
+        this.$octoBay.methods
+          .depositAndSetGovTokenForIssue(
+            this.issue.id,
+            this.departmentForIssue.tokenAddress,
+            this.departmentForIssue.projectId
+          )
+          .send({
+            // useGSN: false,
+            from: this.account,
+            value: this.$web3.utils.toWei(this.amount, 'ether'),
+          })
+          .then((tx) => {
+            this.$store.dispatch('updateIssues')
+            this.$store.dispatch('updateOvtBalance')
+            this.$web3.eth
+              .getBalance(this.account)
+              .then((balance) => this.$store.commit('setBalance', balance))
+            this.sending = false
+            this.showIssueDepositSuccess = true
+            this.amount = 0
+          })
+      } else {
+        this.$octoBay.methods
+          .depositEthForIssue(this.issue.id)
+          .send({
+            // useGSN: false,
+            from: this.account,
+            value: this.$web3.utils.toWei(this.amount, 'ether'),
+          })
+          .then((tx) => {
+            this.$store.dispatch('updateIssues')
+            this.$store.dispatch('updateOvtBalance')
+            this.$web3.eth
+              .getBalance(this.account)
+              .then((balance) => this.$store.commit('setBalance', balance))
+            this.sending = false
+            this.showIssueDepositSuccess = true
+            this.amount = 0
+          })
+      }
     },
     updateUserDeposits() {
       const accountsDeposits = []
