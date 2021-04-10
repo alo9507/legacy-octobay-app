@@ -2,8 +2,8 @@
   <div>
     <div class="card-body">
       <button
+        v-if="departments.length"
         class="btn btn-lg btn-primary w-100 shadow-sm"
-        :disabled="!selectedDepartment"
         @click="newProposal()"
       >
         New Proposal
@@ -11,7 +11,7 @@
     </div>
     <div class="card-body border-top">
       <select v-model="selectedDepartment" class="custom-select rounded-xl">
-        <option :value="null">Select Departments</option>
+        <option :value="null">Select Department</option>
         <option
           v-for="department in departments"
           :key="department.address"
@@ -22,12 +22,9 @@
       </select>
     </div>
     <div class="card-body pt-0">
-      <div
-        v-if="selectedDepartment && selectedDepartment.proposals.length"
-        class="proposal-list"
-      >
+      <div v-if="filteredProposals.length" class="proposal-list">
         <Proposal
-          v-for="proposal in selectedDepartment.proposals"
+          v-for="proposal in filteredProposals"
           :key="proposal.id"
           :proposal="proposal"
         />
@@ -52,6 +49,16 @@ export default {
       set(value) {
         this.$store.commit('setSelectedDepartment', value)
       },
+    },
+    filteredProposals() {
+      if (this.selectedDepartment) {
+        return this.selectedDepartment.proposals
+      } else {
+        return this.departments.reduce(
+          (proposals, department) => [...proposals, ...department.proposals],
+          []
+        )
+      }
     },
   },
   methods: {

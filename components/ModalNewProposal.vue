@@ -1,74 +1,82 @@
 <template>
   <div class="card shadow-sm d-flex flex-column" @click.stop>
-    <div class="card-body modal-body flex-fill">
-      <h5 class="text-center text-muted-light py-3 px-4 m-0">New Proposal</h5>
-      <div>
-        <b>Link to Discussion on GitHub</b>
-        <input
-          v-model="discussionUrl"
-          type="text"
-          class="form-control form-control-lg form-control-with-embed mb-2"
-          placeholder="https://github.com/..."
-        />
-        <b v-if="discussion">{{ discussion.discussion.title }}</b>
-      </div>
-      <div>
-        <small>Governance Department</small>
-        <input
-          v-if="selectedDepartment"
-          type="text"
-          class="form-control"
-          :value="selectedDepartment.name"
-          readonly
-        />
-      </div>
-      <div>
-        <small>Quorum</small>
-        <input
-          v-if="selectedDepartment"
-          v-model="quorum"
-          type="number"
-          :min="selectedDepartment.minQuorum / 100"
-          max="100"
-          class="form-control"
-        />
-      </div>
-      <div class="mt-2">
-        <div class="d-flex align-items-end">
-          <div class="mr-1">
-            <small class="d-flex">Start Date</small>
-            <input
-              v-model="startDate"
-              type="date"
-              class="form-control mb-2"
-              placeholder="Mar 29th 2021"
-            />
-          </div>
-          <div class="ml-1">
-            <small class="d-flex">End Date</small>
-            <input
-              v-model="endDate"
-              type="date"
-              class="form-control mb-2"
-              placeholder="Apr 29th 2021"
-            />
+    <div v-if="!success">
+      <div class="card-body modal-body flex-fill">
+        <h5 class="text-center text-muted-light py-3 px-4 m-0">New Proposal</h5>
+        <div>
+          <b>Link to Discussion on GitHub</b>
+          <input
+            v-model="discussionUrl"
+            type="text"
+            class="form-control form-control-lg form-control-with-embed mb-2"
+            placeholder="https://github.com/..."
+          />
+          <b v-if="discussion">{{ discussion.discussion.title }}</b>
+        </div>
+        <div>
+          <small>Governance Department</small>
+          <select v-model="proposalDepartment" class="custom-select rounded-xl">
+            <option :value="null">Select department</option>
+            <option
+              v-for="department in departments"
+              :key="department.address"
+              :value="department"
+            >
+              {{ department.name }}
+            </option>
+          </select>
+        </div>
+        <div v-if="proposalDepartment">
+          <small>Quorum</small>
+          <input
+            v-model="quorum"
+            type="number"
+            :min="proposalDepartment.minQuorum / 100"
+            max="100"
+            class="form-control"
+          />
+        </div>
+        <div v-if="proposalDepartment" class="mt-2">
+          <div class="d-flex align-items-end">
+            <div class="mr-1">
+              <small class="d-flex">Start Date</small>
+              <input
+                v-model="startDate"
+                type="date"
+                class="form-control mb-2"
+                placeholder="Mar 29th 2021"
+              />
+            </div>
+            <div class="ml-1">
+              <small class="d-flex">End Date</small>
+              <input
+                v-model="endDate"
+                type="date"
+                class="form-control mb-2"
+                placeholder="Apr 29th 2021"
+              />
+            </div>
           </div>
         </div>
       </div>
+      <div class="card-body pt-0">
+        <button
+          class="btn btn-lg btn-primary w-100 shadow-sm"
+          :disabled="waitingForTransaction || !proposalDepartment"
+          @click="createNewProposal()"
+        >
+          <font-awesome-icon
+            v-if="waitingForTransaction"
+            :icon="['fas', 'circle-notch']"
+            spin
+          />
+          Create Proposal
+        </button>
+      </div>
     </div>
-    <div class="card-body pt-0">
-      <button
-        class="btn btn-lg btn-primary w-100 shadow-sm"
-        :disabled="waitingForTransaction"
-        @click="createNewProposal()"
-      >
-        <font-awesome-icon
-          v-if="waitingForTransaction"
-          :icon="['fas', 'circle-notch']"
-          spin
-        />
-        Create Proposal
-      </button>
+    <div v-else class="alert alert-success mb-0">
+      <CheckIcon />
+      Proposal created successfully! :)
     </div>
   </div>
 </template>
@@ -79,7 +87,9 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      discussionUrl: null,
+      success: false,
+      proposalDepartment: null,
+      discussionUrl: '',
       discussion: null,
       startDate: null,
       endDate: null,
@@ -90,7 +100,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['oracles', 'selectedDepartment', 'account']),
+    ...mapGetters(['oracles', 'departments', 'selectedDepartment', 'account']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   watch: {
@@ -124,6 +134,9 @@ export default {
       }, 500)
     },
   },
+  mounted() {
+    this.proposalDepartment = this.selectedDepartment
+  },
   methods: {
     createNewProposal() {
       const projectId = this.discussion.owner.id
@@ -135,7 +148,7 @@ export default {
       this.waitingForTransaction = true
       this.$octobayGovernor.methods
         .createProposal(
-          this.selectedDepartment.tokenAddress,
+          this.proposalDepartment.tokenAddress,
           projectId,
           discussionId,
           startDate,
@@ -144,7 +157,19 @@ export default {
         )
         .send({ from: this.account })
         .then(() => {
-          this.waitingForTransaction = false
+          this.success = true
+          this.$store.dispatch('updateDepartments').then(() => {
+            this.discussionUrl = ''
+            this.discussion = null
+            this.startDate = null
+            this.endDate = null
+            this.quorum = null
+            this.waitingForTransaction = false
+            setTimeout(() => {
+              this.$store.commit('setModalData', null)
+              this.$store.commit('setShowModal', false)
+            }, 1000)
+          })
         })
     },
   },
