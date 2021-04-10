@@ -20,5 +20,11 @@ export default ({ app }, inject) => {
     inject('octoBay', octoBay)
     inject('ovt', ovt)
     inject('octobayGovernor', octobayGovernor)
+    inject('octobayGovToken', (address) => {
+      return new app.$web3.eth.Contract(
+        process.env.OCTOBAY_GOV_TOKEN_ABI,
+        address
+      )
+    })
   }
 }

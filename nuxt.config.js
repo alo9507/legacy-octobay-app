@@ -26,6 +26,9 @@ export default {
     OCTOBAY_GOVERNOR_ABI: JSON.parse(
       fs.readFileSync('./contract-abi/OctobayGovernor.json').toString()
     ).abi,
+    OCTOBAY_GOV_TOKEN_ABI: JSON.parse(
+      fs.readFileSync('./contract-abi/OctobayGovToken.json').toString()
+    ).abi,
     /*
      ** for Vercel
      */
