@@ -139,8 +139,7 @@
             withdrawingFromIssue ||
             !contribution ||
             !githubUser ||
-            !issueDepositsAmount ||
-            githubUser.login != issueReleasedTo
+            !canWithdrawIssue
           "
           @click="withdrawFromIssue()"
         >
@@ -236,7 +235,6 @@ export default {
       claimingPullRequest: false,
       showClaimSuccess: false,
       showClaimError: false,
-      issueDepositsAmount: 0,
       canWithdrawIssue: false,
       claimRequestID: null,
     }
@@ -270,7 +268,6 @@ export default {
         } else if (newUrl.includes('/issues/') && number) {
           this.type = 'issue'
           this.loadingContribution = true
-          this.issueDepositsAmount = 0
           this.canWithdrawIssue = false
           this.loadIssue(owner, repo, number)
             .then((issue) => {
@@ -278,7 +275,7 @@ export default {
               this.$axios
                 .$get(
                   process.env.API_URL +
-                    `/github/can-withdraw-from-issue/${this.githubUser.login}/${this.contribution.id}`
+                    `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.contribution.id}`
                 )
                 .then((can) => {
                   this.canWithdrawIssue = can
@@ -371,7 +368,7 @@ export default {
     withdrawFromIssue() {
       this.withdrawingFromIssue = true
       this.$octoBay.methods
-        .claimReleasedIssueDeposits(this.contribution.id)
+        .withdrawIssueDeposit(this.oracles[0].ethAddress, this.contribution.id)
         .send({
           // useGSN: false,
           from: this.account,
@@ -402,7 +399,7 @@ export default {
       const deposits = []
       if (this.githubUser) {
         this.$octoBay.methods
-          .getUserDepositIdsForGithubUser(this.githubUser.login)
+          .getUserDepositIdsForGithubUserId(this.githubUser.node_id)
           .call()
           .then((ids) => {
             ids.forEach((id) => {
