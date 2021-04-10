@@ -15,7 +15,7 @@
               <small>octobay/app</small>
             </small>
             <div :class="{ 'text-truncate': !showDetails }">
-              <b>Use GPL3 License for all repositories.</b>
+              <b>{{ discussionNode.title }}</b>
             </div>
             <div
               class="flex-fill rounded-lg position-relative"
@@ -97,12 +97,14 @@
                 <font-awesome-icon :icon="['fas', 'vote-yea']" />
               </button>
               <!-- GitHub link -->
-              <button
+              <a
                 v-tooltip="{
                   content:
                     'Show Discussion on GitHub<br><span class=\'text-danger\'>(Has been altered after submission. Check edit log on GitHub.)</span>',
                   trigger: 'hover',
                 }"
+                :href="discussionNode.url"
+                target="_blank"
                 class="btn btn-sm btn-light text-muted"
               >
                 <font-awesome-icon :icon="['fab', 'github']" />
@@ -110,7 +112,7 @@
                   :icon="['fas', 'external-link-alt']"
                   class="text-muted-light ml-1"
                 />
-              </button>
+              </a>
             </div>
           </div>
           <!-- details content -->
@@ -118,23 +120,31 @@
             <transition name="fade" mode="out-in">
               <!-- votes -->
               <div v-if="action === 'votes'" key="holders" class="py-3">
-                <div
-                  v-for="vote in proposal.votes"
-                  :key="vote.id"
-                  class="d-flex justify-content-between"
-                >
-                  <small>
-                    <b>{{ vote.githubUser }}</b
-                    ><br />
-                    <AddressShort :address="vote.address" class="text-muted" />
-                  </small>
-                  <small
-                    :class="
-                      'text-' + (vote.percentage > 0 ? 'success' : 'danger')
-                    "
-                    >{{ (vote.percentage / 100).toFixed(2) }} %</small
+                <div v-if="proposal.votes.length">
+                  <div
+                    v-for="vote in proposal.votes"
+                    :key="vote.id"
+                    class="d-flex justify-content-between"
                   >
+                    <small>
+                      <b>{{ vote.githubUser }}</b
+                      ><br />
+                      <AddressShort
+                        :address="vote.address"
+                        class="text-muted"
+                      />
+                    </small>
+                    <small
+                      :class="
+                        'text-' + (vote.percentage > 0 ? 'success' : 'danger')
+                      "
+                      >{{ (vote.percentage / 100).toFixed(2) }} %</small
+                    >
+                  </div>
                 </div>
+                <small v-else class="text-muted d-block text-center">
+                  No votes for this proposal yet.
+                </small>
               </div>
             </transition>
           </div>
@@ -200,6 +210,8 @@ export default {
         if (discussion) {
           this.discussionNode = {
             id: discussion.id,
+            title: discussion.title,
+            url: discussion.url,
           }
         }
       })

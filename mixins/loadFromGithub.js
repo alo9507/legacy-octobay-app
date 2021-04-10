@@ -31,12 +31,10 @@ export default {
         })
       })
     },
-    loadDiscussionById(id) {
-      return new Promise((resolve) => {
-        resolve({
-          id: '123',
-        })
-      })
+    loadDiscussionById(discussionId) {
+      return axios
+        .get(`${process.env.API_URL}/github/discussion-by-id/${discussionId}`)
+        .then((res) => res.data)
     },
   },
 }
