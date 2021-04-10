@@ -160,6 +160,9 @@ export const mutations = {
   setRegisteredAccounts(state, registeredAccounts) {
     state.registeredAccounts = registeredAccounts
   },
+  setIssues(state, issues) {
+    state.issues = issues
+  },
   addIssue(state, issue) {
     state.issues.push(issue)
   },
@@ -266,6 +269,7 @@ export const mutations = {
 
 export const actions = {
   updateIssues({ commit }) {
+    commit('setIssues', [])
     if (this.$octoBay) {
       this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
         issues.forEach(async (issue) => {

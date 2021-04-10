@@ -19,6 +19,10 @@ export default function ({ store, redirect, app }) {
         store.commit('setTokenList', values[5])
         store.commit('setOracles', values[6])
 
+        // load issues and departments
+        store.dispatch('updateIssues')
+        store.dispatch('updateDepartments')
+
         if (accounts.length) {
           store.commit('setAccounts', accounts)
           app.$web3.eth
