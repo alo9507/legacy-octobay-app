@@ -59,8 +59,14 @@
     <div class="card-body pt-0">
       <button
         class="btn btn-lg btn-primary w-100 shadow-sm"
+        :disabled="waitingForTransaction"
         @click="createNewProposal()"
       >
+        <font-awesome-icon
+          v-if="waitingForTransaction"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
         Create Proposal
       </button>
     </div>
@@ -73,7 +79,6 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      loading: false,
       discussionUrl: null,
       discussion: null,
       startDate: null,
@@ -81,6 +86,7 @@ export default {
       quorum: null,
       loadingDiscussion: false,
       loadDiscussionTimeout: null,
+      waitingForTransaction: false,
     }
   },
   computed: {
@@ -126,6 +132,7 @@ export default {
       const endDate = new Date(this.endDate).getTime() / 1000
       const quorum = Number(this.quorum) * 100
 
+      this.waitingForTransaction = true
       this.$octobayGovernor.methods
         .createProposal(
           this.selectedDepartment.tokenAddress,
@@ -136,7 +143,9 @@ export default {
           quorum
         )
         .send({ from: this.account })
-        .then((result) => {})
+        .then(() => {
+          this.waitingForTransaction = false
+        })
     },
   },
 }

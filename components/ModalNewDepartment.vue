@@ -77,8 +77,14 @@
     <div class="card-body pt-0">
       <button
         class="btn btn-lg btn-primary w-100 shadow-sm"
+        :disabled="waitingForTransaction"
         @click="createNewDepartment()"
       >
+        <font-awesome-icon
+          v-if="waitingForTransaction"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
         Create new Department
       </button>
     </div>
@@ -99,6 +105,7 @@ export default {
       organization: null,
       newProposalShare: null,
       minQuorum: null,
+      waitingForTransaction: false,
     }
   },
   computed: {
@@ -158,6 +165,7 @@ export default {
         ? this.organization.id
         : null
       if (projectId) {
+        this.waitingForTransaction = true
         this.$octoBay.methods
           .createGovernanceToken(this.oracles[0].ethAddress, {
             isValue: true,
@@ -170,7 +178,9 @@ export default {
             creator: '0x0000000000000000000000000000000000000000',
           })
           .send({ from: this.account })
-          .then((result) => {})
+          .then(() => {
+            this.waitingForTransaction = false
+          })
       }
     },
   },
