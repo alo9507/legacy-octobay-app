@@ -124,7 +124,7 @@ export default {
       const discussionId = this.discussion.discussion.id
       const startDate = new Date(this.startDate).getTime() / 1000
       const endDate = new Date(this.endDate).getTime() / 1000
-      const quorum = this.quorum
+      const quorum = Number(this.quorum) * 100
 
       this.$octobayGovernor.methods
         .createProposal(
