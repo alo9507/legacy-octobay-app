@@ -22,32 +22,60 @@
             </div>
           </div>
           <div v-if="showDetails" class="d-flex flex-column">
-            <small class="text-muted text-truncate">
-              {{ department.tokenAddress }}
-            </small>
+            <div
+              v-clipboard="department.tokenAddress"
+              v-clipboard:success="copiedAddress"
+              class="text-muted text-truncate btn btn-sm btn-light font-weight-normal border mt-2 mb-1"
+              @click.stop
+            >
+              <small class="d-flex justify-content-between align-items-center">
+                <AddressShort
+                  :address="department.tokenAddress"
+                  length="long"
+                />
+                <transition name="fade" mode="out-in">
+                  <font-awesome-icon
+                    v-if="copyAddressSuccess"
+                    key="check"
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                  <font-awesome-icon
+                    v-else
+                    key="copy"
+                    :icon="['far', 'copy']"
+                  />
+                </transition>
+              </small>
+            </div>
             <div class="mt-2 d-flex justify-content-between">
               <small class="text-muted text-center">
-                Current supply:<br />
-                <span v-if="totalSupply !== null">
-                  {{ $web3.utils.fromWei(totalSupply, 'ether') }}
-                </span>
-                <font-awesome-icon
-                  v-else
-                  :icon="['fas', 'circle-notch']"
-                  spin
-                />
+                Current supply<br />
+                <b>
+                  <span v-if="totalSupply !== null">
+                    {{ $web3.utils.fromWei(totalSupply, 'ether') }}
+                  </span>
+                  <font-awesome-icon
+                    v-else
+                    :icon="['fas', 'circle-notch']"
+                    spin
+                  />
+                </b>
               </small>
               <small class="text-muted text-center">
-                Holders:<br />{{ department.holders.length }}
+                Holders<br />
+                <b>{{ department.holders.length }}</b>
               </small>
               <small class="text-muted text-center">
-                Average holdings:<br />
-                {{
-                  (
-                    Number($web3.utils.fromWei(totalSupply, 'ether')) /
-                    department.holders.length
-                  ).toFixed(0)
-                }}
+                Average holdings<br />
+                <b>
+                  {{
+                    (
+                      Number($web3.utils.fromWei(totalSupply, 'ether')) /
+                      department.holders.length
+                    ).toFixed(0)
+                  }}
+                </b>
               </small>
             </div>
           </div>
@@ -299,6 +327,7 @@ export default {
       requiredShareToCreateProposals: 0,
       minQuorum: 0,
       totalSupply: null,
+      copyAddressSuccess: false,
     }
   },
   computed: {
@@ -349,6 +378,12 @@ export default {
       } else {
         this.action = action
       }
+    },
+    copiedAddress() {
+      this.copyAddressSuccess = true
+      setTimeout(() => {
+        this.copyAddressSuccess = false
+      }, 1000)
     },
   },
 }
