@@ -27,10 +27,28 @@
             </small>
             <div class="mt-2 d-flex justify-content-between">
               <small class="text-muted text-center">
-                Current supply: 10,000
+                Current supply:<br />
+                <span v-if="totalSupply !== null">
+                  {{ $web3.utils.fromWei(totalSupply, 'ether') }}
+                </span>
+                <font-awesome-icon
+                  v-else
+                  :icon="['fas', 'circle-notch']"
+                  spin
+                />
               </small>
-              <small class="text-muted text-center">Holders: 20</small>
-              <small class="text-muted text-center">Median holdings: 315</small>
+              <small class="text-muted text-center">
+                Holders:<br />{{ department.holders.length }}
+              </small>
+              <small class="text-muted text-center">
+                Average holdings:<br />
+                {{
+                  (
+                    Number($web3.utils.fromWei(totalSupply, 'ether')) /
+                    department.holders.length
+                  ).toFixed(0)
+                }}
+              </small>
             </div>
           </div>
         </div>
@@ -103,10 +121,8 @@
                     class="d-flex justify-content-between"
                   >
                     <small>
-                      <b>{{ holder.githubUserId }}</b
-                      ><br />
                       <AddressShort
-                        :address="holder.address"
+                        :address="holder.ethAddress"
                         class="text-muted"
                       />
                     </small>
@@ -126,35 +142,71 @@
                   <small class="d-block">
                     <table class="w-100">
                       <tr>
-                        <th></th>
-                        <th class="text-center">Manage<br />Settings</th>
-                        <th class="text-center">Create<br />Proposals</th>
-                        <th></th>
+                        <td></td>
+                        <td class="text-center">
+                          <small>Create NFTs</small>
+                        </td>
+                        <td class="text-center">
+                          <small>Transfer</small>
+                        </td>
+                        <td class="text-center">
+                          <small>Bounty Minting</small>
+                        </td>
+                        <td class="text-center">
+                          <small>Create Proposals</small>
+                        </td>
+                        <td></td>
                       </tr>
                       <tr v-for="nft in department.nfts" :key="nft.id">
                         <td>
-                          <b>{{ nft.githubUserId }}</b>
-                          <br />
                           <AddressShort
                             :address="nft.ownerAddress"
                             class="text-muted"
                           />
                         </td>
-                        <td class="text-center"><input type="checkbox" /></td>
-                        <td class="text-center"><input type="checkbox" /></td>
+                        <td class="text-center">
+                          <input
+                            type="checkbox"
+                            :checked="nft.permissions.includes('MINT')"
+                          />
+                        </td>
+                        <td class="text-center">
+                          <input
+                            type="checkbox"
+                            :checked="nft.permissions.includes('TRANSFER')"
+                          />
+                        </td>
+                        <td class="text-center">
+                          <input
+                            type="checkbox"
+                            :checked="
+                              nft.permissions.includes('SET_ISSUE_GOVTOKEN')
+                            "
+                          />
+                        </td>
+                        <td class="text-center">
+                          <input
+                            type="checkbox"
+                            :checked="
+                              nft.permissions.includes('CREATE_PROPOSAL')
+                            "
+                          />
+                        </td>
                         <td class="text-right">
-                          <button
-                            v-tooltip="{ content: 'Save', trigger: 'hover' }"
-                            class="btn btn-sm btn-primary shadow-sm"
-                          >
-                            <font-awesome-icon :icon="['fas', 'check']" />
-                          </button>
-                          <button
-                            v-tooltip="{ content: 'Burn', trigger: 'hover' }"
-                            class="btn btn-sm btn-primary shadow-sm"
-                          >
-                            <font-awesome-icon :icon="['fas', 'fire']" />
-                          </button>
+                          <div class="btn-group shadow-sm rounded-xl">
+                            <button
+                              v-tooltip="{ content: 'Save', trigger: 'hover' }"
+                              class="btn btn-sm btn-primary"
+                            >
+                              <font-awesome-icon :icon="['fas', 'check']" />
+                            </button>
+                            <button
+                              v-tooltip="{ content: 'Burn', trigger: 'hover' }"
+                              class="btn btn-sm btn-primary"
+                            >
+                              <font-awesome-icon :icon="['fas', 'fire']" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     </table>
@@ -246,6 +298,7 @@ export default {
       loading: false,
       requiredShareToCreateProposals: 0,
       minQuorum: 0,
+      totalSupply: null,
     }
   },
   computed: {
@@ -272,6 +325,13 @@ export default {
         }
       })
       .finally(() => (this.loading = false))
+
+    this.$octobayGovToken(this.department.tokenAddress)
+      .methods.totalSupply()
+      .call()
+      .then((totalSupply) => {
+        this.totalSupply = totalSupply
+      })
   },
   methods: {
     showProposals() {
