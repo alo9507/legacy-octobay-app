@@ -189,18 +189,22 @@ export default {
           .send({ from: this.account })
           .then(() => {
             this.success = true
-            this.waitingForTransaction = false
-            this.tokenName = null
-            this.tokenSymbol = null
-            this.projectUrl = ''
-            this.repository = null
-            this.organization = null
-            this.newProposalShare = null
-            this.minQuorum = null
             setTimeout(() => {
-              this.$store.commit('setModalData', null)
-              this.$store.commit('setShowModal', false)
-            }, 1000)
+              this.$store.dispatch('updateDepartments').then(() => {
+                this.waitingForTransaction = false
+                this.tokenName = null
+                this.tokenSymbol = null
+                this.projectUrl = ''
+                this.repository = null
+                this.organization = null
+                this.newProposalShare = null
+                this.minQuorum = null
+                setTimeout(() => {
+                  this.$store.commit('setModalData', null)
+                  this.$store.commit('setShowModal', false)
+                }, 1000)
+              })
+            }, 3000)
           })
       }
     },

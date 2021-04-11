@@ -268,7 +268,9 @@ export default {
             .send({ from: this.account })
             .then(() => {
               this.waitingForVoteTransaction = false
-              this.$store.dispatch('updateDepartments')
+              setTimeout(() => {
+                this.$store.dispatch('updateDepartments')
+              }, 3000)
             })
         })
     },

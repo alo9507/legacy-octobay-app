@@ -158,18 +158,20 @@ export default {
         .send({ from: this.account })
         .then(() => {
           this.success = true
-          this.$store.dispatch('updateDepartments').then(() => {
-            this.discussionUrl = ''
-            this.discussion = null
-            this.startDate = null
-            this.endDate = null
-            this.quorum = null
-            this.waitingForTransaction = false
-            setTimeout(() => {
-              this.$store.commit('setModalData', null)
-              this.$store.commit('setShowModal', false)
-            }, 1000)
-          })
+          setTimeout(() => {
+            this.$store.dispatch('updateDepartments').then(() => {
+              this.discussionUrl = ''
+              this.discussion = null
+              this.startDate = null
+              this.endDate = null
+              this.quorum = null
+              this.waitingForTransaction = false
+              setTimeout(() => {
+                this.$store.commit('setModalData', null)
+                this.$store.commit('setShowModal', false)
+              }, 1000)
+            })
+          }, 3000)
         })
     },
   },
