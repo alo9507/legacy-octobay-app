@@ -171,7 +171,7 @@
           class="border rounded-xl mt-3 px-3 pt-2"
           style="margin-bottom: -48px; padding-bottom: 52px"
         >
-          <small class="d-block font-weight-bold text-muted text-center"
+          <!-- <small class="d-block font-weight-bold text-muted text-center"
             >Available repository funds:</small
           >
           <div class="d-flex justify-content-between mb-1">
@@ -225,11 +225,11 @@
                 use
               </button>
             </span>
-          </div>
-          <div v-if="departments.length" class="border-top mt-2 py-2">
-            <small class="text-muted">
-              Mint governance token for contributor.
-            </small>
+          </div> -->
+          <div v-if="departments.length" class="py-2">
+            <div class="text-muted d-block text-center mb-2">
+              Which governance token shall be minted for the contributor?
+            </div>
             <select
               v-model="departmentForIssue"
               class="custom-select rounded-xl"
