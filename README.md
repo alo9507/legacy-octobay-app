@@ -11,6 +11,8 @@ OctoBay is a decentralized bounty and promotion platform for open source project
 
 ## Run locally
 
-```shell
+```bash
 git clone https://github.com/Octobay/app octobay-app && cd octobay-app && yarn && cp .env.sample .env && yarn app:dev
 ```
+
+Now connect your MetaMask to Kovan and open `http://localhost:3000`.
