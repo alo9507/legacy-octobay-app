@@ -12,12 +12,17 @@ export default ({ app }, inject) => {
       process.env.OCTOBAY_GOVERNOR_ABI,
       process.env.OCTOBAY_GOVERNOR_ADDRESS
     )
+    const octobayNFT = new app.$web3.eth.Contract(
+      process.env.OCTOBAY_NFT_ABI,
+      process.env.OCTOBAY_NFT_ADDRESS
+    )
 
     /**
      * Exposes the OctoBay and OVT contracts as nuxt plugins.
      * in components: this.$octoBay and this.ovt
      */
     inject('octoBay', octoBay)
+    inject('octobayNFT', octobayNFT)
     inject('ovt', ovt)
     inject('octobayGovernor', octobayGovernor)
     inject('octobayGovToken', (address) => {

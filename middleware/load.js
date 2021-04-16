@@ -29,6 +29,24 @@ export default function ({ store, redirect, app }) {
             .getBalance(accounts[0])
             .then((balance) => store.commit('setBalance', balance))
           store.dispatch('updateOvtBalance')
+
+          app.$octobayNFT.methods
+            .getTokenIDForUserInProject(
+              accounts[0],
+              'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
+            )
+            .call()
+            .then((tokenId) => {
+              if (tokenId) {
+                app.$octobayNFT.methods
+                  .hasPermission(tokenId, 1)
+                  .call()
+                  .then((isOctobayAdmin) => {
+                    console.log(isOctobayAdmin)
+                    store.commit('setOctoBayAdmin', isOctobayAdmin)
+                  })
+              }
+            })
         }
 
         if (store.state.github.user) {

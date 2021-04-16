@@ -29,7 +29,7 @@
         >Register</a
       >
       <a
-        v-if="account && account === octoBayOwner"
+        v-if="account && (account === octoBayOwner || octoBayAdmin)"
         href="#"
         :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')"
         @click="$store.commit('setView', 'admin')"
@@ -45,7 +45,11 @@
         <Claim v-else-if="view == 'claim'" />
         <Register v-else-if="view == 'register'" />
         <Admin
-          v-else-if="account && account === octoBayOwner && view == 'admin'"
+          v-else-if="
+            account &&
+            (account === octoBayOwner || octoBayAdmin) &&
+            view == 'admin'
+          "
         />
       </keep-alive>
     </transition>
@@ -58,7 +62,13 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'registeredAccount', 'octoBayOwner']),
+    ...mapGetters([
+      'view',
+      'account',
+      'registeredAccount',
+      'octoBayOwner',
+      'octoBayAdmin',
+    ]),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   mounted() {

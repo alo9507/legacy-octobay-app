@@ -2,6 +2,7 @@ export const state = () => ({
   loaded: false,
   loadError: null,
   octoBayOwner: null,
+  octoBayAdmin: null,
   networkId: null,
   accounts: [],
   registeredAccounts: [],
@@ -120,6 +121,9 @@ export const getters = {
   },
   octoBayOwner(state) {
     return state.octoBayOwner
+  },
+  octoBayAdmin(state) {
+    return state.octoBayAdmin
   },
   twitterAccountId(state) {
     return state.twitterAccountId
@@ -252,6 +256,9 @@ export const mutations = {
   },
   setOctoBayOwner(state, owner) {
     state.octoBayOwner = owner
+  },
+  setOctoBayAdmin(state, isAdmin) {
+    state.octoBayAdmin = isAdmin
   },
   setTwitterAccountId(state, id) {
     state.twitterAccountId = id
