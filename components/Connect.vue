@@ -38,9 +38,6 @@
       </div>
       <div class="d-flex flex-column text-right">
         <b class="text-nowrap">{{ formattedBalance }} ETH</b>
-        <small class="text-nowrap" style="margin-top: -3px"
-          >{{ formattedOvtBalance }} OVT</small
-        >
       </div>
     </div>
 
@@ -114,7 +111,6 @@ export default {
       'connected',
       'account',
       'balance',
-      'ovtBalance',
       'registeredAccount',
       'networkId',
     ]),
@@ -122,11 +118,6 @@ export default {
     formattedBalance() {
       return Number(
         this.$web3.utils.fromWei(this.balance.toString(), 'ether')
-      ).toFixed(2)
-    },
-    formattedOvtBalance() {
-      return Number(
-        this.$web3.utils.fromWei(this.ovtBalance.toString(), 'ether')
       ).toFixed(2)
     },
   },
