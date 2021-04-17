@@ -63,31 +63,6 @@
               >
             </div>
           </div>
-          <div
-            :class="
-              'mt-2 text-left d-flex align-items-center btn btn-' +
-              (selectedRecipientType == 'Project'
-                ? 'primary'
-                : 'outline-light text-dark')
-            "
-            @click="
-              $store.commit('setSelectedRecipientType', 'Project')
-              $store.commit('setShowRecipientTypeList', false)
-            "
-          >
-            <font-awesome-icon :icon="['fas', 'code']" class="fa-2x mx-2" />
-            <div class="ml-2 d-flex flex-column">
-              Project
-              <small
-                :class="
-                  'text-' +
-                  (selectedRecipientType == 'Project' ? 'white' : 'muted')
-                "
-                >Send funds to any Repository on GitHub. Can only be used to
-                fund issue.</small
-              >
-            </div>
-          </div>
         </div>
       </div>
     </div>

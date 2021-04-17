@@ -72,35 +72,6 @@
             {{ label.name }}
           </span>
         </div>
-        <!-- funding goal bar -->
-        <div
-          class="d-flex align-items-end position-absolute w-100"
-          style="bottom: 0"
-        >
-          <div class="flex-fill">
-            <div
-              class="bg-success"
-              :style="`height: 5px; width: ${Math.min(
-                (Number($web3.utils.fromWei(issue.depositAmount, 'ether')) /
-                  fundingGoal) *
-                  100,
-                100
-              ).toFixed(2)}%`"
-            ></div>
-          </div>
-          <small
-            :class="['px-2 text-muted', { 'bg-light': !showDetails }]"
-            style="border-top-left-radius: 1rem"
-          >
-            <small>
-              <font-awesome-icon
-                :icon="['fas', 'check']"
-                class="text-success mr-1"
-              />
-              {{ fundingGoal }} ETH Goal
-            </small>
-          </small>
-        </div>
       </div>
       <!-- details -->
       <transition name="fade">
@@ -136,30 +107,6 @@
             >
               <font-awesome-icon :icon="['fas', 'coins']" />
             </button>
-            <!-- twitter -->
-            <button
-              v-tooltip="{ content: 'Post via @OctoBayApp', trigger: 'hover' }"
-              class="btn btn-sm btn-light text-muted"
-              @click="twitterPost()"
-            >
-              <font-awesome-icon :icon="['fab', 'twitter']" />
-            </button>
-            <!-- pin -->
-            <button
-              v-tooltip="{ content: 'Pin issue', trigger: 'hover' }"
-              :class="[
-                'btn btn-sm btn-light text-muted',
-                { active: action === 'pin' },
-              ]"
-              @click="changeAction('pin')"
-            >
-              <svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z"
-                />
-              </svg>
-            </button>
             <!-- pull requests -->
             <button
               v-tooltip="{ content: 'Pull Requests', trigger: 'hover' }"
@@ -170,17 +117,6 @@
               @click="changeAction('pull-requests')"
             >
               <span v-html="$octicons['git-pull-request'].toSVG()"></span>
-            </button>
-            <!-- project -->
-            <button
-              v-tooltip="{ content: 'Project', trigger: 'hover' }"
-              :class="[
-                'btn btn-sm btn-light text-muted',
-                { active: action === 'project' },
-              ]"
-              @click="changeAction('project')"
-            >
-              <span v-html="$octicons.repo.toSVG()"></span>
             </button>
             <!-- github -->
             <a
@@ -234,46 +170,6 @@
                       spin
                     />
                     <span v-else>withdraw</span>
-                  </button>
-                </div>
-              </div>
-              <!-- pin -->
-              <div v-if="action === 'pin'" key="pin" class="py-3">
-                <div class="d-flex align-items-center">
-                  <div class="select-input flex-fill mr-2">
-                    <input
-                      v-model="pinAmount"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      novalidate
-                      class="form-control"
-                      placeholder="0.00"
-                    />
-                    <span class="text-muted mr-2">OPIN</span>
-                  </div>
-                  <button
-                    class="btn btn-primary shadow-sm text-nowrap"
-                    :disabled="pinningIssue || !Number(pinAmount)"
-                    @click="pin()"
-                  >
-                    <font-awesome-icon
-                      v-if="pinningIssue"
-                      :icon="['fas', 'circle-notch']"
-                      spin
-                    />
-                    <span v-else>
-                      <svg
-                        style="width: 18px; height: 18px"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z"
-                        />
-                      </svg>
-                      Pin
-                    </span>
                   </button>
                 </div>
               </div>
@@ -341,69 +237,9 @@
                     />
                   </a>
                 </div>
-                <small v-else class="text-muted d-block text-center">
+                <small v-else class="text-muted d-block text-center mt-2">
                   No linked pull requests yet.
                 </small>
-              </div>
-              <!-- project -->
-              <div v-if="action === 'project'" key="project" class="py-3">
-                <div class="d-flex justify-content-around text-center">
-                  <div>
-                    <small class="text-muted d-block">Total released:</small>
-                    <h5 class="text-center">$46,500</h5>
-                  </div>
-                  <div>
-                    <small class="text-muted d-block">Past 12 months:</small>
-                    <h5 class="text-center">
-                      <small>$10,800</small>
-                    </h5>
-                  </div>
-                </div>
-                <div
-                  v-if="Math.floor(Math.random() * 3) + 1 === 1"
-                  class="d-flex flex-column text-center mt-3"
-                >
-                  <span
-                    class="d-flex align-items-center justify-content-center rounded-circle bg-success p-2 mb-2 mx-auto"
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'check-double']"
-                      class="text-white fa-fw"
-                    />
-                  </span>
-                  <small class="text-muted d-block">
-                    This project has proven to be trustworthy.
-                  </small>
-                </div>
-                <div
-                  v-else-if="Math.floor(Math.random() * 3) + 1 === 2"
-                  class="d-flex flex-column text-center mt-3"
-                >
-                  <span
-                    class="d-flex align-items-center justify-content-center rounded-circle bg-muted-light p-2 mb-2 mx-auto"
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'check']"
-                      class="text-white fa-fw"
-                    />
-                  </span>
-                  <small class="text-muted d-block">
-                    This project has just started out on Octobay.
-                  </small>
-                </div>
-                <div v-else class="d-flex flex-column text-center mt-3">
-                  <span
-                    class="d-flex align-items-center justify-content-center rounded-circle bg-danger p-2 mb-2 mx-auto"
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'exclamation']"
-                      class="text-white fa-fw"
-                    />
-                  </span>
-                  <small class="text-muted d-block">
-                    People have flagged this project.
-                  </small>
-                </div>
               </div>
             </transition>
           </div>
@@ -456,7 +292,6 @@ export default {
       pinningIssue: false,
       refundingDeposit: false,
       isRepoAdmin: false,
-      fundingGoal: Math.floor(Math.random() * 5) + 1,
       linkedPullRequests: [],
       loading: false,
     }
