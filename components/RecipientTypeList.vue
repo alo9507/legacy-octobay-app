@@ -52,7 +52,7 @@
               class="fa-2x mx-2"
             />
             <div class="ml-2 d-flex flex-column">
-              Issue
+              Bounty
               <small
                 :class="
                   'text-' +
