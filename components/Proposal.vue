@@ -127,7 +127,7 @@
               <a
                 v-tooltip="{
                   content:
-                    'Show Discussion on GitHub<br><span class=\'text-danger\'>(Has been altered after submission. Check edit log on GitHub.)</span>',
+                    'Show Discussion on GitHub<br><span class=\'text-dark\'><small class=\'d-flex justify-content-center my-2\'>Has been altered after submission.<br>Check edit log on GitHub.</small></span><img src=\'/edit-log.png\' class=\'w-100\' />',
                   trigger: 'hover',
                 }"
                 :href="discussionNode.url"
