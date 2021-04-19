@@ -13,9 +13,8 @@
         @click="$store.commit('setView', 'issues')"
         >Pinboard</a
       >
-      <!-- <a href="#" :class="'mx-2 text-' + (view === 'contributors' ? 'primary' : 'muted')" @click="$store.commit('setView', 'contributors')">Contributors</a> -->
       <a
-        v-if="registeredAccount === account"
+        v-if="account && registeredAccount === account"
         href="#"
         :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')"
         @click="$store.commit('setView', 'claim')"
