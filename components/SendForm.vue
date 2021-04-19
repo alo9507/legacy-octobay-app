@@ -207,22 +207,15 @@
         <span v-else>ETH</span>
       </span>
     </div>
-    <button
-      v-if="connected"
-      class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-4"
+    <ConnectActionButton
+      :action="confirm"
       :disabled="confirmDisabled"
-      @click="confirm()"
+      :required="['wallet']"
+      class="mt-4"
     >
       <font-awesome-icon v-if="sending" :icon="['fas', 'circle-notch']" spin />
       {{ sending ? 'Waiting for confirmation...' : 'Confirm' }}
-    </button>
-    <button
-      v-else-if="$web3"
-      class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-4"
-      @click="connect()"
-    >
-      Connect
-    </button>
+    </ConnectActionButton>
     <TokenList
       :select="tokenListSelectCallback"
       :show="showTokenList"

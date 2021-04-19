@@ -11,12 +11,9 @@
       <div v-else class="text-center text-muted my-3">No departments.</div>
     </div>
     <div class="card-body">
-      <button
-        class="btn btn-lg btn-primary w-100 shadow-sm"
-        @click="newDepartment()"
-      >
+      <ConnectActionButton :action="newDepartment" :required="['wallet']">
         New Department
-      </button>
+      </ConnectActionButton>
     </div>
   </div>
 </template>
@@ -27,6 +24,10 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['departments']),
+    ...mapGetters('github', {
+      githubUser: 'user',
+      githubAuthUrl: 'authUrl',
+    }),
   },
   mounted() {
     this.$store.dispatch('updateDepartments')

@@ -1,13 +1,9 @@
 <template>
   <div>
     <div class="card-body">
-      <button
-        v-if="departments.length"
-        class="btn btn-lg btn-primary w-100 shadow-sm"
-        @click="newProposal()"
-      >
+      <ConnectActionButton :action="newProposal" :required="['wallet']">
         New Proposal
-      </button>
+      </ConnectActionButton>
     </div>
     <div class="card-body border-top">
       <select v-model="selectedDepartment" class="custom-select rounded-xl">
