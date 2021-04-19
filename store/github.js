@@ -10,6 +10,9 @@ export const getters = {
   accessToken(state) {
     return state.accessToken
   },
+  authUrl() {
+    return `https://github.com/login/oauth/authorize?scope=user:email,public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`
+  },
 }
 
 export const mutations = {

@@ -122,10 +122,7 @@
       </div>
       <a
         v-else
-        :href="
-          'https://github.com/login/oauth/authorize?scope=user:email&client_id=' +
-          githubClientId
-        "
+        :href="githubAuthUrl"
         class="btn btn-lg btn-dark shadow-sm d-block mt-4"
       >
         <font-awesome-icon :icon="['fab', 'github']" />
@@ -152,7 +149,6 @@ export default {
   mixins: [connect, helpers],
   data() {
     return {
-      githubClientId: process.env.GITHUB_CLIENT_ID,
       loadingRegistration: false,
       showRegistrationSuccess: false,
       copyAddressSuccess: false,
@@ -178,6 +174,7 @@ export default {
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',
+      githubAuthUrl: 'authUrl',
     }),
   },
   watch: {

@@ -50,10 +50,7 @@
       />
       <a
         v-if="!githubUser"
-        :href="
-          'https://github.com/login/oauth/authorize?scope=user:email,public_repo&client_id=' +
-          githubClientId
-        "
+        :href="githubAuthUrl"
         class="ml-2 btn btn-lg btn-light shadow-sm"
       >
         Connect GitHub
@@ -100,7 +97,6 @@ export default {
   mixins: [connect],
   data() {
     return {
-      githubClientId: process.env.GITHUB_CLIENT_ID,
       connectedGithub: false,
       cssClasses:
         'd-flex justify-content-between align-items-top text-muted bg-white rounded-xl p-1 connect',
@@ -114,7 +110,7 @@ export default {
       'registeredAccount',
       'networkId',
     ]),
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters('github', { githubUser: 'user', githubAuthUrl: 'authUrl' }),
     formattedBalance() {
       return Number(
         this.$web3.utils.fromWei(this.balance.toString(), 'ether')
