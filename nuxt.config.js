@@ -76,6 +76,11 @@ export default {
       { rel: 'shortcut icon', type: 'image/png', href: './icon.png' },
     ],
   },
+  loading: {
+    color: '#652FFF',
+    height: '5px',
+  },
+
   /*
    ** Global CSS
    */
