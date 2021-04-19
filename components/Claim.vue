@@ -1,35 +1,5 @@
 <template>
   <div class="card-body">
-    <div v-if="showClaimSuccess" class="alert alert-success border-0">
-      <button
-        type="button"
-        class="close text-success"
-        @click="showClaimSuccess = false"
-      >
-        <span>&times;</span>
-      </button>
-      <font-awesome-icon :icon="['far', 'smile']" />
-      Claim successful!
-    </div>
-    <div v-if="showClaimError" class="alert alert-danger border-0">
-      <button
-        type="button"
-        class="close text-danger"
-        @click="showClaimError = false"
-      >
-        <span>&times;</span>
-      </button>
-      <font-awesome-icon :icon="['far', 'frown']" />
-      Claim failed!<br />
-      <small>
-        Please make sure your pull request is valid. It must be for a repository
-        you don't have administrative rights for and merged not longer than
-        {{ maxClaimPrAge }} days ago. If you did, the problem might be on our
-        side. Please let us know on
-        <a href="https://twitter.com/OctoBayApp" target="_blank">Twitter</a> or
-        <a href="https://discord.gg/DhKgHrFeCD" target="_blank">Discord</a>.
-      </small>
-    </div>
     <div v-if="showWithdrawalSuccess" class="alert alert-success border-0">
       <button
         type="button"
@@ -44,11 +14,9 @@
     <div v-if="connected">
       <div v-if="registeredAccount === account">
         <small class="text-muted d-flex justify-content-between">
-          Pull Request or Issue URL
+          Issue URL
           <HelpIcon
-            v-tooltip="
-              'Paste the URL of a an issue or a related merged pull request to withdraw a bounty.'
-            "
+            v-tooltip="'Paste the URL of a an issue to withdraw a bounty.'"
             width="18px"
             height="18px"
             class="mb-1 help-icon"
@@ -61,65 +29,14 @@
           placeholder="https://github.com/..."
         />
         <font-awesome-icon
-          v-if="loadingContribution"
+          v-if="loadingIssue"
           :icon="['fas', 'circle-notch']"
           spin
           class="text-muted-light"
         />
-        <PullRequestEmbed
-          v-else-if="contribution && type == 'pr'"
-          :contribution="contribution"
-        />
-        <IssueEmbed
-          v-else-if="contribution && type == 'issue'"
-          :issue="contribution"
-        />
+        <IssueEmbed v-else-if="issue" :issue="issue" />
 
-        <div v-if="contribution && type == 'pr'">
-          <div
-            v-if="
-              githubUser &&
-              contribution.repository.owner.login === githubUser.login
-            "
-            class="alert alert-warning border-0 mt-2 mb-2"
-          >
-            <font-awesome-icon :icon="['fas', 'info-circle']" />
-            <small>
-              You can only claim pull requests for repositories that are not
-              your own.
-            </small>
-          </div>
-          <div
-            v-if="githubUser && contribution.author.login !== githubUser.login"
-            class="alert alert-warning border-0 mt-2 mb-2"
-          >
-            <font-awesome-icon :icon="['fas', 'info-circle']" />
-            <small> This pull request does not belong to you. </small>
-          </div>
-          <div
-            v-if="githubUser && !contribution.merged"
-            class="alert alert-warning border-0 mt-2 mb-2"
-          >
-            <font-awesome-icon :icon="['fas', 'info-circle']" />
-            <small> This pull request is not merged yet. </small>
-          </div>
-          <div
-            v-if="githubUser && getAge(contribution.mergedAt) > maxClaimPrAge"
-            class="alert alert-warning border-0 mt-2 mb-2"
-          >
-            <font-awesome-icon :icon="['fas', 'info-circle']" />
-            <small>
-              Only pull request merged inside the last {{ maxClaimPrAge }} days
-              can be claimed.
-            </small>
-          </div>
-          <div class="text-center">
-            <small class="text-muted">Score:</small>
-            <h3>{{ score }}</h3>
-          </div>
-        </div>
-
-        <div v-if="contribution && type == 'issue'">
+        <div v-if="issue">
           <div
             v-if="!canWithdrawIssue"
             class="alert alert-warning border-0 mb-2 mt-3"
@@ -133,13 +50,9 @@
         </div>
 
         <button
-          v-if="type === 'issue'"
           class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-4"
           :disabled="
-            withdrawingFromIssue ||
-            !contribution ||
-            !githubUser ||
-            !canWithdrawIssue
+            withdrawingFromIssue || !issue || !githubUser || !canWithdrawIssue
           "
           @click="withdrawFromIssue()"
         >
@@ -149,27 +62,6 @@
             spin
           />
           {{ withdrawingFromIssue ? 'Waiting for confirmation...' : 'Claim' }}
-        </button>
-        <button
-          v-if="type === 'pr'"
-          class="btn btn-lg btn-primary shadow-sm d-block w-100 mt-4"
-          :disabled="
-            claimingPullRequest ||
-            !contribution ||
-            !contribution.merged ||
-            !githubUser ||
-            contribution.author.login !== githubUser.login ||
-            getAge(contribution.mergedAt) > maxClaimPrAge ||
-            contribution.repository.owner.login === githubUser.login
-          "
-          @click="claimPullRequest()"
-        >
-          <font-awesome-icon
-            v-if="claimingPullRequest"
-            :icon="['fas', 'circle-notch']"
-            spin
-          />
-          {{ claimingPullRequest ? 'Waiting for confirmation...' : 'Claim' }}
         </button>
 
         <div v-if="userDeposits.length" class="border-top mt-3 pt-3">
@@ -222,21 +114,15 @@ export default {
   mixins: [connect, loadFromGithub],
   data() {
     return {
-      maxClaimPrAge: process.env.MAX_CLAIMPR_AGE,
       url: '',
-      type: null,
-      loadingContribution: false,
-      contribution: null,
+      loadingIssue: false,
+      issue: null,
       score: 0,
       withdrawingFromIssue: false,
       showWithdrawalSuccess: false,
       userDeposits: [],
       withdrawingUserDeposit: 0,
-      claimingPullRequest: false,
-      showClaimSuccess: false,
-      showClaimError: false,
       canWithdrawIssue: false,
-      claimRequestID: null,
     }
   },
   computed: {
@@ -262,7 +148,7 @@ export default {
       }
     },
     url(newUrl, oldUrl) {
-      this.contribution = null
+      this.issue = null
       // TODO: use regex here
       if (newUrl.includes('https://github.com')) {
         const urlParts = newUrl.split('/')
@@ -270,32 +156,22 @@ export default {
         urlParts.pop()
         const repo = urlParts.pop()
         const owner = urlParts.pop()
-        if (newUrl.includes('/pull/') && number) {
-          this.type = 'pr'
-          this.loadingContribution = true
-          this.loadPullRequest(owner, repo, number, this.githubAccessToken)
-            .then((pr) => {
-              this.contribution = pr
-              this.score = this.calculatePRScore(pr)
-            })
-            .finally(() => (this.loadingContribution = false))
-        } else if (newUrl.includes('/issues/') && number) {
-          this.type = 'issue'
-          this.loadingContribution = true
+        if (newUrl.includes('/issues/') && number) {
+          this.loadingIssue = true
           this.canWithdrawIssue = false
           this.loadIssue(owner, repo, number)
             .then((issue) => {
-              this.contribution = issue
+              this.issue = issue
               this.$axios
                 .$get(
                   process.env.API_URL +
-                    `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.contribution.id}`
+                    `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issue.id}`
                 )
                 .then((can) => {
                   this.canWithdrawIssue = can
                 })
             })
-            .finally(() => (this.loadingContribution = false))
+            .finally(() => (this.loadingIssue = false))
         }
       }
     },
@@ -344,57 +220,19 @@ export default {
 
       return Math.min(Math.round(Math.round((score / 35) * 100)), 100)
     },
-    claimPullRequest() {
-      this.claimingPullRequest = true
-      // start listening for request event
-      const confirmListener = this.$octoBay.events
-        .ChainlinkFulfilled()
-        .on('data', (event) => {
-          if (event.returnValues.id === this.claimRequestID) {
-            // stop listening and finish process
-            confirmListener.unsubscribe()
-            this.$store.dispatch('updateOvtBalance')
-            this.$web3.eth
-              .getBalance(this.account)
-              .then((balance) => this.$store.commit('setBalance', balance))
-            this.showClaimSuccess = true
-            this.claimingPullRequest = false
-            this.url = ''
-            this.contribution = null
-            this.claimRequestID = null
-          }
-        })
-
-      // trigger claim (get gas price first)
-      this.$octoBay.methods
-        .claimPullRequest(
-          this.oracles[0].ethAddress,
-          this.contribution.id,
-          this.githubUser.login
-        )
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
-        .then((claimRequest) => {
-          this.claimRequestID =
-            claimRequest.events.ChainlinkRequested.returnValues.id
-        })
-        .catch(() => (this.claimingPullRequest = false))
-    },
     withdrawFromIssue() {
       this.withdrawingFromIssue = true
       this.$octoBay.methods
-        .withdrawIssueDeposit(this.oracles[0].ethAddress, this.contribution.id)
+        .withdrawIssueDeposit(this.oracles[0].ethAddress, this.issue.id)
         .send({
           // useGSN: false,
           from: this.account,
         })
         .then(() => {
-          this.$store.commit('removeIssue', this.contribution.id)
+          this.$store.commit('removeIssue', this.issue.id)
           this.withdrawingFromIssue = false
           this.showWithdrawalSuccess = true
-          this.contribution = null
+          this.issue = null
           this.url = ''
           this.canWithdrawIssue = false
         })
