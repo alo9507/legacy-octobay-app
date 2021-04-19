@@ -240,13 +240,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'registeredAccount', 'oracles']),
+    ...mapGetters([
+      'connected',
+      'account',
+      'registeredAccount',
+      'oracles',
+      'redirectPrefills',
+    ]),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',
     }),
   },
   watch: {
+    redirectPrefills() {
+      if (
+        this.redirectPrefills &&
+        this.redirectPrefills.type === 'claim-issue'
+      ) {
+        this.url = this.redirectPrefills.url
+      }
+    },
     url(newUrl, oldUrl) {
       this.contribution = null
       // TODO: use regex here
@@ -288,6 +302,9 @@ export default {
   },
   mounted() {
     this.updateUserDeposits()
+    if (this.redirectPrefills && this.redirectPrefills.type === 'claim-issue') {
+      this.url = this.redirectPrefills.url
+    }
   },
   methods: {
     getAge(createdAt) {

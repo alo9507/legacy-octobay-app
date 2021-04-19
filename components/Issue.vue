@@ -138,6 +138,14 @@
                 class="text-muted-light ml-1"
               />
             </a>
+            <button
+              v-if="canWithdrawIssue"
+              v-tooltip="{ content: 'Claim', trigger: 'hover' }"
+              class="btn btn-sm btn-primary shadow-sm"
+              @click="claimIssue()"
+            >
+              <font-awesome-icon :icon="['fas', 'hand-holding-usd']" />
+            </button>
           </div>
           <!-- details content -->
           <div class="w-100 px-3">
@@ -294,6 +302,7 @@ export default {
       isRepoAdmin: false,
       linkedPullRequests: [],
       loading: false,
+      canWithdrawIssue: false,
     }
   },
   computed: {
@@ -357,6 +366,14 @@ export default {
             labels: issue.labels.edges.map((label) => label.node),
             closed: issue.closed,
           }
+          this.$axios
+            .$get(
+              process.env.API_URL +
+                `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issueNode.id}`
+            )
+            .then((can) => {
+              this.canWithdrawIssue = can
+            })
         }
       })
       .finally(() => (this.loading = false))
@@ -371,6 +388,19 @@ export default {
         amount: '1.0',
       })
       this.$store.commit('setView', 'send')
+    },
+    claimIssue() {
+      this.$store.commit('setRedirectPrefills', {
+        type: 'claim-issue',
+        url:
+          'https://github.com/' +
+          this.issueNode.owner +
+          '/' +
+          this.issueNode.repository +
+          '/issues/' +
+          this.issueNode.number,
+      })
+      this.$store.commit('setView', 'claim')
     },
     twitterPost() {
       this.$store.commit('setModalData', this.issueNode)
