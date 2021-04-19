@@ -33,7 +33,7 @@ export default {
     ...mapGetters(['issues']),
     issuesSorted() {
       return this.issues
-        .filter(() => true)
+        .filter((issue) => issue.status === 0)
         .sort((a, b) => {
           if (a.boostAmount === b.boostAmount) {
             return a.depositAmount < b.depositAmount
