@@ -60,11 +60,6 @@ export const getters = {
   registeredAccounts(state) {
     return state.registeredAccounts
   },
-  registeredAccount(state) {
-    return state.registeredAccounts.length
-      ? state.registeredAccounts[0].address.toLowerCase()
-      : null
-  },
   issues(state) {
     return state.issues
   },
