@@ -49,7 +49,6 @@
       :disabled="
         withdrawingFromIssue || !issue || !githubUser || !canWithdrawIssue
       "
-      :required="['wallet', 'github']"
       class="mt-4"
     >
       <font-awesome-icon
@@ -113,7 +112,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'oracles', 'redirectPrefills']),
+    ...mapGetters(['account', 'oracles', 'redirectPrefills']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',

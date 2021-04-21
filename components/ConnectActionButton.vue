@@ -1,7 +1,7 @@
 <template>
   <div>
     <button
-      v-if="required.includes('wallet') && !connected"
+      v-if="required.includes('wallet') && !account"
       class="btn btn-lg btn-light shadow-sm d-block w-100"
       @click="connect()"
     >
@@ -14,6 +14,16 @@
     >
       <font-awesome-icon :icon="['fab', 'github']" />
       Connect GitHub
+    </a>
+    <a
+      v-else-if="
+        required.includes('verify') &&
+        !registeredAccounts.map((a) => a.address).includes(account)
+      "
+      class="btn btn-lg btn-primary shadow-sm d-block"
+      @click="showRegister()"
+    >
+      Verify Address
     </a>
     <button
       v-else-if="$web3"
@@ -40,7 +50,7 @@ export default {
     },
     required: {
       type: Array,
-      default: () => ['github', 'wallet'],
+      default: () => ['github', 'wallet', 'verify'],
     },
     disabled: {
       type: Boolean,
@@ -48,11 +58,18 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['connected']),
+    ...mapGetters(['account', 'registeredAccounts']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAuthUrl: 'authUrl',
     }),
+  },
+  methods: {
+    showRegister() {
+      this.$store.commit('setModalData', null)
+      this.$store.commit('setModalComponent', 'ModalRegister')
+      this.$store.commit('setShowModal', true)
+    },
   },
 }
 </script>
