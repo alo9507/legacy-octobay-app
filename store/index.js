@@ -120,6 +120,16 @@ export const getters = {
   departments(state) {
     return state.departments
   },
+  ownDepartments(state) {
+    return state.departments.filter((d) => {
+      return (
+        state.accounts.length &&
+        (d.creator === state.accounts[0] ||
+          d.nfts.find((nft) => nft.ownerAddress === state.accounts[0]) ||
+          d.holders.find((holder) => holder.ethAddress === state.accounts[0]))
+      )
+    })
+  },
   proposals(state) {
     return state.proposals
   },
@@ -136,7 +146,7 @@ export const mutations = {
     state.networkId = id
   },
   setAccounts(state, accounts) {
-    state.accounts = accounts
+    state.accounts = accounts.map((address) => address.toLowerCase())
   },
   setBalance(state, balance) {
     state.balance = balance

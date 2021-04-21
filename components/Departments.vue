@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="card-body pb-0">
-      <div v-if="departments.length" class="department-list">
+      <div v-if="ownDepartments.length" class="department-list">
         <Department
-          v-for="department in departments"
+          v-for="department in ownDepartments"
           :key="department.address"
           :department="department"
         />
       </div>
-      <div v-else class="text-center text-muted my-3">No departments.</div>
+      <div v-else class="text-center text-muted my-3">
+        You have not created any<br />departments yet.
+      </div>
     </div>
     <div class="card-body">
       <ConnectActionButton :action="newDepartment" :required="['wallet']">
@@ -23,7 +25,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['departments']),
+    ...mapGetters(['ownDepartments']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAuthUrl: 'authUrl',

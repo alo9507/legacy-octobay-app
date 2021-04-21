@@ -9,7 +9,7 @@
       <select v-model="selectedDepartment" class="custom-select rounded-xl">
         <option :value="null">Select Department</option>
         <option
-          v-for="department in departments"
+          v-for="department in ownDepartments"
           :key="department.address"
           :value="department"
         >
@@ -37,7 +37,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['departments']),
+    ...mapGetters(['ownDepartments']),
     selectedDepartment: {
       get() {
         return this.$store.state.selectedDepartment
@@ -50,7 +50,7 @@ export default {
       if (this.selectedDepartment) {
         return this.selectedDepartment.proposals
       } else {
-        return this.departments.reduce(
+        return this.ownDepartments.reduce(
           (proposals, department) => [...proposals, ...department.proposals],
           []
         )

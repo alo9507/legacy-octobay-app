@@ -18,7 +18,7 @@
           <select v-model="proposalDepartment" class="custom-select rounded-xl">
             <option :value="null">Select department</option>
             <option
-              v-for="department in departments"
+              v-for="department in ownDepartments"
               :key="department.address"
               :value="department"
             >
@@ -100,7 +100,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['oracles', 'departments', 'selectedDepartment', 'account']),
+    ...mapGetters([
+      'oracles',
+      'ownDepartments',
+      'selectedDepartment',
+      'account',
+    ]),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   watch: {
