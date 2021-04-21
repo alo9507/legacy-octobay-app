@@ -1,32 +1,40 @@
 const Web3 = require('web3')
 // const { RelayProvider } = require('@opengsn/gsn')
 
-export default ({ app }, inject) => {
+export default ({ store, app }, inject) => {
   if (window.ethereum) {
     const plainWeb3 = new Web3(window.ethereum)
-
-    // GSN integration currently disabled
-    // const gsnRelayProvider = await RelayProvider.newProvider({
-    //   provider: plainWeb3.currentProvider,
-    //   config: {
-    //     relayHubInstance: process.env.GSN_RELAYHUB_ADDRESS,
-    //     paymasterAddress: process.env.GSN_PAYMASTER_ADDRESS,
-    //     loggerConfiguration: {
-    //       logLevel: 'debug',
-    //       loggerUrl: 'https://logger.opengsn.org',
-    //       applicationId: 'octobay-dev'
-    //     }
-    //   }
-    // }).init()
 
     const web3 = plainWeb3 // new Web3(gsnRelayProvider)
 
     window.ethereum.on('accountsChanged', (accounts) => {
-      app.store.dispatch('load')
+      store.commit('setAccounts', accounts)
+      app.$web3.eth
+        .getBalance(accounts[0])
+        .then((balance) => store.commit('setBalance', balance))
+
+      app.$octobayNFT.methods
+        .getTokenIDForUserInProject(
+          accounts[0],
+          'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
+        )
+        .call()
+        .then((tokenId) => {
+          if (tokenId) {
+            app.$octobayNFT.methods
+              .hasPermission(tokenId, 1)
+              .call()
+              .then((isOctobayAdmin) => {
+                store.commit('setOctoBayAdmin', isOctobayAdmin)
+              })
+          }
+        })
     })
 
-    window.ethereum.on('chainChanged', (network) => {
-      app.store.dispatch('load')
+    window.ethereum.on('chainChanged', () => {
+      app.$web3.eth.net.getId().then((chainId) => {
+        store.commit('setNetworkId', chainId)
+      })
     })
 
     /**
