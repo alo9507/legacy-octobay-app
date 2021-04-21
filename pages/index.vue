@@ -14,18 +14,10 @@
         >Pinboard</a
       >
       <a
-        v-if="account && registeredAccount === account"
         href="#"
         :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')"
         @click="$store.commit('setView', 'claim')"
         >Claim</a
-      >
-      <a
-        v-else
-        href="#"
-        :class="'mx-2 text-' + (view === 'register' ? 'primary' : 'muted')"
-        @click="$store.commit('setView', 'register')"
-        >Register</a
       >
       <a
         v-if="account && (account === octoBayOwner || octoBayAdmin)"
@@ -42,7 +34,6 @@
         <IssuesList v-else-if="view == 'issues'" />
         <Contributors v-else-if="view == 'contributors'" />
         <Claim v-else-if="view == 'claim'" />
-        <Register v-else-if="view == 'register'" />
         <Admin
           v-else-if="
             account &&
@@ -61,13 +52,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters([
-      'view',
-      'account',
-      'registeredAccount',
-      'octoBayOwner',
-      'octoBayAdmin',
-    ]),
+    ...mapGetters(['view', 'account', 'octoBayOwner', 'octoBayAdmin']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   mounted() {

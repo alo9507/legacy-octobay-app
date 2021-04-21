@@ -1,9 +1,7 @@
-export default function ({ store, redirect, app }) {
+export default function ({ store, app }) {
   if (app.$octoBay) {
     Promise.all([
       app.$octoBay.methods.owner().call(),
-      app.$octoBay.methods.twitterAccountId().call(),
-      app.$octoBay.methods.twitterFollowers().call(),
       app.$web3.eth.net.getId(),
       app.$web3.eth.getAccounts(),
       app.$axios.$get('https://tokens.coingecko.com/uniswap/all.json'),
@@ -12,12 +10,10 @@ export default function ({ store, redirect, app }) {
     ])
       .then((values) => {
         store.commit('setOctoBayOwner', values[0].toLowerCase())
-        store.commit('setTwitterAccountId', values[1])
-        store.commit('setTwitterFollowers', values[2])
-        store.commit('setNetworkId', values[3])
-        const accounts = values[4]
-        store.commit('setTokenList', values[5])
-        store.commit('setOracles', values[6])
+        store.commit('setNetworkId', values[1])
+        const accounts = values[2]
+        store.commit('setTokenList', values[3])
+        store.commit('setOracles', values[4])
 
         // load issues and departments
         store.dispatch('updateIssues')
@@ -28,7 +24,6 @@ export default function ({ store, redirect, app }) {
           app.$web3.eth
             .getBalance(accounts[0])
             .then((balance) => store.commit('setBalance', balance))
-          store.dispatch('updateOvtBalance')
 
           app.$octobayNFT.methods
             .getTokenIDForUserInProject(
@@ -42,7 +37,6 @@ export default function ({ store, redirect, app }) {
                   .hasPermission(tokenId, 1)
                   .call()
                   .then((isOctobayAdmin) => {
-                    console.log(isOctobayAdmin)
                     store.commit('setOctoBayAdmin', isOctobayAdmin)
                   })
               }

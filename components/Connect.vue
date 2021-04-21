@@ -1,43 +1,48 @@
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="connected && githubUser" :class="cssClasses + ' pr-4'">
+    <div v-if="connected && githubUser" :class="cssClasses">
       <a
         :href="githubUser.html_url"
         target="_blank"
-        class="rounded-circle avatar border"
+        class="rounded-circle avatar mr-1 shadow-sm"
         :style="'background-image: url(' + githubUser.avatar_url + ')'"
       ></a>
-      <a
-        v-if="registeredAccount && registeredAccount != account"
-        v-tooltip="
-          'You are not connected to the Ethereum account registered with this GitHub account. Switch accounts or register again.'
-        "
-        class="btn btn-sm btn-light rounded-circle mx-2 text-warning"
-      >
-        <small
-          ><font-awesome-icon :icon="['fas', 'exclamation-triangle']"
-        /></small>
-      </a>
-      <div class="d-flex flex-column text-center mx-auto px-3">
-        <AddressShort :address="account" />
-        <small>
-          <sup class="text-nowrap">
-            {{
-              networkId === 1
-                ? 'Mainnet'
-                : networkId === 3
-                ? 'Ropsten'
-                : networkId === 4
-                ? 'Rinkeby'
-                : networkId === 42
-                ? 'Kovan'
-                : 'Unknown Testnet'
-            }}
-          </sup>
-        </small>
-      </div>
-      <div class="d-flex flex-column text-right">
-        <b class="text-nowrap">{{ formattedBalance }} ETH</b>
+      <div class="d-flex ml-1">
+        <div
+          class="d-flex align-items-center bg-white pl-1 pr-5 rounded-xl border-light"
+          style="margin-right: -55px"
+        >
+          <button
+            class="btn btn-sm btn-primary shadow-sm mr-2"
+            @click="showRegister()"
+          >
+            <font-awesome-icon :icon="['fas', 'wallet']" />
+          </button>
+          <div class="pr-3 d-flex flex-column align-items-end">
+            <small><AddressShort :address="account" /></small>
+            <small>
+              <sup class="text-nowrap">
+                {{
+                  networkId === 1
+                    ? 'Mainnet'
+                    : networkId === 3
+                    ? 'Ropsten'
+                    : networkId === 4
+                    ? 'Rinkeby'
+                    : networkId === 42
+                    ? 'Kovan'
+                    : 'Unknown Testnet'
+                }}
+              </sup>
+            </small>
+          </div>
+        </div>
+        <div
+          class="d-flex align-items-center bg-secondary text-white px-3 py-1 rounded-xl text-nowrap font-weight-bold"
+        >
+          {{ formattedBalance }}
+          <font-awesome-icon :icon="['fab', 'ethereum']" class="ml-2" />
+        </div>
       </div>
     </div>
 
@@ -98,18 +103,11 @@ export default {
   data() {
     return {
       connectedGithub: false,
-      cssClasses:
-        'd-flex justify-content-between align-items-top text-muted bg-white rounded-xl p-1 connect',
+      cssClasses: 'd-flex justify-content-between align-items-top text-muted',
     }
   },
   computed: {
-    ...mapGetters([
-      'connected',
-      'account',
-      'balance',
-      'registeredAccount',
-      'networkId',
-    ]),
+    ...mapGetters(['connected', 'account', 'balance', 'networkId']),
     ...mapGetters('github', { githubUser: 'user', githubAuthUrl: 'authUrl' }),
     formattedBalance() {
       return Number(
@@ -117,19 +115,22 @@ export default {
       ).toFixed(2)
     },
   },
+  methods: {
+    showRegister() {
+      this.$store.commit('setModalData', null)
+      this.$store.commit('setModalComponent', 'ModalRegister')
+      this.$store.commit('setShowModal', true)
+    },
+  },
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .avatar
-  width: 46px
-  height: 46px
+  display: block
+  width: 40px
+  height: 40px
   background-repeat: no-repeat
   background-position: center center
   background-size: 100%
-  border-width: 2px !important
-
-.disabled
-  opacity: 1 !important
-  z-index: 1 !important
 </style>
