@@ -402,11 +402,6 @@ export default {
       })
       this.$store.commit('setView', 'claim')
     },
-    twitterPost() {
-      this.$store.commit('setModalData', this.issueNode)
-      this.$store.commit('setModalComponent', 'ModalTwitterPost')
-      this.$store.commit('setShowModal', true)
-    },
     changeAction(action) {
       if (this.action === action) {
         this.action = null
@@ -428,7 +423,6 @@ export default {
           })
           .then((result) => {
             this.$store.dispatch('updatePins', this.issue.id)
-            this.$store.dispatch('updateOvtBalance')
             this.$web3.eth
               .getBalance(this.account)
               .then((balance) => this.$store.commit('setBalance', balance))

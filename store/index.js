@@ -7,7 +7,6 @@ export const state = () => ({
   accounts: [],
   registeredAccounts: [],
   balance: 0,
-  ovtBalance: 0,
   issues: [],
   tokenList: [],
   showTokenList: false,
@@ -26,8 +25,6 @@ export const state = () => ({
   showModal: false,
   modalComponent: null,
   modalData: null,
-  twitterAccountId: null,
-  twitterFollowers: 0,
   selectedDepartment: null,
   departments: [],
 })
@@ -50,9 +47,6 @@ export const getters = {
   },
   balance(state) {
     return state.balance
-  },
-  ovtBalance(state) {
-    return state.ovtBalance
   },
   connected(state) {
     return !!state.accounts.length
@@ -120,12 +114,6 @@ export const getters = {
   octoBayAdmin(state) {
     return state.octoBayAdmin
   },
-  twitterAccountId(state) {
-    return state.twitterAccountId
-  },
-  twitterFollowers(state) {
-    return state.twitterFollowers
-  },
   selectedDepartment(state) {
     return state.selectedDepartment
   },
@@ -152,9 +140,6 @@ export const mutations = {
   },
   setBalance(state, balance) {
     state.balance = balance
-  },
-  setOvtBalance(state, balance) {
-    state.ovtBalance = balance
   },
   setRegisteredAccounts(state, registeredAccounts) {
     state.registeredAccounts = registeredAccounts
@@ -255,12 +240,6 @@ export const mutations = {
   setOctoBayAdmin(state, isAdmin) {
     state.octoBayAdmin = isAdmin
   },
-  setTwitterAccountId(state, id) {
-    state.twitterAccountId = id
-  },
-  setTwitterFollowers(state, followers) {
-    state.twitterFollowers = followers
-  },
   setDepartments(state, departments) {
     state.departments = departments
   },
@@ -307,12 +286,6 @@ export const actions = {
     this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
       commit('setOracles', oracles)
     })
-  },
-  updateOvtBalance({ state, commit }) {
-    this.$ovt.methods
-      .balanceOf(state.accounts[0])
-      .call()
-      .then((balance) => commit('setOvtBalance', balance))
   },
   updatePins({ commit }, issueId) {
     this.$octoBay.methods

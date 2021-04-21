@@ -12,10 +12,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ModalTwitterPost from './ModalTwitterPost.vue'
 
 export default {
-  components: { ModalTwitterPost },
   computed: {
     ...mapGetters(['showModal', 'modalComponent']),
   },

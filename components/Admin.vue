@@ -12,24 +12,6 @@
       </div>
     </div>
     <div class="mt-3">
-      <b>Twitter Account ID</b>
-      <div class="input-with-button">
-        <input v-model="twitterAccountId" type="text" class="form-control" />
-        <button
-          class="btn btn-primary btn-sm shadow-sm"
-          :disabled="updatingTwitterAccountId"
-          @click="updateTwitterAccountId()"
-        >
-          <font-awesome-icon
-            v-if="updatingTwitterAccountId"
-            :icon="['fas', 'circle-notch']"
-            spin
-          />
-          <font-awesome-icon v-else :icon="['fas', 'check']" />
-        </button>
-      </div>
-    </div>
-    <div class="mt-3">
       <b>New Oracle</b>
       <div>
         <small class="text-muted">Address:</small>
@@ -160,7 +142,6 @@ export default {
       jobUpdating: false,
       addingNewOracle: false,
       removingOralce: false,
-      updatingTwitterAccountId: false,
       newOracleJob: {
         oracle: null,
         jobName: null,
@@ -171,26 +152,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles', 'twitterAccountId']),
-    twitterAccountId: {
-      get() {
-        return this.$store.state.twitterAccountId
-      },
-      set(id) {
-        this.$store.commit('setTwitterAccountId', id)
-      },
-    },
+    ...mapGetters(['account', 'oracles']),
   },
   methods: {
-    updateTwitterAccountId() {
-      this.updatingTwitterAccountId = true
-      this.$octoBay.methods
-        .setTwitterAccountId(this.twitterAccountId)
-        .send({ from: this.account })
-        .then(() => {
-          this.updatingTwitterAccountId = false
-        })
-    },
     isNewOracleValid() {
       return (
         this.newOracle.ethAddress.length === 42 &&
