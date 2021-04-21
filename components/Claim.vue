@@ -11,15 +11,9 @@
       <font-awesome-icon :icon="['far', 'smile']" />
       Withdrawal successful!
     </div>
-    <small class="text-muted d-flex justify-content-between">
-      Issue URL
-      <HelpIcon
-        v-tooltip="'Paste the URL of a an issue to withdraw a bounty.'"
-        width="18px"
-        height="18px"
-        class="mb-1 help-icon"
-      />
-    </small>
+    <h5 class="text-center text-muted-light py-2 px-4 mt-2">
+      Paste the URL of an issue you worked on.
+    </h5>
     <input
       v-model="url"
       type="text"
