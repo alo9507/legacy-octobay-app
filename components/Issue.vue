@@ -306,7 +306,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'registeredAccount', 'oracles']),
+    ...mapGetters(['account', 'oracles']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',
