@@ -45,7 +45,10 @@
         </div>
       </div>
       <div
-        v-if="!registeredAccounts.map((a) => a.address).includes(account)"
+        v-if="
+          registeredAccounts.length &&
+          !registeredAccounts.map((a) => a.address).includes(account)
+        "
         class="mt-3 alert bg-secondary text-white text-center"
       >
         You are connected to an address that has not been verified for this
