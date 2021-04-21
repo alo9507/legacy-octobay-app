@@ -248,6 +248,14 @@
                 <small v-else class="text-muted d-block text-center mt-2">
                   No linked pull requests yet.
                 </small>
+                <small class="d-block text-center">
+                  <a
+                    href="https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword"
+                    target="_blank"
+                  >
+                    What does that mean?
+                  </a>
+                </small>
               </div>
             </transition>
           </div>
