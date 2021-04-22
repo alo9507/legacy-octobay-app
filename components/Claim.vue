@@ -113,6 +113,9 @@ export default {
     }),
   },
   watch: {
+    githubUser() {
+      this.updateUserDeposits()
+    },
     redirectPrefills() {
       if (
         this.redirectPrefills &&
@@ -225,26 +228,15 @@ export default {
         .finally(() => (this.withdrawingUserDeposit = 0))
     },
     updateUserDeposits() {
-      const deposits = []
       if (this.githubUser) {
-        this.$octoBay.methods
-          .getUserDepositIdsForGithubUserId(this.githubUser.node_id)
-          .call()
-          .then((ids) => {
-            ids.forEach((id) => {
-              this.$octoBay.methods
-                .userDeposits(id)
-                .call()
-                .then((deposit) => {
-                  if (Number(deposit.amount)) {
-                    deposit.id = id
-                    deposits.push(deposit)
-                  }
-                })
-            })
+        this.$axios
+          .$get(process.env.API_URL + '/graph/user/' + this.githubUser.node_id)
+          .then((user) => {
+            if (user) {
+              this.userDeposits = user.deposits
+            }
           })
       }
-      this.userDeposits = deposits
     },
     formatAmount(amount) {
       return Number(

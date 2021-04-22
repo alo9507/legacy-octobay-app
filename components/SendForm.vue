@@ -1,9 +1,194 @@
 <template>
-  <div class="card-body" style="max-width: 360px">
-    <div v-if="accountsUserDeposits.length" class="border-bottom mb-4 pb-2">
-      <small class="text-muted d-block text-center border-bottom pb-2 mb-2"
-        >Pending withdrawals:</small
+  <div style="max-width: 360px">
+    <div class="card-body">
+      <div v-if="showSendSuccess" class="alert alert-success border-0">
+        <button
+          type="button"
+          class="close text-success"
+          @click="showSendSuccess = false"
+        >
+          <span>&times;</span>
+        </button>
+        <CheckIcon />
+        Transfer confirmed! :)
+      </div>
+      <div v-if="showIssueDepositSuccess" class="alert alert-success border-0">
+        <button
+          type="button"
+          class="close text-success"
+          @click="showIssueDepositSuccess = false"
+        >
+          <span>&times;</span>
+        </button>
+        <CheckIcon />
+        Issue deposit confirmed! :)
+      </div>
+      <div
+        v-if="selectedRecipientType == 'User'"
+        class="input-with-embed select-input select-input-left"
       >
+        <input
+          v-model="username"
+          type="text"
+          class="form-control form-control-lg form-control-with-embed mb-2"
+          style="padding-right: 5rem"
+          placeholder="Username"
+        />
+        <span
+          class="btn btn-primary shadow-sm"
+          style="width: 95px"
+          @click="$store.commit('setShowRecipientTypeList', true)"
+        >
+          <span>User</span>
+          <small
+            ><font-awesome-icon
+              :icon="['fas', 'chevron-down']"
+              style="opacity: 0.5"
+          /></small>
+        </span>
+        <a
+          v-if="user"
+          href="#"
+          class="position-absolute text-muted-light"
+          style="top: 12px; right: 50px; z-index: 2"
+          @click="
+            user = null
+            username = ''
+          "
+        >
+          <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+            />
+          </svg>
+        </a>
+        <div v-if="loading || user">
+          <div v-if="loading" class="text-center mb-2">
+            <font-awesome-icon
+              :icon="['fas', 'circle-notch']"
+              spin
+              class="text-muted-light"
+            />
+          </div>
+          <UserEmbed
+            v-if="user"
+            :user="user"
+            :address="userEthAddress"
+            class="mb-2"
+          />
+        </div>
+      </div>
+      <div
+        v-if="selectedRecipientType == 'Issue'"
+        class="input-with-embed select-input select-input-left"
+      >
+        <input
+          v-model="issueUrl"
+          type="text"
+          class="form-control form-control-lg form-control-with-embed mb-2 pr-5"
+          placeholder="Issue URL"
+        />
+        <span
+          class="btn btn-primary shadow-sm"
+          style="width: 103px"
+          @click="$store.commit('setShowRecipientTypeList', true)"
+        >
+          <span>Bounty</span>
+          <small
+            ><font-awesome-icon
+              :icon="['fas', 'chevron-down']"
+              style="opacity: 0.5"
+          /></small>
+        </span>
+        <a
+          v-if="issue"
+          href="#"
+          class="position-absolute text-muted-light"
+          style="top: 12px; right: 10px; z-index: 2"
+          @click="
+            issue = null
+            issueUrl = ''
+          "
+        >
+          <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+            />
+          </svg>
+        </a>
+        <div v-if="loading || issue">
+          <div v-if="loading" class="text-center mb-2">
+            <font-awesome-icon
+              :icon="['fas', 'circle-notch']"
+              spin
+              class="text-muted-light"
+            />
+          </div>
+          <IssueEmbed v-if="issue" :issue="issue" />
+          <div
+            v-if="issue"
+            class="border rounded-xl mt-3 px-3 pt-2"
+            style="margin-bottom: -48px; padding-bottom: 52px"
+          >
+            <div v-if="departments.length" class="py-2">
+              <div class="text-muted d-block text-center mb-2">
+                Which governance token shall be minted for the contributor?
+              </div>
+              <select
+                v-model="departmentForIssue"
+                class="custom-select rounded-xl"
+              >
+                <option :value="null">No Governance Minting</option>
+                <option
+                  v-for="department in departments"
+                  :key="department.id"
+                  :value="department"
+                >
+                  {{ department.name }} ({{ department.symbol }})
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="select-input mb-2">
+        <input
+          v-model="amount"
+          type="number"
+          min="0"
+          step="0.01"
+          novalidate
+          class="form-control form-control-lg mb-2"
+          placeholder="0.00"
+        />
+        <span class="btn btn-light disabled">
+          <span v-if="selectedToken">{{ selectedToken.symbol }}</span>
+          <span v-else>ETH</span>
+        </span>
+      </div>
+      <ConnectActionButton
+        :action="confirm"
+        :disabled="confirmDisabled"
+        :required="['wallet']"
+        class="mt-4"
+      >
+        <font-awesome-icon
+          v-if="sending"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
+        {{ sending ? 'Waiting for confirmation...' : 'Confirm' }}
+      </ConnectActionButton>
+      <TokenList
+        :select="tokenListSelectCallback"
+        :show="showTokenList"
+        :hide="tokenListHideCallback"
+      />
+    </div>
+    <div v-if="accountsUserDeposits.length" class="card-body mt-4 border-top">
+      <small class="text-muted d-block text-center pb-2 mb-2">Pending:</small>
       <div
         v-for="(deposit, index) in accountsUserDeposits"
         :key="index"
@@ -17,12 +202,8 @@
             <small>ETH</small>
           </h4>
           <small class="text-muted">
-            &gt;
-            <a
-              :href="'https://github.com/' + deposit.githubUser"
-              target="_blank"
-            >
-              {{ deposit.githubUser }}
+            <a :href="'https://github.com/' + deposit.user.id" target="_blank">
+              {{ deposit.user.id }}
             </a>
           </small>
         </div>
@@ -40,187 +221,6 @@
         </button>
       </div>
     </div>
-    <div v-if="showSendSuccess" class="alert alert-success border-0">
-      <button
-        type="button"
-        class="close text-success"
-        @click="showSendSuccess = false"
-      >
-        <span>&times;</span>
-      </button>
-      <CheckIcon />
-      Transfer confirmed! :)
-    </div>
-    <div v-if="showIssueDepositSuccess" class="alert alert-success border-0">
-      <button
-        type="button"
-        class="close text-success"
-        @click="showIssueDepositSuccess = false"
-      >
-        <span>&times;</span>
-      </button>
-      <CheckIcon />
-      Issue deposit confirmed! :)
-    </div>
-    <div
-      v-if="selectedRecipientType == 'User'"
-      class="input-with-embed select-input select-input-left"
-    >
-      <input
-        v-model="username"
-        type="text"
-        class="form-control form-control-lg form-control-with-embed mb-2"
-        style="padding-right: 5rem"
-        placeholder="Username"
-      />
-      <span
-        class="btn btn-primary shadow-sm"
-        style="width: 95px"
-        @click="$store.commit('setShowRecipientTypeList', true)"
-      >
-        <span>User</span>
-        <small
-          ><font-awesome-icon
-            :icon="['fas', 'chevron-down']"
-            style="opacity: 0.5"
-        /></small>
-      </span>
-      <a
-        v-if="user"
-        href="#"
-        class="position-absolute text-muted-light"
-        style="top: 12px; right: 50px; z-index: 2"
-        @click="
-          user = null
-          username = ''
-        "
-      >
-        <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-          />
-        </svg>
-      </a>
-      <div v-if="loading || user">
-        <div v-if="loading" class="text-center mb-2">
-          <font-awesome-icon
-            :icon="['fas', 'circle-notch']"
-            spin
-            class="text-muted-light"
-          />
-        </div>
-        <UserEmbed
-          v-if="user"
-          :user="user"
-          :address="userEthAddress"
-          class="mb-2"
-        />
-      </div>
-    </div>
-    <div
-      v-if="selectedRecipientType == 'Issue'"
-      class="input-with-embed select-input select-input-left"
-    >
-      <input
-        v-model="issueUrl"
-        type="text"
-        class="form-control form-control-lg form-control-with-embed mb-2 pr-5"
-        placeholder="Issue URL"
-      />
-      <span
-        class="btn btn-primary shadow-sm"
-        style="width: 103px"
-        @click="$store.commit('setShowRecipientTypeList', true)"
-      >
-        <span>Bounty</span>
-        <small
-          ><font-awesome-icon
-            :icon="['fas', 'chevron-down']"
-            style="opacity: 0.5"
-        /></small>
-      </span>
-      <a
-        v-if="issue"
-        href="#"
-        class="position-absolute text-muted-light"
-        style="top: 12px; right: 10px; z-index: 2"
-        @click="
-          issue = null
-          issueUrl = ''
-        "
-      >
-        <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-          />
-        </svg>
-      </a>
-      <div v-if="loading || issue">
-        <div v-if="loading" class="text-center mb-2">
-          <font-awesome-icon
-            :icon="['fas', 'circle-notch']"
-            spin
-            class="text-muted-light"
-          />
-        </div>
-        <IssueEmbed v-if="issue" :issue="issue" />
-        <div
-          v-if="issue"
-          class="border rounded-xl mt-3 px-3 pt-2"
-          style="margin-bottom: -48px; padding-bottom: 52px"
-        >
-          <div v-if="departments.length" class="py-2">
-            <div class="text-muted d-block text-center mb-2">
-              Which governance token shall be minted for the contributor?
-            </div>
-            <select
-              v-model="departmentForIssue"
-              class="custom-select rounded-xl"
-            >
-              <option :value="null">No Governance Minting</option>
-              <option
-                v-for="department in departments"
-                :key="department.id"
-                :value="department"
-              >
-                {{ department.name }} ({{ department.symbol }})
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="select-input mb-2">
-      <input
-        v-model="amount"
-        type="number"
-        min="0"
-        step="0.01"
-        novalidate
-        class="form-control form-control-lg mb-2"
-        placeholder="0.00"
-      />
-      <span class="btn btn-light disabled">
-        <span v-if="selectedToken">{{ selectedToken.symbol }}</span>
-        <span v-else>ETH</span>
-      </span>
-    </div>
-    <ConnectActionButton
-      :action="confirm"
-      :disabled="confirmDisabled"
-      :required="['wallet']"
-      class="mt-4"
-    >
-      <font-awesome-icon v-if="sending" :icon="['fas', 'circle-notch']" spin />
-      {{ sending ? 'Waiting for confirmation...' : 'Confirm' }}
-    </ConnectActionButton>
-    <TokenList
-      :select="tokenListSelectCallback"
-      :show="showTokenList"
-      :hide="tokenListHideCallback"
-    />
   </div>
 </template>
 
@@ -262,6 +262,7 @@ export default {
       'redirectPrefills',
       'departments',
     ]),
+    ...mapGetters('github', { githubUser: 'user' }),
     confirmDisabled() {
       if (!this.sending && this.amount > 0) {
         if (this.selectedRecipientType === 'User' && this.user) {
@@ -276,6 +277,9 @@ export default {
   },
   watch: {
     account() {
+      this.updateUserDeposits()
+    },
+    githubUser() {
       this.updateUserDeposits()
     },
     redirectPrefills() {
@@ -375,7 +379,7 @@ export default {
     depositForUser() {
       this.sending = true
       this.$octoBay.methods
-        .depositEthForGithubUser(this.user.login.toLowerCase())
+        .depositEthForGithubUser(this.user.id)
         .send({
           // useGSN: false,
           from: this.account,
@@ -384,7 +388,7 @@ export default {
         .then((result) => {
           this.amount = 0
           this.showSendSuccess = true
-          this.updateUserDeposits()
+          setTimeout(() => this.updateUserDeposits(), 1000)
           this.$web3.eth
             .getBalance(this.account)
             .then((balance) => this.$store.commit('setBalance', balance))
@@ -440,26 +444,19 @@ export default {
       }
     },
     updateUserDeposits() {
-      const accountsDeposits = []
-      if (this.$octoBay) {
-        this.$octoBay.methods
-          .getUserDepositIdsForSender()
-          .call({ from: this.account })
-          .then((ids) => {
-            ids.forEach((id) => {
-              this.$octoBay.methods
-                .userDeposits(id)
-                .call()
-                .then((deposit) => {
-                  if (Number(deposit.amount)) {
-                    deposit.id = id
-                    accountsDeposits.push(deposit)
-                  }
-                })
-            })
+      if (this.githubUser) {
+        this.$axios
+          .$get(
+            process.env.API_URL +
+              '/graph/outgoing-user-deposits/' +
+              this.account
+          )
+          .then((deposits) => {
+            if (deposits) {
+              this.accountsUserDeposits = deposits
+            }
           })
       }
-      this.accountsUserDeposits = accountsDeposits
     },
     refundUserDeposit(id) {
       this.refundingUserDeposit = id
@@ -470,10 +467,10 @@ export default {
           from: this.account,
         })
         .then(() => {
-          this.updateUserDeposits()
           this.$web3.eth
             .getBalance(this.account)
             .then((balance) => this.$store.commit('setBalance', balance))
+          setTimeout(() => this.updateUserDeposits(), 1000)
         })
         .catch((e) => console.log(e))
         .finally(() => (this.refundingUserDeposit = 0))
