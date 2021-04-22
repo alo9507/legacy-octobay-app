@@ -5,11 +5,21 @@
         :href="githubUser.url"
         target="_blank"
         class="rounded-circle avatar mr-1 shadow-sm"
-        :style="`width: 18px; height: 18px; background-image: url(${githubUser.avatarUrl})`"
+        :style="`width: 2em; height: 2em; background-image: url(${githubUser.avatarUrl})`"
       ></a>
-      <a :href="githubUser.url" target="_blank" class="font-weight-bold">
-        {{ githubUser.login }}
-      </a>
+      <div class="d-flex flex-column">
+        <a :href="githubUser.url" target="_blank" class="font-weight-bold">
+          {{ githubUser.login }}
+        </a>
+        <a
+          v-if="fromAddress && forceShowAddress"
+          :href="`https://etherscan.com/address/${fromAddress}`"
+          target="_blank"
+          class="d-flex text-muted"
+        >
+          <small><AddressShort :address="fromAddress" /></small>
+        </a>
+      </div>
     </div>
     <div v-else-if="fromAddress">
       <a
@@ -40,6 +50,10 @@ export default {
     fromAddress: {
       type: String,
       default: '',
+    },
+    forceShowAddress: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

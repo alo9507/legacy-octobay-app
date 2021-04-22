@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="!loading && projectNode"
-      :class="['issue d-flex flex-column', { showDetails }]"
+      :class="['department d-flex flex-column', { showDetails }]"
       @click="showDetails = !showDetails"
     >
       <div class="position-relative">
@@ -139,10 +139,10 @@
             </button>
           </div>
           <!-- details content -->
-          <div class="w-100 px-3">
+          <div class="w-100">
             <transition name="fade" mode="out-in">
               <!-- holders -->
-              <div v-if="action === 'holders'" key="holders" class="py-3">
+              <div v-if="action === 'holders'" key="holders" class="p-3">
                 <div v-if="department.holders.length">
                   <div
                     v-for="holder in department.holders"
@@ -166,109 +166,157 @@
                 </div>
               </div>
               <!-- nfts -->
-              <div v-if="action === 'nfts'" key="nfts" class="py-3">
+              <div v-if="action === 'nfts'" key="nfts" class="pt-3">
+                <div class="px-3 pb-3 border-bottom-light">
+                  <button
+                    class="btn btn-sm btn-primary w-100 shadow-sm"
+                    @click="newNFT()"
+                  >
+                    New Permission-NFT
+                  </button>
+                </div>
                 <div v-if="department.nfts.length">
-                  <small class="d-block">
-                    <table class="w-100">
-                      <tr>
-                        <td></td>
-                        <td class="text-center">
-                          <small>Create NFTs</small>
-                        </td>
-                        <td class="text-center">
-                          <small>Transfer</small>
-                        </td>
-                        <td class="text-center">
-                          <small>Bounty Minting</small>
-                        </td>
-                        <td class="text-center">
-                          <small>Create Proposals</small>
-                        </td>
-                        <td></td>
-                      </tr>
-                      <tr v-for="nft in department.nfts" :key="nft.id">
-                        <td>
-                          <AddressShort
-                            :address="nft.ownerAddress"
-                            class="text-muted"
-                          />
-                        </td>
-                        <td class="text-center">
+                  <div
+                    class="d-flex w-100 justify-content-around align-items-center text-center py-2 px-3"
+                  >
+                    <small class="w-25">Create<br />NFTs</small>
+                    <small class="w-25">Transfer</small>
+                    <small class="w-25">Bounty<br />Minting</small>
+                    <small class="w-25">Create<br />Proposals</small>
+                  </div>
+                  <div
+                    v-for="(nft, i) in department.nfts"
+                    :key="nft.id"
+                    class="py-2 border-top-light"
+                  >
+                    <div
+                      class="d-flex justify-content-center align-items-center pb-2"
+                    >
+                      <small class="mr-1">
+                        <GithubUser
+                          :from-address="nft.ownerAddress"
+                          :force-show-address="true"
+                        />
+                      </small>
+                      <div class="btn-group shadow-sm rounded-xl ml-1">
+                        <button
+                          v-tooltip="{ content: 'Save', trigger: 'hover' }"
+                          class="btn btn-sm btn-primary"
+                        >
+                          <font-awesome-icon :icon="['fas', 'check']" />
+                        </button>
+                        <button
+                          v-tooltip="{ content: 'Send', trigger: 'hover' }"
+                          class="btn btn-sm btn-primary"
+                        >
+                          <font-awesome-icon :icon="['fas', 'share']" />
+                        </button>
+                        <button
+                          v-tooltip="{ content: 'Copy', trigger: 'hover' }"
+                          class="btn btn-sm btn-primary"
+                        >
+                          <font-awesome-icon :icon="['fas', 'copy']" />
+                        </button>
+                        <button
+                          v-tooltip="{ content: 'Burn', trigger: 'hover' }"
+                          class="btn btn-sm btn-primary"
+                        >
+                          <font-awesome-icon :icon="['fas', 'fire']" />
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-around align-items-center px-3"
+                    >
+                      <div class="text-center py-2 w-25">
+                        <div class="custom-control custom-switch ml-2">
                           <input
+                            :id="'customSwitch1-' + i"
                             type="checkbox"
+                            class="custom-control-input"
                             :checked="nft.permissions.includes('MINT')"
                           />
-                        </td>
-                        <td class="text-center">
+                          <label
+                            class="custom-control-label"
+                            :for="'customSwitch1-' + i"
+                          ></label>
+                        </div>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <div class="custom-control custom-switch ml-2">
                           <input
+                            :id="'customSwitch2-' + i"
                             type="checkbox"
+                            class="custom-control-input"
                             :checked="nft.permissions.includes('TRANSFER')"
                           />
-                        </td>
-                        <td class="text-center">
+                          <label
+                            class="custom-control-label"
+                            :for="'customSwitch2-' + i"
+                          ></label>
+                        </div>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <div class="custom-control custom-switch ml-2">
                           <input
+                            :id="'customSwitch3-' + i"
                             type="checkbox"
+                            class="custom-control-input"
                             :checked="
                               nft.permissions.includes('SET_ISSUE_GOVTOKEN')
                             "
                           />
-                        </td>
-                        <td class="text-center">
+                          <label
+                            class="custom-control-label"
+                            :for="'customSwitch3-' + i"
+                          ></label>
+                        </div>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <div class="custom-control custom-switch ml-2">
                           <input
+                            :id="'customSwitch4-' + i"
                             type="checkbox"
+                            class="custom-control-input"
                             :checked="
                               nft.permissions.includes('CREATE_PROPOSAL')
                             "
                           />
-                        </td>
-                        <td class="text-right">
-                          <div class="btn-group shadow-sm rounded-xl">
-                            <button
-                              v-tooltip="{ content: 'Save', trigger: 'hover' }"
-                              class="btn btn-sm btn-primary"
-                            >
-                              <font-awesome-icon :icon="['fas', 'check']" />
-                            </button>
-                            <button
-                              v-tooltip="{ content: 'Burn', trigger: 'hover' }"
-                              class="btn btn-sm btn-primary"
-                            >
-                              <font-awesome-icon :icon="['fas', 'fire']" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </small>
+                          <label
+                            class="custom-control-label"
+                            :for="'customSwitch4-' + i"
+                          ></label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div v-else class="text-muted text-center">
                   <small>No Permission-NFTs yet.</small>
                 </div>
-                <button
-                  class="btn btn-sm btn-primary w-100 mt-2 shadow-sm"
-                  @click="newNFT()"
-                >
-                  New Permission-NFT
-                </button>
               </div>
               <!-- settings -->
-              <div v-if="action === 'settings'" key="settings" class="py-3">
+              <div v-if="action === 'settings'" key="settings" class="p-3">
                 <div class="d-flex align-items-end">
                   <div class="mr-1">
-                    <small class="d-flex">Shares to create proposals</small>
+                    <small class="d-block text-center mb-2">
+                      Shares to<br />create proposals
+                    </small>
                     <input
                       v-model="requiredSharesToCreateProposals"
                       type="text"
-                      class="form-control form-control-sm form-control-with-embed mb-2"
+                      class="form-control form-control-sm form-control-with-embed mb-2 w-50 mx-auto"
                       placeholder="1-100 %"
                     />
                   </div>
                   <div class="ml-1">
-                    <small class="d-flex">Minimum Quorum</small>
+                    <small class="d-block text-center mb-2">
+                      Minimum<br />Quorum
+                    </small>
                     <input
                       v-model="minQuorum"
                       type="text"
-                      class="form-control form-control-sm form-control-with-embed mb-2"
+                      class="form-control form-control-sm form-control-with-embed mb-2 w-50 mx-auto"
                       placeholder="1-100 %"
                     />
                   </div>
@@ -391,7 +439,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.issue
+.department
   border-top: solid 1px fff
   cursor: pointer
   position: relative

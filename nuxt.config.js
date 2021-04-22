@@ -149,6 +149,7 @@ export default {
         'faCalendarAlt',
       ],
       solid: [
+        'faCopy',
         'faShareAlt',
         'faPlus',
         'faMinus',
@@ -193,6 +194,7 @@ export default {
         'faVoteYea',
         'faFire',
         'faWallet',
+        'faShare',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },

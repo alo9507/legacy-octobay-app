@@ -64,15 +64,13 @@
         :key="index"
         class="d-flex justify-content-between align-items-center mt-2"
       >
-        <div class="d-flex flex-column">
-          <h5 class="mb-0">
-            {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
-            <small>ETH</small>
-          </h5>
-          <small class="text-muted">
-            <GithubUser :from-address="deposit.from" />
-          </small>
-        </div>
+        <small class="text-muted">
+          <GithubUser :from-address="deposit.from" :force-show-address="true" />
+        </small>
+        <h5 class="mb-0 ml-auto mr-3">
+          {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
+          <small>ETH</small>
+        </h5>
         <ConnectActionButton
           :action="() => withdrawUserDeposit(deposit.id)"
           :disabled="withdrawingUserDeposit != 0"

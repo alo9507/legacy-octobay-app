@@ -163,7 +163,7 @@
                       <small>ETH</small>
                     </h5>
                     <small class="text-muted">
-                      From: <AddressShort :address="deposit.from" />
+                      <GithubUser :from-address="deposit.from" />
                     </small>
                   </div>
                   <button

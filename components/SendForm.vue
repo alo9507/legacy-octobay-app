@@ -197,15 +197,13 @@
         :key="index"
         class="d-flex justify-content-between align-items-center mt-2"
       >
-        <div class="d-flex flex-column">
-          <h5 class="mb-0">
-            {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
-            <small>ETH</small>
-          </h5>
-          <small class="text-muted">
-            <GithubUser :github-user-id="deposit.user.id" />
-          </small>
-        </div>
+        <small class="text-muted">
+          <GithubUser :github-user-id="deposit.user.id" />
+        </small>
+        <h5 class="mb-0 ml-auto mr-3">
+          {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
+          <small>ETH</small>
+        </h5>
         <button
           class="btn btn-primary shadow-sm"
           :disabled="refundingUserDeposit != 0"
