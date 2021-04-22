@@ -80,15 +80,21 @@
       <div class="card-body pt-0">
         <button
           class="btn btn-lg btn-primary w-100 shadow-sm"
-          :disabled="waitingForTransaction"
+          :disabled="waitingForTransaction || waitingForOracle"
           @click="createNewDepartment()"
         >
           <font-awesome-icon
-            v-if="waitingForTransaction"
+            v-if="waitingForTransaction || waitingForOracle"
             :icon="['fas', 'circle-notch']"
             spin
           />
-          Create new Department
+          {{
+            waitingForTransaction
+              ? 'Waiting for confirmation...'
+              : waitingForOracle
+              ? 'Waiting for oracle...'
+              : 'Create new Department'
+          }}
         </button>
       </div>
     </div>
@@ -115,6 +121,7 @@ export default {
       newProposalShare: null,
       minQuorum: null,
       waitingForTransaction: false,
+      waitingForOracle: false,
     }
   },
   computed: {
@@ -175,6 +182,36 @@ export default {
         : null
       if (projectId) {
         this.waitingForTransaction = true
+
+        // listening for request confirmation
+        const confirmListener = this.$octoBay.events
+          .ChainlinkFulfilled()
+          .on('data', (event) => {
+            if (event.returnValues.id === this.createDepartmentRequestID) {
+              // stop listening and finish process
+              confirmListener.unsubscribe()
+              // this.$store.commit('setRegisteredAccount', this.account)
+              this.success = true
+              this.waitingForOracle = false
+              this.createDepartmentRequestID = null
+              setTimeout(() => {
+                this.$store.dispatch('updateDepartments').then(() => {
+                  this.tokenName = null
+                  this.tokenSymbol = null
+                  this.projectUrl = ''
+                  this.repository = null
+                  this.organization = null
+                  this.newProposalShare = null
+                  this.minQuorum = null
+                  setTimeout(() => {
+                    this.$store.commit('setModalData', null)
+                    this.$store.commit('setShowModal', false)
+                  }, 1000)
+                })
+              }, 3000)
+            }
+          })
+
         this.$octoBay.methods
           .createGovernanceToken(this.oracles[0].ethAddress, {
             isValue: true,
@@ -187,25 +224,13 @@ export default {
             creator: '0x0000000000000000000000000000000000000000',
           })
           .send({ from: this.account })
-          .then(() => {
-            this.success = true
-            setTimeout(() => {
-              this.$store.dispatch('updateDepartments').then(() => {
-                this.waitingForTransaction = false
-                this.tokenName = null
-                this.tokenSymbol = null
-                this.projectUrl = ''
-                this.repository = null
-                this.organization = null
-                this.newProposalShare = null
-                this.minQuorum = null
-                setTimeout(() => {
-                  this.$store.commit('setModalData', null)
-                  this.$store.commit('setShowModal', false)
-                }, 1000)
-              })
-            }, 3000)
+          .then((createDepartmentRequest) => {
+            this.waitingForTransaction = false
+            this.waitingForOracle = true
+            this.createDepartmentRequestID =
+              createDepartmentRequest.events.ChainlinkRequested.returnValues.id
           })
+          .catch(() => (this.waitingForTransaction = false))
       }
     },
   },
