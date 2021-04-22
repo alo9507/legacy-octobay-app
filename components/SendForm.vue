@@ -187,24 +187,22 @@
         :hide="tokenListHideCallback"
       />
     </div>
-    <div v-if="accountsUserDeposits.length" class="card-body mt-4 border-top">
-      <small class="text-muted d-block text-center pb-2 mb-2">Pending:</small>
+    <div
+      v-if="accountsUserDeposits.length"
+      class="card-body mt-2 pt-2 border-top"
+    >
       <div
         v-for="(deposit, index) in accountsUserDeposits"
         :key="index"
-        class="d-flex justify-content-between align-items-center"
+        class="d-flex justify-content-between align-items-center mt-2"
       >
         <div class="d-flex flex-column">
-          <h4 class="mb-0">
-            {{
-              Number($web3.utils.fromWei(deposit.amount, 'ether')).toFixed(2)
-            }}
+          <h5 class="mb-0">
+            {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
             <small>ETH</small>
-          </h4>
+          </h5>
           <small class="text-muted">
-            <a :href="'https://github.com/' + deposit.user.id" target="_blank">
-              {{ deposit.user.id }}
-            </a>
+            <GithubUser :github-user-id="deposit.user.id" />
           </small>
         </div>
         <button
@@ -277,9 +275,6 @@ export default {
   },
   watch: {
     account() {
-      this.updateUserDeposits()
-    },
-    githubUser() {
       this.updateUserDeposits()
     },
     redirectPrefills() {
@@ -360,7 +355,9 @@ export default {
         this.amount = this.redirectPrefills.amount
       }
     }
-    this.updateUserDeposits()
+    if (this.account) {
+      this.updateUserDeposits()
+    }
   },
   methods: {
     tokenListSelectCallback(token) {

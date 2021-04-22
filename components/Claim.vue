@@ -1,71 +1,75 @@
 <template>
-  <div class="card-body">
-    <div v-if="showWithdrawalSuccess" class="alert alert-success border-0">
-      <button
-        type="button"
-        class="close text-success"
-        @click="showWithdrawalSuccess = false"
-      >
-        <span>&times;</span>
-      </button>
-      <font-awesome-icon :icon="['far', 'smile']" />
-      Withdrawal successful!
-    </div>
-    <h5 class="text-center text-muted-light py-2 px-4 mt-2">
-      Paste the URL of an issue you worked on.
-    </h5>
-    <input
-      v-model="url"
-      type="text"
-      class="form-control form-control-lg form-control-with-embed mb-2"
-      placeholder="https://github.com/..."
-    />
-    <font-awesome-icon
-      v-if="loadingIssue"
-      :icon="['fas', 'circle-notch']"
-      spin
-      class="text-muted-light"
-    />
-    <IssueEmbed v-else-if="issue" :issue="issue" />
-
-    <div
-      v-if="issue && !canWithdrawIssue"
-      class="alert alert-warning border-0 mb-2 mt-3"
-    >
-      <small>
-        In order to withdraw from this issue, it must have been closed by one of
-        your pull requests or explicitly released to you by the maintainer.
-      </small>
-    </div>
-
-    <ConnectActionButton
-      :action="withdrawFromIssue"
-      :disabled="
-        withdrawingFromIssue || !issue || !githubUser || !canWithdrawIssue
-      "
-      class="mt-4"
-    >
+  <div>
+    <div class="card-body">
+      <div v-if="showWithdrawalSuccess" class="alert alert-success border-0">
+        <button
+          type="button"
+          class="close text-success"
+          @click="showWithdrawalSuccess = false"
+        >
+          <span>&times;</span>
+        </button>
+        <font-awesome-icon :icon="['far', 'smile']" />
+        Withdrawal successful!
+      </div>
+      <h5 class="text-center text-muted-light py-2 px-4 mt-2">
+        Paste the URL of an issue you worked on.
+      </h5>
+      <input
+        v-model="url"
+        type="text"
+        class="form-control form-control-lg form-control-with-embed mb-2"
+        placeholder="https://github.com/..."
+      />
       <font-awesome-icon
-        v-if="withdrawingFromIssue"
+        v-if="loadingIssue"
         :icon="['fas', 'circle-notch']"
         spin
+        class="text-muted-light"
       />
-      {{ withdrawingFromIssue ? 'Waiting for confirmation...' : 'Claim' }}
-    </ConnectActionButton>
+      <IssueEmbed v-else-if="issue" :issue="issue" />
 
-    <div v-if="userDeposits.length" class="border-top mt-3 pt-3">
+      <div
+        v-if="issue && !canWithdrawIssue"
+        class="alert alert-warning border-0 mb-2 mt-3"
+      >
+        <small>
+          In order to withdraw from this issue, it must have been closed by one
+          of your pull requests or explicitly released to you by the maintainer.
+        </small>
+      </div>
+
+      <ConnectActionButton
+        :action="withdrawFromIssue"
+        :disabled="
+          withdrawingFromIssue || !issue || !githubUser || !canWithdrawIssue
+        "
+        class="mt-4"
+      >
+        <font-awesome-icon
+          v-if="withdrawingFromIssue"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
+        {{ withdrawingFromIssue ? 'Waiting for confirmation...' : 'Claim' }}
+      </ConnectActionButton>
+    </div>
+    <div v-if="userDeposits.length" class="card-body border-top mt-2 pt-2">
+      <h5 class="text-center text-muted-light py-2 px-4 mt-2">
+        Claim funds sent to your GitHub account.
+      </h5>
       <div
         v-for="(deposit, index) in userDeposits"
         :key="index"
-        class="d-flex justify-content-between align-items-center"
+        class="d-flex justify-content-between align-items-center mt-2"
       >
         <div class="d-flex flex-column">
-          <h4 class="mb-0">
-            {{ $web3.utils.fromWei(deposit.amount, 'ether') }} ETH
-          </h4>
-          <small class="text-muted"> From: <a href="#">unknown</a> </small>
-          <small class="text-muted" style="margin-top: -3px">
-            <AddressShort :address="deposit.from" />
+          <h5 class="mb-0">
+            {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
+            <small>ETH</small>
+          </h5>
+          <small class="text-muted">
+            <GithubUser :from-address="deposit.from" />
           </small>
         </div>
         <button
@@ -78,7 +82,7 @@
             :icon="['fas', 'circle-notch']"
             spin
           />
-          {{ withdrawingUserDeposit === deposit.id ? '' : 'Withdraw' }}
+          {{ withdrawingUserDeposit === deposit.id ? '' : 'Claim' }}
         </button>
       </div>
     </div>
@@ -223,7 +227,12 @@ export default {
           // useGSN: false,
           from: this.account,
         })
-        .then(() => this.updateUserDeposits())
+        .then(() => {
+          setTimeout(() => this.updateUserDeposits(), 1000)
+          this.$web3.eth
+            .getBalance(this.account)
+            .then((balance) => this.$store.commit('setBalance', balance))
+        })
         .catch((e) => console.log(e))
         .finally(() => (this.withdrawingUserDeposit = 0))
     },
