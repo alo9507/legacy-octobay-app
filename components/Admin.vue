@@ -1,12 +1,67 @@
 <template>
   <div class="card-body" style="max-width: 360px">
     <div>
-      <b>OctoBay Contract</b>
+      <b>Octobay Contract</b>
       <div>
         <input
           type="text"
           :value="$octoBay.options.address"
           class="form-control"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>OctobayGovernor Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="$octobayGovernor.options.address"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>OctobayGovNFT Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="govNFTAddress"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>OracleStorage Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="oracleStorageAddress"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>DepositStorage Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="depositStorageAddress"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>UserAddressStorage Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="userAddressStorageAddress"
+          class="form-control form-control-sm"
           readonly
         />
       </div>
@@ -149,10 +204,32 @@ export default {
         jobFee: null,
       },
       addingOracleJob: false,
+      govNFTAddress: '',
+      oracleStorageAddress: '',
+      depositStorageAddress: '',
+      userAddressStorageAddress: '',
     }
   },
   computed: {
     ...mapGetters(['account', 'oracles']),
+  },
+  mounted() {
+    this.$octoBay.methods
+      .octobayGovNFT()
+      .call()
+      .then((address) => (this.govNFTAddress = address))
+    this.$octoBay.methods
+      .oracleStorage()
+      .call()
+      .then((address) => (this.oracleStorageAddress = address))
+    this.$octoBay.methods
+      .depositStorage()
+      .call()
+      .then((address) => (this.depositStorageAddress = address))
+    this.$octoBay.methods
+      .userAddressStorage()
+      .call()
+      .then((address) => (this.userAddressStorageAddress = address))
   },
   methods: {
     isNewOracleValid() {
