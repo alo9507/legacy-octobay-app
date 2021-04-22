@@ -51,7 +51,7 @@
         color="white"
         class="mr-2"
         size="md"
-        style="background-color: #004a9d; border-radius: 50%"
+        style="background-color: #652fff; border-radius: 50%"
       />
       <a
         v-if="!githubUser"
@@ -63,11 +63,19 @@
     </div>
 
     <div v-else :class="cssClasses">
+      <a
+        v-if="githubUser"
+        :href="githubUser.html_url"
+        target="_blank"
+        class="rounded-circle avatar mr-1 shadow-sm"
+        :style="'background-image: url(' + githubUser.avatar_url + ')'"
+      ></a>
       <Logo
+        v-else
         color="white"
         class="mr-2"
         size="md"
-        style="background-color: #004a9d; border-radius: 50%"
+        style="background-color: #652fff; border-radius: 50%"
       />
       <span
         v-if="!connected"
