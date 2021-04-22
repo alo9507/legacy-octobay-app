@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     getDirectLink(username) {
-      return `${window.location.origin}${window.location.pathname}u/${username}`
+      return `${window.location.origin}${window.location.pathname}#/u/${username}/1.5`
     },
     copiedAddress() {
       this.copyAddressSuccess = true
