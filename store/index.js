@@ -185,14 +185,6 @@ export const mutations = {
       }
     }
   },
-  updatePins(state, { issueId, pins }) {
-    const existingIssue = state.issues.find((issue) => issue.id === issueId)
-    if (existingIssue) {
-      existingIssue.boostAmount = Number(
-        this.$web3.utils.fromWei(pins, 'ether')
-      )
-    }
-  },
   setTokenList(state, list) {
     state.tokenList = list
   },
@@ -263,7 +255,7 @@ export const actions = {
     commit('setIssues', [])
     if (this.$octoBay) {
       this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
-        issues.forEach(async (issue) => {
+        issues.forEach((issue) => {
           // TODO: this all has to go to graph as well
           let depositAmount = BigInt(0)
           issue.deposits.forEach((deposit) => {
@@ -271,12 +263,6 @@ export const actions = {
           })
           issue.depositAmount = depositAmount.toString()
           if (issue.depositAmount) {
-            const boostAmount = await this.$octoBay.methods
-              .issuePins(issue.id)
-              .call()
-            issue.boostAmount = Number(
-              this.$web3.utils.fromWei(boostAmount, 'ether')
-            )
             commit('addIssue', issue)
           }
         })
@@ -296,11 +282,5 @@ export const actions = {
     this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
       commit('setOracles', oracles)
     })
-  },
-  updatePins({ commit }, issueId) {
-    this.$octoBay.methods
-      .issuePins(issueId)
-      .call()
-      .then((pins) => commit('updatePins', { issueId, pins }))
   },
 }
