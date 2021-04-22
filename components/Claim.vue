@@ -44,6 +44,7 @@
         :disabled="
           withdrawingFromIssue || !issue || !githubUser || !canWithdrawIssue
         "
+        size="lg"
         class="mt-4"
       >
         <font-awesome-icon
@@ -72,10 +73,9 @@
             <GithubUser :from-address="deposit.from" />
           </small>
         </div>
-        <button
-          class="btn btn-primary shadow-sm"
+        <ConnectActionButton
+          :action="() => withdrawUserDeposit(deposit.id)"
           :disabled="withdrawingUserDeposit != 0"
-          @click="withdrawUserDeposit(deposit.id)"
         >
           <font-awesome-icon
             v-if="withdrawingUserDeposit === deposit.id"
@@ -83,7 +83,7 @@
             spin
           />
           {{ withdrawingUserDeposit === deposit.id ? '' : 'Claim' }}
-        </button>
+        </ConnectActionButton>
       </div>
     </div>
   </div>

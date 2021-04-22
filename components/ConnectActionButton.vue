@@ -2,7 +2,9 @@
   <div>
     <button
       v-if="required.includes('wallet') && !account"
-      class="btn btn-lg btn-light shadow-sm d-block w-100"
+      :class="
+        'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
+      "
       @click="connect()"
     >
       Connect Wallet
@@ -10,7 +12,9 @@
     <a
       v-else-if="required.includes('github') && !githubUser"
       :href="githubAuthUrl"
-      class="btn btn-lg btn-light shadow-sm d-block"
+      :class="
+        'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
+      "
     >
       <font-awesome-icon :icon="['fab', 'github']" />
       Connect GitHub
@@ -20,14 +24,18 @@
         required.includes('verify') &&
         !registeredAccounts.map((a) => a.address).includes(account)
       "
-      class="btn btn-lg btn-primary shadow-sm d-block"
+      :class="
+        'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
+      "
       @click="showRegister()"
     >
       Verify Address
     </a>
     <button
       v-else-if="$web3"
-      class="btn btn-lg btn-primary w-100 shadow-sm"
+      :class="
+        'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
+      "
       :disabled="disabled"
       @click="action()"
     >
@@ -55,6 +63,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+    size: {
+      type: String,
+      default: '',
     },
   },
   computed: {

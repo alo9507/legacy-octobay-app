@@ -13,7 +13,11 @@
       </div>
     </div>
     <div class="card-body">
-      <ConnectActionButton :action="newDepartment" :required="['wallet']">
+      <ConnectActionButton
+        :action="newDepartment"
+        :required="['wallet']"
+        size="lg"
+      >
         New Department
       </ConnectActionButton>
     </div>

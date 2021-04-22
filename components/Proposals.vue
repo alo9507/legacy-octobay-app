@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="card-body">
-      <ConnectActionButton :action="newProposal" :required="['wallet']">
+      <ConnectActionButton
+        :action="newProposal"
+        :required="['wallet']"
+        size="lg"
+      >
         New Proposal
       </ConnectActionButton>
     </div>

@@ -172,6 +172,7 @@
         :action="confirm"
         :disabled="confirmDisabled"
         :required="['wallet']"
+        size="lg"
         class="mt-4"
       >
         <font-awesome-icon

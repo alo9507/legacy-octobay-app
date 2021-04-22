@@ -105,6 +105,7 @@
           :action="register"
           :disabled="loadingRegistration || checkingRepo"
           :required="['wallet', 'github']"
+          size="lg"
           class="mt-2"
         >
           <font-awesome-icon
