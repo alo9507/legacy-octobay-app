@@ -54,6 +54,15 @@
         You are connected to an address that has not been verified for this
         GitHub account:
       </div>
+      <h5
+        v-if="
+          registeredAccounts.length &&
+          !registeredAccounts.map((a) => a.address).includes(account)
+        "
+        class="text-muted-light text-center pt-2"
+      >
+        Verify Address
+      </h5>
       <div
         v-if="
           githubUser &&
@@ -158,13 +167,22 @@ export default {
       githubAuthUrl: 'authUrl',
     }),
   },
+  watch: {
+    account() {
+      this.checkRepo()
+    },
+  },
   mounted() {
     this.checkRepo()
     this.checkRepoInterval = setInterval(() => this.checkRepo(), 10000)
   },
   methods: {
     checkRepo() {
-      if (this.connected && this.githubUser) {
+      if (
+        this.connected &&
+        this.githubUser &&
+        !this.registeredAccounts.map((a) => a.address).includes(this.account)
+      ) {
         addressRepoExists(
           this.githubUser.login,
           this.account,
