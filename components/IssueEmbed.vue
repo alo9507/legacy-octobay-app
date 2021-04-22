@@ -41,7 +41,8 @@
         </a>
       </small>
       <span v-if="amount" class="font-weight-bold">
-        {{ $web3.utils.fromWei(amount.toString(), 'ether') }} ETH
+        {{ Number($web3.utils.fromWei(amount.toString(), 'ether')).toFixed(2) }}
+        ETH
       </span>
     </span>
   </div>
@@ -59,17 +60,24 @@ export default {
   },
   data() {
     return {
-      amount: 0,
+      deposits: [],
     }
   },
   computed: {
     ...mapGetters('github', { githubUser: 'user' }),
+    amount() {
+      return this.deposits.reduce(
+        (amount, deposit) => BigInt(amount) + BigInt(deposit.amount),
+        BigInt('0')
+      )
+    },
   },
   mounted() {
-    this.$octoBay.methods
-      .issueDepositsAmountByIssueId(this.issue.id)
-      .call()
-      .then((amount) => (this.amount = amount))
+    this.$axios
+      .$get(process.env.API_URL + '/graph/issue/' + this.issue.id)
+      .then((issue) => {
+        this.deposits = issue.deposits
+      })
   },
 }
 </script>
