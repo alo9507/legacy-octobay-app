@@ -1,6 +1,9 @@
 <template>
   <div style="max-width: 360px">
     <div class="card-body">
+      <h5 class="text-center text-muted-light py-2 px-4">
+        Send funds to any<br />GitHub user or issue.
+      </h5>
       <div v-if="showSendSuccess" class="alert alert-success border-0">
         <button
           type="button"
@@ -192,6 +195,7 @@
       v-if="accountsUserDeposits.length"
       class="card-body mt-2 pt-2 border-top"
     >
+      <h5 class="text-center text-muted-light py-2 px-4">Pending</h5>
       <div
         v-for="(deposit, index) in accountsUserDeposits"
         :key="index"

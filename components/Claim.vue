@@ -12,7 +12,7 @@
         <font-awesome-icon :icon="['far', 'smile']" />
         Withdrawal successful!
       </div>
-      <h5 class="text-center text-muted-light py-2 px-4 mt-2">
+      <h5 class="text-center text-muted-light py-2 px-4">
         Paste the URL of an issue you worked on.
       </h5>
       <input
