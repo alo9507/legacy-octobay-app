@@ -200,12 +200,12 @@
         <small class="text-muted">
           <GithubUser :github-user-id="deposit.user.id" />
         </small>
-        <h5 class="mb-0 ml-auto mr-3">
-          {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
-          <small>ETH</small>
-        </h5>
+        <div class="d-flex flex-column mb-0 ml-auto mr-2 text-right">
+          <b>{{ $web3.utils.fromWei(deposit.amount, 'ether') }}</b>
+          <sup class="pt-2">ETH</sup>
+        </div>
         <button
-          class="btn btn-primary shadow-sm"
+          class="btn btn-primary shadow-sm text-nowrap ml-1"
           :disabled="refundingUserDeposit != 0"
           @click="refundUserDeposit(deposit.id)"
         >

@@ -67,13 +67,14 @@
         <small class="text-muted">
           <GithubUser :from-address="deposit.from" :force-show-address="true" />
         </small>
-        <h5 class="mb-0 ml-auto mr-3">
-          {{ $web3.utils.fromWei(deposit.amount, 'ether') }}
-          <small>ETH</small>
-        </h5>
+        <div class="d-flex flex-column mb-0 ml-auto mr-2 text-right">
+          <b>{{ $web3.utils.fromWei(deposit.amount, 'ether') }}</b>
+          <sup class="pt-2">ETH</sup>
+        </div>
         <ConnectActionButton
           :action="() => withdrawUserDeposit(deposit.id)"
           :disabled="withdrawingUserDeposit != 0"
+          class="text-nowrap ml-1"
         >
           <font-awesome-icon
             v-if="withdrawingUserDeposit === deposit.id"
