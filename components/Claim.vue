@@ -31,12 +31,10 @@
 
       <div
         v-if="issue && canWithdrawIssue === false"
-        class="alert alert-warning border-0 mb-2 mt-3"
+        class="alert bg-secondary text-white text-center border-0 mb-2 mt-3"
       >
-        <small>
-          In order to withdraw from this issue, it must have been closed by one
-          of your pull requests or explicitly released to you by the maintainer.
-        </small>
+        This issue has not been closed by your pull request and was not released
+        to you manually.
       </div>
 
       <ConnectActionButton
