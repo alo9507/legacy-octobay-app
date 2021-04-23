@@ -30,7 +30,7 @@
       <IssueEmbed v-else-if="issue" :issue="issue" />
 
       <div
-        v-if="issue && !canWithdrawIssue"
+        v-if="issue && canWithdrawIssue === false"
         class="alert alert-warning border-0 mb-2 mt-3"
       >
         <small>
@@ -105,7 +105,7 @@ export default {
       showWithdrawalSuccess: false,
       userDeposits: [],
       withdrawingUserDeposit: 0,
-      canWithdrawIssue: false,
+      canWithdrawIssue: null,
     }
   },
   computed: {
@@ -138,7 +138,7 @@ export default {
         const owner = urlParts.pop()
         if (newUrl.includes('/issues/') && number) {
           this.loadingIssue = true
-          this.canWithdrawIssue = false
+          this.canWithdrawIssue = null
           this.loadIssue(owner, repo, number)
             .then((issue) => {
               this.issue = issue
