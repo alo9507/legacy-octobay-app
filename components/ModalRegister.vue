@@ -14,14 +14,18 @@
         </p>
       </div>
       <div v-else class="mt-3">
-        <small class="text-muted d-block text-center"
-          >Verified Addresses:</small
-        >
+        <small class="text-muted d-block text-center">Verified Addresses</small>
         <div v-for="regAccount in registeredAccounts" :key="regAccount.address">
           <div
             v-clipboard="regAccount.address"
             v-clipboard:success="copiedAddress"
-            class="d-flex justify-content-between align-items-center btn btn-light mt-1"
+            :class="
+              'd-flex justify-content-between align-items-center btn mt-2 position-relative' +
+              (regAccount.address === account
+                ? ' btn-dark text-white'
+                : ' btn-light')
+            "
+            style="z-index: 1"
           >
             <transition name="fade" mode="out-in">
               <font-awesome-icon
@@ -41,6 +45,72 @@
               style="width: 8px; height: 8px"
             ></i>
             <i v-else></i>
+          </div>
+          <div
+            v-if="regAccount.address === account && nfts.length"
+            class="border-light rounded-xl px-3 pb-3 position-relative"
+            style="margin-top: -36px; padding-top: 32px; z-index: 0"
+          >
+            <div v-for="nft in nfts" :key="nft.id" class="mt-3">
+              <b class="d-block text-center">
+                <b>{{ nft.department.name }}</b>
+              </b>
+              <div class="d-flex justify-content-between align-items-center">
+                <small>Manage Governance</small>
+                <div>
+                  <font-awesome-icon
+                    v-if="nft.permissions.includes('MINT')"
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                  <font-awesome-icon
+                    v-else
+                    :icon="['fas', 'ban']"
+                    class="text-danger"
+                  />
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <small>Manage Bounties</small>
+                <div>
+                  <font-awesome-icon
+                    v-if="nft.permissions.includes('SET_ISSUE_GOVTOKEN')"
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                  <font-awesome-icon
+                    v-else
+                    :icon="['fas', 'ban']"
+                    class="text-danger"
+                  />
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <small>Create Proposals</small>
+                <div>
+                  <font-awesome-icon
+                    v-if="nft.permissions.includes('CREATE_PROPOSAL')"
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                  <font-awesome-icon
+                    v-else
+                    :icon="['fas', 'ban']"
+                    class="text-danger"
+                  />
+                </div>
+              </div>
+              <div v-if="nft.permissions.includes('TRANSFER')" class="mt-2">
+                <input
+                  type="text"
+                  class="form-control form-contro-sm"
+                  placeholder="Address"
+                />
+                <button class="btn btn-primary shadow-sm w-100 mt-2">
+                  Transfer Permission
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -151,6 +221,7 @@ export default {
       repoExists: false,
       checkRepoInterval: null,
       registerRequestID: null,
+      nfts: [],
     }
   },
   computed: {
@@ -169,10 +240,12 @@ export default {
   },
   watch: {
     account() {
+      this.checkNFTs()
       this.checkRepo()
     },
   },
   mounted() {
+    this.checkNFTs()
     this.checkRepo()
     this.checkRepoInterval = setInterval(() => this.checkRepo(), 10000)
   },
@@ -201,6 +274,15 @@ export default {
             this.repoExists = false
           })
       }
+    },
+    checkNFTs() {
+      this.$axios
+        .$get(
+          process.env.API_URL +
+            '/graph/permission-nfts-by-owner/' +
+            this.account
+        )
+        .then((nfts) => (this.nfts = nfts))
     },
     register() {
       this.loadingRegistration = true
