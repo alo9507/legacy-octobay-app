@@ -206,7 +206,7 @@
                           <font-awesome-icon :icon="['fas', 'check']" />
                         </button>
                         <button
-                          v-tooltip="{ content: 'Send', trigger: 'hover' }"
+                          v-tooltip="{ content: 'Transfer', trigger: 'hover' }"
                           class="btn btn-sm btn-primary"
                         >
                           <font-awesome-icon :icon="['fas', 'share']" />
