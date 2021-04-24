@@ -51,8 +51,17 @@
             class="border-light rounded-xl px-3 pb-3 position-relative"
             style="margin-top: -36px; padding-top: 32px; z-index: 0"
           >
-            <div v-for="nft in nfts" :key="nft.id" class="mt-3">
-              <b class="d-block text-center">
+            <transition name="fade">
+              <div
+                v-if="showTransferNFTsuccess"
+                class="alert alert-success mt-3"
+              >
+                <CheckIcon />
+                Permission transferred.
+              </div>
+            </transition>
+            <div v-for="nft in nfts" :key="nft.id" class="mt-3 pt-1">
+              <b class="d-block text-center mb-2">
                 <b>{{ nft.department.name }}</b>
               </b>
               <div class="d-flex justify-content-between align-items-center">
@@ -102,12 +111,30 @@
               </div>
               <div v-if="nft.permissions.includes('TRANSFER')" class="mt-2">
                 <input
+                  v-model="nftTransferAddress[nft.id]"
                   type="text"
                   class="form-control form-contro-sm"
                   placeholder="Address"
                 />
-                <button class="btn btn-primary shadow-sm w-100 mt-2">
-                  Transfer Permission
+                <button
+                  class="btn btn-primary shadow-sm w-100 mt-2"
+                  :disabled="
+                    transferingNFT ||
+                    !$web3.utils.isAddress(nftTransferAddress[nft.id])
+                  "
+                  @click="transferNft(nft, nftTransferAddress[nft.id])"
+                >
+                  <font-awesome-icon
+                    v-if="transferingNFT == nft.id"
+                    :icon="['fas', 'circle-notch']"
+                    spin
+                    class="text-muted-light"
+                  />
+                  {{
+                    transferingNFT == nft.id
+                      ? 'Waiting for confirmation...'
+                      : 'Transfer Permission'
+                  }}
                 </button>
               </div>
             </div>
@@ -222,6 +249,9 @@ export default {
       checkRepoInterval: null,
       registerRequestID: null,
       nfts: [],
+      nftTransferAddress: {},
+      transferingNFT: null,
+      showTransferNFTsuccess: false,
     }
   },
   computed: {
@@ -240,12 +270,12 @@ export default {
   },
   watch: {
     account() {
-      this.checkNFTs()
+      this.updateNFTs()
       this.checkRepo()
     },
   },
   mounted() {
-    this.checkNFTs()
+    this.updateNFTs()
     this.checkRepo()
     this.checkRepoInterval = setInterval(() => this.checkRepo(), 10000)
   },
@@ -274,15 +304,6 @@ export default {
             this.repoExists = false
           })
       }
-    },
-    checkNFTs() {
-      this.$axios
-        .$get(
-          process.env.API_URL +
-            '/graph/permission-nfts-by-owner/' +
-            this.account
-        )
-        .then((nfts) => (this.nfts = nfts))
     },
     register() {
       this.loadingRegistration = true
@@ -314,6 +335,31 @@ export default {
             registerRequest.events.ChainlinkRequested.returnValues.id
         })
         .catch(() => (this.loadingRegistration = false))
+    },
+    updateNFTs() {
+      return this.$axios
+        .$get(
+          process.env.API_URL +
+            '/graph/permission-nfts-by-owner/' +
+            this.account
+        )
+        .then((nfts) => (this.nfts = nfts))
+    },
+    transferNft(nft, ethAddress) {
+      this.transferingNFT = nft.id
+      this.$octobayNFT.methods
+        .safeTransferFrom(this.account, ethAddress, nft.id)
+        .send({ from: this.account })
+        .then(() => {
+          this.showTransferNFTsuccess = true
+          setTimeout(() => {
+            this.updateNFTs().then(() => {
+              this.transferingNFT = null
+              setTimeout(() => (this.showTransferNFTsuccess = false), 3000)
+            })
+          }, 3000)
+        })
+        .catch(() => (this.transferingNFT = null))
     },
     copiedAddress() {
       this.copyAddressSuccess = true
