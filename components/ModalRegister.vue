@@ -18,7 +18,7 @@
         <div v-for="regAccount in registeredAccounts" :key="regAccount.address">
           <div
             v-clipboard="regAccount.address"
-            v-clipboard:success="copiedAddress"
+            v-clipboard:success="() => copiedAddress(regAccount.address)"
             :class="
               'd-flex justify-content-between align-items-center btn mt-2 position-relative' +
               (regAccount.address === account
@@ -29,7 +29,7 @@
           >
             <transition name="fade" mode="out-in">
               <font-awesome-icon
-                v-if="copyAddressSuccess"
+                v-if="copyAddressSuccess === regAccount.address"
                 key="check"
                 :icon="['fas', 'check']"
                 class="text-success"
@@ -243,7 +243,7 @@ export default {
     return {
       success: false,
       loadingRegistration: false,
-      copyAddressSuccess: false,
+      copyAddressSuccess: null,
       checkingRepo: true,
       repoExists: false,
       checkRepoInterval: null,
@@ -361,10 +361,10 @@ export default {
         })
         .catch(() => (this.transferingNFT = null))
     },
-    copiedAddress() {
-      this.copyAddressSuccess = true
+    copiedAddress(address) {
+      this.copyAddressSuccess = address
       setTimeout(() => {
-        this.copyAddressSuccess = false
+        this.copyAddressSuccess = null
       }, 1000)
     },
   },
