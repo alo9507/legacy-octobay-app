@@ -17,6 +17,7 @@
           <div class="custom-control custom-switch ml-2">
             <input
               id="customSwitch1"
+              v-model="permissions['MINT']"
               type="checkbox"
               class="custom-control-input"
             />
@@ -27,6 +28,7 @@
           <div class="custom-control custom-switch ml-2">
             <input
               id="customSwitch2"
+              v-model="permissions['TRANSFER']"
               type="checkbox"
               class="custom-control-input"
             />
@@ -37,6 +39,7 @@
           <div class="custom-control custom-switch ml-2">
             <input
               id="customSwitch3"
+              v-model="permissions['SET_ISSUE_GOVTOKEN']"
               type="checkbox"
               class="custom-control-input"
             />
@@ -47,6 +50,7 @@
           <div class="custom-control custom-switch ml-2">
             <input
               id="customSwitch4"
+              v-model="permissions['CREATE_PROPOSAL']"
               type="checkbox"
               class="custom-control-input"
             />
@@ -57,15 +61,37 @@
       <div class="d-flex flex-column mt-3">
         Recipient Address
         <input
+          v-model="ethAddress"
           type="input"
           class="form-control form-control-lg"
-          :value="account"
         />
       </div>
     </div>
     <div class="card-body pt-0">
-      <button class="btn btn-lg btn-primary w-100 shadow-sm">
-        Create Permission-NFT
+      <div v-if="showSuccess" class="alert alert-success border-0">
+        <button
+          type="button"
+          class="close text-success"
+          @click="showSuccess = false"
+        >
+          <span>&times;</span>
+        </button>
+        <CheckIcon />
+        Permission-NFT created! :)
+      </div>
+      <button
+        class="btn btn-lg btn-primary w-100 shadow-sm"
+        :disabled="btnDisabled"
+        @click="createNFT()"
+      >
+        <font-awesome-icon
+          v-if="creatingNFT"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
+        {{
+          creatingNFT ? 'Waiting for confirmation...' : 'Create Permission-NFT'
+        }}
       </button>
     </div>
   </div>
@@ -78,10 +104,38 @@ export default {
   data() {
     return {
       loading: false,
+      creatingNFT: false,
+      showSuccess: false,
+      ethAddress: null,
+      permissions: {
+        MINT: false,
+        TRANSFER: false,
+        SET_ISSUE_GOVTOKEN: false,
+        CREATE_PROPOSAL: false,
+      },
     }
   },
   computed: {
-    ...mapGetters(['oracles', 'account']),
+    ...mapGetters(['account']),
+    btnDisabled() {
+      return (
+        this.creatingNFT ||
+        !this.$web3.utils.isAddress(this.ethAddress) ||
+        !Object.values(this.permissions).find((perm) => perm === true)
+      )
+    },
+  },
+  mounted() {
+    this.ethAddress = this.account
+  },
+  methods: {
+    createNFT() {
+      this.creatingNFT = true
+      setTimeout(() => {
+        this.creatingNFT = false
+        this.showSuccess = true
+      }, 3000)
+    },
   },
 }
 </script>

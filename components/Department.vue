@@ -167,7 +167,7 @@
               </div>
               <!-- nfts -->
               <div v-if="action === 'nfts'" key="nfts" class="pt-3">
-                <div class="px-3 pb-3 border-bottom-light">
+                <div v-if="canCreateNFT" class="px-3 pb-3 border-bottom-light">
                   <button
                     class="btn btn-sm btn-primary w-100 shadow-sm"
                     @click="newNFT()"
@@ -380,13 +380,24 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles']),
+    ...mapGetters(['account', 'oracles', 'nfts']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',
     }),
+    canCreateNFT() {
+      return (
+        this.department.creator === this.account ||
+        !!this.nfts.find(
+          (nft) =>
+            nft.permissions.includes('MINT') &&
+            nft.department.id === this.department.id
+        )
+      )
+    },
   },
   mounted() {
+    this.$store.dispatch('updateNFTs')
     this.requiredSharesToCreateProposals =
       this.department.requiredSharesToCreateProposals / 100
     this.minQuorum = this.department.minQuorum / 100
