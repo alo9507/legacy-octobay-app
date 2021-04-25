@@ -260,30 +260,26 @@ export const mutations = {
 export const actions = {
   updateIssues({ commit }) {
     commit('setIssues', [])
-    if (this.$octoBay) {
-      this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
-        issues.forEach((issue) => {
-          // TODO: this all has to go to graph as well
-          let depositAmount = BigInt(0)
-          issue.deposits.forEach((deposit) => {
-            depositAmount += BigInt(deposit.amount)
-          })
-          issue.depositAmount = depositAmount.toString()
-          if (issue.depositAmount) {
-            commit('addIssue', issue)
-          }
+    this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
+      issues.forEach((issue) => {
+        // TODO: this all has to go to graph as well
+        let depositAmount = BigInt(0)
+        issue.deposits.forEach((deposit) => {
+          depositAmount += BigInt(deposit.amount)
         })
+        issue.depositAmount = depositAmount.toString()
+        if (issue.depositAmount) {
+          commit('addIssue', issue)
+        }
       })
-    }
+    })
   },
   updateDepartments({ commit }) {
-    if (this.$octoBay) {
-      this.$axios
-        .$get(process.env.API_URL + '/graph/departments')
-        .then((departments) => {
-          commit('setDepartments', departments)
-        })
-    }
+    this.$axios
+      .$get(process.env.API_URL + '/graph/departments')
+      .then((departments) => {
+        commit('setDepartments', departments)
+      })
   },
   updateNFTs({ state, commit }) {
     return this.$axios
