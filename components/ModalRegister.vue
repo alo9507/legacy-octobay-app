@@ -248,7 +248,6 @@ export default {
       repoExists: false,
       checkRepoInterval: null,
       registerRequestID: null,
-      nfts: [],
       nftTransferAddress: {},
       transferingNFT: null,
       showTransferNFTsuccess: false,
@@ -261,6 +260,7 @@ export default {
       'registeredAccounts',
       'oracles',
       'activeOracle',
+      'nfts',
     ]),
     ...mapGetters('github', {
       githubUser: 'user',
@@ -270,12 +270,12 @@ export default {
   },
   watch: {
     account() {
-      this.updateNFTs()
+      this.$store.dispatch('updateNFTs')
       this.checkRepo()
     },
   },
   mounted() {
-    this.updateNFTs()
+    this.$store.dispatch('updateNFTs')
     this.checkRepo()
     this.checkRepoInterval = setInterval(() => this.checkRepo(), 10000)
   },
@@ -336,15 +336,6 @@ export default {
         })
         .catch(() => (this.loadingRegistration = false))
     },
-    updateNFTs() {
-      return this.$axios
-        .$get(
-          process.env.API_URL +
-            '/graph/permission-nfts-by-owner/' +
-            this.account
-        )
-        .then((nfts) => (this.nfts = nfts))
-    },
     transferNft(nft, ethAddress) {
       this.transferingNFT = nft.id
       this.$octobayNFT.methods
@@ -353,7 +344,7 @@ export default {
         .then(() => {
           this.showTransferNFTsuccess = true
           setTimeout(() => {
-            this.updateNFTs().then(() => {
+            this.$store.dispatch('updateNFTs').then(() => {
               this.transferingNFT = null
               setTimeout(() => (this.showTransferNFTsuccess = false), 3000)
             })

@@ -27,6 +27,7 @@ export const state = () => ({
   modalData: null,
   selectedDepartment: null,
   departments: [],
+  nfts: [],
 })
 
 export const getters = {
@@ -132,6 +133,9 @@ export const getters = {
   },
   proposals(state) {
     return state.proposals
+  },
+  nfts(state) {
+    return state.nfts
   },
 }
 
@@ -248,6 +252,9 @@ export const mutations = {
   setSelectedDepartment(state, department) {
     state.selectedDepartment = department
   },
+  setNFTs(state, nfts) {
+    state.nfts = nfts
+  },
 }
 
 export const actions = {
@@ -277,6 +284,17 @@ export const actions = {
           commit('setDepartments', departments)
         })
     }
+  },
+  updateNFTs({ state, commit }) {
+    return this.$axios
+      .$get(
+        process.env.API_URL +
+          '/graph/permission-nfts-by-owner/' +
+          state.accounts[0]
+      )
+      .then((nfts) => {
+        commit('setNFTs', nfts)
+      })
   },
   updateOracles({ commit }) {
     this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
