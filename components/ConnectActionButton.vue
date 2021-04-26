@@ -27,7 +27,7 @@
       :class="
         'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
       "
-      @click="showRegister()"
+      @click="showWallet()"
     >
       Verify Address
     </a>
@@ -77,9 +77,9 @@ export default {
     }),
   },
   methods: {
-    showRegister() {
+    showWallet() {
       this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalRegister')
+      this.$store.commit('setModalComponent', 'ModalWallet')
       this.$store.commit('setShowModal', true)
     },
   },

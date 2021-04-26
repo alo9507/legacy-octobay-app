@@ -4,13 +4,13 @@
       <h5 class="text-center text-muted-light py-2 px-4 mt-4">Wallet</h5>
       <div v-if="success" class="alert alert-success mb-0">
         <font-awesome-icon :icon="['fas', 'check']" />
-        Registration successful! :)
+        Verification successful! :)
       </div>
       <div v-if="!registeredAccounts.length" class="mt-3 mb-4 text-muted">
         <p>To withdraw funds you need to fully verify your addresses.</p>
         <p>
-          Create a repository named after the Ethereum address you are connected
-          with and register.
+          Create a repository on GitHub, named after the address you are
+          connected with.
         </p>
       </div>
       <div v-else class="mt-3">

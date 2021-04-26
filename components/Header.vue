@@ -15,7 +15,7 @@
           >
             <button
               class="btn btn-sm btn-primary shadow-sm mr-2"
-              @click="showRegister()"
+              @click="showWallet()"
             >
               <font-awesome-icon :icon="['fas', 'wallet']" />
             </button>
@@ -128,9 +128,9 @@ export default {
     },
   },
   methods: {
-    showRegister() {
+    showWallet() {
       this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalRegister')
+      this.$store.commit('setModalComponent', 'ModalWallet')
       this.$store.commit('setShowModal', true)
     },
   },
