@@ -6,12 +6,14 @@
         <font-awesome-icon :icon="['fas', 'check']" />
         Verification successful! :)
       </div>
-      <div v-if="!registeredAccounts.length" class="mt-3 mb-4 text-muted">
-        <p>To withdraw funds you need to fully verify your addresses.</p>
-        <p>
-          Create a repository on GitHub, named after the address you are
-          connected with.
-        </p>
+      <div
+        v-if="!registeredAccounts.length"
+        class="alert bg-secondary text-white text-center"
+      >
+        To withdraw funds you need to fully verify your addresses.<br />
+        <br />
+        Create a repository on GitHub, named after the address you are connected
+        with.
       </div>
       <div v-else class="mt-3">
         <small class="text-muted d-block text-center">Verified Addresses</small>
