@@ -88,11 +88,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import connect from '@/mixins/connect'
 import loadFromGithub from '@/mixins/loadFromGithub'
 
 export default {
-  mixins: [connect, loadFromGithub],
+  mixins: [loadFromGithub],
   data() {
     return {
       url: '',

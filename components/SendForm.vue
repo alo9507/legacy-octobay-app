@@ -227,12 +227,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import connect from '@/mixins/connect'
 import loadFromGithub from '@/mixins/loadFromGithub'
 import helpers from '@/mixins/helpers'
 
 export default {
-  mixins: [connect, loadFromGithub, helpers],
+  mixins: [loadFromGithub, helpers],
   data() {
     return {
       username: '',

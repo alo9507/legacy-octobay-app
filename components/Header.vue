@@ -54,11 +54,7 @@
           size="md"
           style="background-color: #652fff; border-radius: 50%"
         />
-        <a
-          v-if="!githubUser"
-          :href="githubAuthUrl"
-          class="ml-2 btn btn-lg btn-light shadow-sm"
-        >
+        <a :href="githubAuthUrl" class="ml-2 btn btn-lg btn-light shadow-sm">
           Connect GitHub
         </a>
       </div>
@@ -119,7 +115,6 @@ export default {
   mixins: [connect],
   data() {
     return {
-      connectedGithub: false,
       cssClasses: 'd-flex justify-content-between align-items-top text-muted',
     }
   },
