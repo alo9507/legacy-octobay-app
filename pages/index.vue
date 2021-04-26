@@ -32,7 +32,6 @@
       <keep-alive>
         <SendForm v-if="view == 'send'" />
         <IssuesList v-else-if="view == 'issues'" />
-        <Contributors v-else-if="view == 'contributors'" />
         <Claim v-else-if="view == 'claim'" />
         <Admin
           v-else-if="

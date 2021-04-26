@@ -12,7 +12,7 @@
         >
           <span>&times;</span>
         </button>
-        <CheckIcon />
+        <font-awesome-icon :icon="['fas', 'check']" />
         Transfer confirmed! :)
       </div>
       <div v-if="showIssueDepositSuccess" class="alert alert-success border-0">
@@ -23,7 +23,7 @@
         >
           <span>&times;</span>
         </button>
-        <CheckIcon />
+        <font-awesome-icon :icon="['fas', 'check']" />
         Issue deposit confirmed! :)
       </div>
       <div

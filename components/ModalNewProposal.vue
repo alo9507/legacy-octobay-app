@@ -75,7 +75,7 @@
       </div>
     </div>
     <div v-else class="alert alert-success mb-0">
-      <CheckIcon />
+      <font-awesome-icon :icon="['fas', 'check']" />
       Proposal created successfully! :)
     </div>
   </div>

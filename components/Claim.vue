@@ -161,43 +161,6 @@ export default {
     }
   },
   methods: {
-    getAge(createdAt) {
-      return (
-        (new Date().getTime() - new Date(createdAt).getTime()) /
-        (60 * 60 * 24 * 1000)
-      )
-    },
-    calculatePRScore(pr) {
-      const userAge = this.getAge(pr.author.createdAt)
-      const userFollowers = pr.author.followers.totalCount
-      const repoAge = this.getAge(pr.repository.createdAt)
-      const repoStars = pr.repository.stargazers.totalCount
-      const repoForks = pr.repository.forkCount
-
-      let score = 0
-
-      if (userAge > 365) score += 1
-      if (userAge > 365 * 5) score += 2
-      if (userAge > 365 * 10) score += 4
-
-      if (userFollowers > 50) score += 1
-      if (userFollowers > 250) score += 2
-      if (userFollowers > 1000) score += 4
-
-      if (repoAge > 90) score += 1
-      if (repoAge > 365) score += 2
-      if (repoAge > 365 * 5) score += 4
-
-      if (repoStars > 50) score += 1
-      if (repoStars > 250) score += 2
-      if (repoStars > 1000) score += 4
-
-      if (repoForks > 10) score += 1
-      if (repoForks > 50) score += 2
-      if (repoForks > 250) score += 4
-
-      return Math.min(Math.round(Math.round((score / 35) * 100)), 100)
-    },
     withdrawFromIssue() {
       this.withdrawingFromIssue = true
       this.$octobay.methods
@@ -243,11 +206,6 @@ export default {
             }
           })
       }
-    },
-    formatAmount(amount) {
-      return Number(
-        this.$web3.utils.fromWei(amount.toString(), 'ether')
-      ).toFixed(2)
     },
   },
 }

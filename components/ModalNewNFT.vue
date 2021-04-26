@@ -76,7 +76,7 @@
         >
           <span>&times;</span>
         </button>
-        <CheckIcon />
+        <font-awesome-icon :icon="['fas', 'check']" />
         Permission-NFT created! :)
       </div>
       <button

@@ -3,7 +3,7 @@
     <div class="card-body pt-0" @click.stop>
       <h5 class="text-center text-muted-light py-2 px-4 mt-4">Wallet</h5>
       <div v-if="success" class="alert alert-success mb-0">
-        <CheckIcon />
+        <font-awesome-icon :icon="['fas', 'check']" />
         Registration successful! :)
       </div>
       <div v-if="!registeredAccounts.length" class="mt-3 mb-4 text-muted">
@@ -56,7 +56,7 @@
                 v-if="showTransferNFTsuccess"
                 class="alert alert-success mt-3"
               >
-                <CheckIcon />
+                <font-awesome-icon :icon="['fas', 'check']" />
                 Permission transferred.
               </div>
             </transition>
@@ -194,7 +194,10 @@
           class="d-flex justify-content-between align-items-center btn btn-dark btn-block mt-2 mb-3"
         >
           <font-awesome-icon :icon="['fab', 'github']" />
-          <span><CheckIcon class="text-success" /> Repository found</span>
+          <span>
+            <font-awesome-icon :icon="['fas', 'check']" class="text-success" />
+            Repository found
+          </span>
           <i></i>
         </a>
         <a
