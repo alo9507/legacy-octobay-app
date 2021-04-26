@@ -4,7 +4,7 @@
   >
     <div class="mb-3">
       <a
-        href="https://twitter.com/OctoBayApp"
+        href="https://twitter.com/OctobayApp"
         target="_blank"
         class="text-white px-2"
       >

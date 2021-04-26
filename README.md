@@ -1,13 +1,13 @@
-# OctoBay
+# Octobay
 
-OctoBay is a decentralized bounty and promotion platform for open source projects on GitHub, with [Discussions](https://docs.github.com/en/discussions) integration as the governance layer.
+Octobay is a decentralized bounty and promotion platform for open source projects on GitHub, with [Discussions](https://docs.github.com/en/discussions) integration as the governance layer.
 
 - [Demo](https://app.octobay.org)
 - [Docs](https://octobay.github.io/docs)
-- [Contracts](https://github.com/OctoBay/contracts)
-- [Chainlink Adapters](https://github.com/OctoBay/chainlink-adapters)
-- [Subgraph](https://github.com/OctoBay/subgraph)
-- [API Server](https://github.com/OctoBay/api)
+- [Contracts](https://github.com/Octobay/contracts)
+- [Chainlink Adapters](https://github.com/Octobay/chainlink-adapters)
+- [Subgraph](https://github.com/Octobay/subgraph)
+- [API Server](https://github.com/Octobay/api)
 
 ## Run locally
 

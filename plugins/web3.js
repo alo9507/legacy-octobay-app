@@ -25,7 +25,7 @@ export default ({ store, app }, inject) => {
               .hasPermission(tokenId, 1)
               .call()
               .then((isOctobayAdmin) => {
-                store.commit('setOctoBayAdmin', isOctobayAdmin)
+                store.commit('setOctobayAdmin', isOctobayAdmin)
               })
           }
         })

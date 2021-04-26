@@ -37,7 +37,7 @@
             <font-awesome-icon :icon="['fab', 'discord']" />
           </a>
           <a
-            href="https://twitter.com/OctoBayApp"
+            href="https://twitter.com/OctobayApp"
             target="_blank"
             class="ml-1 btn btn-sm btn-outline-light"
           >

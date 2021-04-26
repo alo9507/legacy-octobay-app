@@ -8,7 +8,7 @@
       <div class="card shadow-sm fork-list" @click.stop>
         <div class="card-body px-2 pt-2 pb-0">
           <h5 class="text-center text-muted-light py-3 px-4 m-0">
-            Explore the ecosystem. Here's a list of all OctoBay forks.
+            Explore the ecosystem. Here's a list of all Octobay forks.
           </h5>
           <div class="text-right">
             <small>
@@ -41,7 +41,7 @@
               class="rounded-circle shadow-sm"
             />
             <div class="ml-2 d-flex flex-column">
-              OctoBay
+              Octobay
               <small :class="'text-muted'"
                 >Ethereum payment service for GitHub users.</small
               >

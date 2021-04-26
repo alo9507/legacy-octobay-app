@@ -45,7 +45,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-head
    */
   head: {
-    title: 'OctoBay',
+    title: 'Octobay',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -54,12 +54,12 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || '',
       },
-      { property: 'og:title', content: 'OctoBay' },
+      { property: 'og:title', content: 'Octobay' },
       {
         property: 'og:image',
         content: 'https://octobay.github.io/app/cover.png',
       },
-      { property: 'twitter:title', content: 'OctoBay' },
+      { property: 'twitter:title', content: 'Octobay' },
       {
         property: 'twitter:image',
         content: 'https://octobay.github.io/app/cover.png',

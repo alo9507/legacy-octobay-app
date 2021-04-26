@@ -9,7 +9,7 @@ export default function ({ store, app }) {
       store.dispatch('github/login'),
     ])
       .then((values) => {
-        store.commit('setOctoBayOwner', values[0].toLowerCase())
+        store.commit('setOctobayOwner', values[0].toLowerCase())
         store.commit('setNetworkId', values[1])
         const accounts = values[2]
         store.commit('setTokenList', values[3])
@@ -37,7 +37,7 @@ export default function ({ store, app }) {
                   .hasPermission(tokenId, 1)
                   .call()
                   .then((isOctobayAdmin) => {
-                    store.commit('setOctoBayAdmin', isOctobayAdmin)
+                    store.commit('setOctobayAdmin', isOctobayAdmin)
                   })
               }
             })
