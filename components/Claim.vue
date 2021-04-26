@@ -39,17 +39,17 @@
       <ConnectActionButton
         :action="withdrawFromIssue"
         :disabled="
-          withdrawingFromIssue || !issue || !githubUser || !canWithdrawIssue
+          waitingForOracleRequest || !issue || !githubUser || !canWithdrawIssue
         "
         size="lg"
         class="mt-4"
       >
         <font-awesome-icon
-          v-if="withdrawingFromIssue"
+          v-if="waitingForOracleRequest"
           :icon="['fas', 'circle-notch']"
           spin
         />
-        {{ withdrawingFromIssue ? 'Waiting for confirmation...' : 'Claim' }}
+        {{ waitingForOracleRequest ? 'Waiting for confirmation...' : 'Claim' }}
       </ConnectActionButton>
     </div>
     <div v-if="userDeposits.length" class="card-body border-top mt-2 pt-2">
@@ -97,8 +97,8 @@ export default {
       loadingIssue: false,
       issue: null,
       score: 0,
-      withdrawingFromIssue: false,
-      waitingForOracle: false,
+      waitingForOracleRequest: false,
+      waitingForOracleFulfillment: false,
       showWithdrawalSuccess: false,
       userDeposits: [],
       withdrawingUserDeposit: 0,
@@ -164,8 +164,8 @@ export default {
       this.oracleRequest(
         this.$octobay.methods.withdrawFromIssue,
         [this.issue.id],
-        (state) => (this.withdrawingFromIssue = state),
-        (state) => (this.waitingForOracle = state)
+        (state) => (this.waitingForOracleRequest = state),
+        (state) => (this.waitingForOracleFulfillment = state)
       ).then(() => {
         this.$store.commit('removeIssue', this.issue.id)
         this.showWithdrawalSuccess = true
