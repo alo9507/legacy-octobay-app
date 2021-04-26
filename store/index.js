@@ -1,8 +1,8 @@
 export const state = () => ({
   loaded: false,
   loadError: null,
-  octoBayOwner: null,
-  octoBayAdmin: null,
+  octobayOwner: null,
+  octobayAdmin: null,
   networkId: null,
   accounts: [],
   registeredAccounts: [],
@@ -109,11 +109,11 @@ export const getters = {
   modalData(state) {
     return state.modalData
   },
-  octoBayOwner(state) {
-    return state.octoBayOwner
+  octobayOwner(state) {
+    return state.octobayOwner
   },
-  octoBayAdmin(state) {
-    return state.octoBayAdmin
+  octobayAdmin(state) {
+    return state.octobayAdmin
   },
   selectedDepartment(state) {
     return state.selectedDepartment
@@ -240,11 +240,11 @@ export const mutations = {
   setModalData(state, data) {
     state.modalData = data
   },
-  setOctoBayOwner(state, owner) {
-    state.octoBayOwner = owner
+  setOctobayOwner(state, owner) {
+    state.octobayOwner = owner
   },
-  setOctoBayAdmin(state, isAdmin) {
-    state.octoBayAdmin = isAdmin
+  setOctobayAdmin(state, isAdmin) {
+    state.octobayAdmin = isAdmin
   },
   setDepartments(state, departments) {
     state.departments = departments

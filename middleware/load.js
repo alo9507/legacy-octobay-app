@@ -1,7 +1,7 @@
 export default function ({ store, app }) {
-  if (app.$octoBay) {
+  if (app.$octobay) {
     Promise.all([
-      app.$octoBay.methods.owner().call(),
+      app.$octobay.methods.owner().call(),
       app.$web3.eth.net.getId(),
       app.$web3.eth.getAccounts(),
       app.$axios.$get('https://tokens.coingecko.com/uniswap/all.json'),

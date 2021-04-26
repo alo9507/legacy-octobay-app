@@ -308,7 +308,7 @@ export default {
     register() {
       this.loadingRegistration = true
       // listening for request confirmation
-      const confirmListener = this.$octoBay.events
+      const confirmListener = this.$octobay.events
         .ChainlinkFulfilled()
         .on('data', (event) => {
           if (event.returnValues.id === this.registerRequestID) {
@@ -321,7 +321,7 @@ export default {
           }
         })
 
-      this.$octoBay.methods
+      this.$octobay.methods
         .registerUserAddress(
           this.nextOracle().ethAddress,
           this.githubUser.node_id

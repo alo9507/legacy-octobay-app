@@ -184,7 +184,7 @@ export default {
         this.waitingForTransaction = true
 
         // listening for request confirmation
-        const confirmListener = this.$octoBay.events
+        const confirmListener = this.$octobay.events
           .ChainlinkFulfilled()
           .on('data', (event) => {
             if (event.returnValues.id === this.createDepartmentRequestID) {
@@ -212,7 +212,7 @@ export default {
             }
           })
 
-        this.$octoBay.methods
+        this.$octobay.methods
           .createGovernanceToken(this.oracles[0].ethAddress, {
             isValue: true,
             githubUserId: this.githubUser.node_id,

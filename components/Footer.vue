@@ -25,7 +25,7 @@
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
       <a
-        :href="'https://kovan.etherscan.io/address/' + octoBayAddress"
+        :href="'https://kovan.etherscan.io/address/' + $octobay.options.address"
         class="text-white px-2"
       >
         <font-awesome-icon :icon="['fab', 'ethereum']" />
@@ -68,9 +68,6 @@ export default {
     ...mapGetters(['activeOracle']),
     appName() {
       return process.env.APP_NAME
-    },
-    octoBayAddress() {
-      return process.env.OCTOBAY_ADDRESS
     },
   },
 }

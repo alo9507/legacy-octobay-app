@@ -418,9 +418,9 @@ export default {
       }
     },
     pin() {
-      if (this.$octoBay) {
+      if (this.$octobay) {
         this.pinningIssue = true
-        this.$octoBay.methods
+        this.$octobay.methods
           .pinIssue(
             this.issue.id,
             this.$web3.utils.toWei(this.pinAmount, 'ether')
@@ -446,7 +446,7 @@ export default {
     },
     refundIssueDeposit(id) {
       this.refundingDeposit = id
-      this.$octoBay.methods
+      this.$octobay.methods
         .refundIssueDeposit(id)
         .send({
           // useGSN: false,

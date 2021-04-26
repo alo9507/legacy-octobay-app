@@ -20,7 +20,7 @@
         >Claim</a
       >
       <a
-        v-if="account && (account === octoBayOwner || octoBayAdmin)"
+        v-if="account && (account === octobayOwner || octobayAdmin)"
         href="#"
         :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')"
         @click="$store.commit('setView', 'admin')"
@@ -37,7 +37,7 @@
         <Admin
           v-else-if="
             account &&
-            (account === octoBayOwner || octoBayAdmin) &&
+            (account === octobayOwner || octobayAdmin) &&
             view == 'admin'
           "
         />
@@ -52,7 +52,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'octoBayOwner', 'octoBayAdmin']),
+    ...mapGetters(['view', 'account', 'octobayOwner', 'octobayAdmin']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   mounted() {

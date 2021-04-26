@@ -378,7 +378,7 @@ export default {
     },
     depositForUser() {
       this.sending = true
-      this.$octoBay.methods
+      this.$octobay.methods
         .depositEthForGithubUser(this.user.id)
         .send({
           // useGSN: false,
@@ -404,7 +404,7 @@ export default {
     depositForIssue() {
       this.sending = true
       if (this.departmentForIssue) {
-        this.$octoBay.methods
+        this.$octobay.methods
           .depositAndSetGovTokenForIssue(
             this.issue.id,
             this.departmentForIssue.tokenAddress,
@@ -425,7 +425,7 @@ export default {
             this.amount = 0
           })
       } else {
-        this.$octoBay.methods
+        this.$octobay.methods
           .depositEthForIssue(this.issue.id)
           .send({
             // useGSN: false,
@@ -460,7 +460,7 @@ export default {
     },
     refundUserDeposit(id) {
       this.refundingUserDeposit = id
-      this.$octoBay.methods
+      this.$octobay.methods
         .refundUserDeposit(id)
         .send({
           // useGSN: false,

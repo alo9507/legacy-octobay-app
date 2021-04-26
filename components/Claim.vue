@@ -200,7 +200,7 @@ export default {
     },
     withdrawFromIssue() {
       this.withdrawingFromIssue = true
-      this.$octoBay.methods
+      this.$octobay.methods
         .withdrawIssueDeposit(this.oracles[0].ethAddress, this.issue.id)
         .send({
           // useGSN: false,
@@ -218,7 +218,7 @@ export default {
     },
     withdrawUserDeposit(id) {
       this.withdrawingUserDeposit = id
-      this.$octoBay.methods
+      this.$octobay.methods
         .withdrawUserDeposit(id)
         .send({
           // useGSN: false,

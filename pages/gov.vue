@@ -35,7 +35,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'octoBayOwner']),
+    ...mapGetters(['view', 'account']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   mounted() {
