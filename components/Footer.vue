@@ -60,19 +60,6 @@
   </footer>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-
-export default {
-  computed: {
-    ...mapGetters(['activeOracle']),
-    appName() {
-      return process.env.APP_NAME
-    },
-  },
-}
-</script>
-
 <style lang="sass" scoped>
 footer
   font-size: 1.9rem

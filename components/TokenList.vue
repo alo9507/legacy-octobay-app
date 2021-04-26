@@ -104,7 +104,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['tokenList', 'showTokenList']),
+    ...mapGetters(['tokenList']),
     filteredTokenList() {
       const search = this.tokenSearch.toLowerCase()
       return this.tokenSearch
