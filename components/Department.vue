@@ -177,7 +177,7 @@
                 </div>
                 <div v-if="department.nfts.length">
                   <div
-                    class="d-flex w-100 justify-content-around align-items-center text-center py-2 px-3"
+                    class="d-flex w-100 justify-content-around align-items-center text-center py-2"
                   >
                     <small class="w-25">Create<br />NFTs</small>
                     <small class="w-25">Transfer</small>
@@ -185,108 +185,90 @@
                     <small class="w-25">Create<br />Proposals</small>
                   </div>
                   <div
-                    v-for="(nft, i) in department.nfts"
+                    v-for="nft in department.nfts"
                     :key="nft.id"
                     class="py-2 border-top-light"
                   >
                     <div
-                      class="d-flex justify-content-center align-items-center pb-2"
+                      class="d-flex justify-content-around align-items-center"
                     >
-                      <small class="mr-1">
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="nft.permissions.includes('MINT')"
+                            :icon="['fas', 'check']"
+                            class="text-success"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
+                          />
+                        </span>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="nft.permissions.includes('TRANSFER')"
+                            :icon="['fas', 'check']"
+                            class="text-success"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
+                          />
+                        </span>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="
+                              nft.permissions.includes('SET_ISSUE_GOVTOKEN')
+                            "
+                            :icon="['fas', 'check']"
+                            class="text-success"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
+                          />
+                        </span>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="nft.permissions.includes('CREATE_PROPOSAL')"
+                            :icon="['fas', 'check']"
+                            class="text-success"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
+                          />
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-between align-items-center pb-2 px-3"
+                    >
+                      <small class="mr-2">
                         <GithubUser
                           :from-address="nft.ownerAddress"
                           :force-show-address="true"
                         />
                       </small>
-                      <div class="btn-group shadow-sm rounded-xl ml-1">
-                        <button
-                          v-tooltip="{ content: 'Save', trigger: 'hover' }"
-                          class="btn btn-sm btn-primary"
-                        >
-                          <font-awesome-icon :icon="['fas', 'check']" />
-                        </button>
-                        <button
-                          v-tooltip="{ content: 'Transfer', trigger: 'hover' }"
-                          class="btn btn-sm btn-primary"
-                        >
+                      <div class="btn-group shadow-sm rounded-xl ml-2">
+                        <button class="btn btn-sm btn-primary">
                           <font-awesome-icon :icon="['fas', 'share']" />
+                          Transfer
                         </button>
-                        <button
-                          v-tooltip="{ content: 'Copy', trigger: 'hover' }"
-                          class="btn btn-sm btn-primary"
-                        >
-                          <font-awesome-icon :icon="['fas', 'copy']" />
-                        </button>
-                        <button
-                          v-tooltip="{ content: 'Burn', trigger: 'hover' }"
-                          class="btn btn-sm btn-primary"
-                        >
+                        <button class="btn btn-sm btn-primary">
                           <font-awesome-icon :icon="['fas', 'fire']" />
+                          Burn
                         </button>
-                      </div>
-                    </div>
-                    <div
-                      class="d-flex justify-content-around align-items-center px-3"
-                    >
-                      <div class="text-center py-2 w-25">
-                        <div class="custom-control custom-switch ml-2">
-                          <input
-                            :id="'customSwitch1-' + i"
-                            type="checkbox"
-                            class="custom-control-input"
-                            :checked="nft.permissions.includes('MINT')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            :for="'customSwitch1-' + i"
-                          ></label>
-                        </div>
-                      </div>
-                      <div class="text-center py-2 w-25">
-                        <div class="custom-control custom-switch ml-2">
-                          <input
-                            :id="'customSwitch2-' + i"
-                            type="checkbox"
-                            class="custom-control-input"
-                            :checked="nft.permissions.includes('TRANSFER')"
-                          />
-                          <label
-                            class="custom-control-label"
-                            :for="'customSwitch2-' + i"
-                          ></label>
-                        </div>
-                      </div>
-                      <div class="text-center py-2 w-25">
-                        <div class="custom-control custom-switch ml-2">
-                          <input
-                            :id="'customSwitch3-' + i"
-                            type="checkbox"
-                            class="custom-control-input"
-                            :checked="
-                              nft.permissions.includes('SET_ISSUE_GOVTOKEN')
-                            "
-                          />
-                          <label
-                            class="custom-control-label"
-                            :for="'customSwitch3-' + i"
-                          ></label>
-                        </div>
-                      </div>
-                      <div class="text-center py-2 w-25">
-                        <div class="custom-control custom-switch ml-2">
-                          <input
-                            :id="'customSwitch4-' + i"
-                            type="checkbox"
-                            class="custom-control-input"
-                            :checked="
-                              nft.permissions.includes('CREATE_PROPOSAL')
-                            "
-                          />
-                          <label
-                            class="custom-control-label"
-                            :for="'customSwitch4-' + i"
-                          ></label>
-                        </div>
                       </div>
                     </div>
                   </div>
