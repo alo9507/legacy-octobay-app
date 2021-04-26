@@ -288,11 +288,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import loadFromGithub from '@/mixins/loadFromGithub'
 import helpers from '@/mixins/helpers'
 
 export default {
-  mixins: [loadFromGithub, helpers],
+  mixins: [helpers],
   props: {
     issue: {
       type: Object,
