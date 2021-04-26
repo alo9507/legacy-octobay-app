@@ -244,6 +244,14 @@ export const mutations = {
 }
 
 export const actions = {
+  web3connect({ commit }) {
+    this.$web3.eth.requestAccounts().then((accounts) => {
+      commit('setAccounts', accounts)
+      this.$web3.eth
+        .getBalance(accounts[0])
+        .then((balance) => commit('setBalance', balance))
+    })
+  },
   updateIssues({ commit }) {
     commit('setIssues', [])
     this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {

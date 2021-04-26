@@ -5,7 +5,7 @@
       :class="
         'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
       "
-      @click="connect()"
+      @click="$store.dispatch('web3connect')"
     >
       Connect Wallet
     </button>
@@ -47,10 +47,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import connect from '@/mixins/connect'
 
 export default {
-  mixins: [connect],
   props: {
     action: {
       type: Function,

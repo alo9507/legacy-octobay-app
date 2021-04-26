@@ -82,7 +82,7 @@
           <button
             v-if="$web3"
             class="ml-2 btn btn-lg btn-light shadow-sm"
-            @click="connect()"
+            @click="$store.dispatch('web3connect')"
           >
             Connect Wallet
           </button>
@@ -109,10 +109,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import connect from '@/mixins/connect'
 
 export default {
-  mixins: [connect],
   data() {
     return {
       cssClasses: 'd-flex justify-content-between align-items-top text-muted',
