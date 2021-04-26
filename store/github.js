@@ -28,7 +28,7 @@ export const mutations = {
 }
 
 export const actions = {
-  login({ commit, dispatch, state }) {
+  login({ commit, state }) {
     return new Promise((resolve, reject) => {
       // don't do anything if user data is already set
       if (!state.user) {
