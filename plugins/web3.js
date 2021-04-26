@@ -13,7 +13,7 @@ export default ({ store, app }, inject) => {
         .getBalance(accounts[0])
         .then((balance) => store.commit('setBalance', balance))
 
-      app.$octobayNFT.methods
+      app.$octobayGovNFT.methods
         .getTokenIDForUserInProject(
           accounts[0],
           'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
@@ -21,7 +21,7 @@ export default ({ store, app }, inject) => {
         .call()
         .then((tokenId) => {
           if (tokenId) {
-            app.$octobayNFT.methods
+            app.$octobayGovNFT.methods
               .hasPermission(tokenId, 1)
               .call()
               .then((isOctobayAdmin) => {

@@ -27,7 +27,7 @@
       <div>
         <input
           type="text"
-          :value="govNFTAddress"
+          :value="$octobayGovNFT.options.address"
           class="form-control form-control-sm"
           readonly
         />
@@ -204,7 +204,6 @@ export default {
         jobFee: null,
       },
       addingOracleJob: false,
-      govNFTAddress: '',
       oracleStorageAddress: '',
       depositStorageAddress: '',
       userAddressStorageAddress: '',
@@ -214,10 +213,6 @@ export default {
     ...mapGetters(['account', 'oracles']),
   },
   mounted() {
-    this.$octoBay.methods
-      .octobayGovNFT()
-      .call()
-      .then((address) => (this.govNFTAddress = address))
     this.$octoBay.methods
       .oracleStorage()
       .call()

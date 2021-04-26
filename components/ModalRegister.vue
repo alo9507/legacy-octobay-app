@@ -338,7 +338,7 @@ export default {
     },
     transferNft(nft, ethAddress) {
       this.transferingNFT = nft.id
-      this.$octobayNFT.methods
+      this.$octobayGovNFT.methods
         .safeTransferFrom(this.account, ethAddress, nft.id)
         .send({ from: this.account })
         .then(() => {
