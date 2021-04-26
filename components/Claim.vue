@@ -36,7 +36,6 @@
         This issue has not been closed by your pull request and was not released
         to you manually.
       </div>
-
       <ConnectActionButton
         :action="withdrawFromIssue"
         :disabled="
@@ -99,6 +98,7 @@ export default {
       issue: null,
       score: 0,
       withdrawingFromIssue: false,
+      waitingForOracle: false,
       showWithdrawalSuccess: false,
       userDeposits: [],
       withdrawingUserDeposit: 0,
@@ -161,22 +161,18 @@ export default {
   },
   methods: {
     withdrawFromIssue() {
-      this.withdrawingFromIssue = true
-      this.$octobay.methods
-        .withdrawIssueDeposit(this.oracles[0].ethAddress, this.issue.id)
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
-        .then(() => {
-          this.$store.commit('removeIssue', this.issue.id)
-          this.withdrawingFromIssue = false
-          this.showWithdrawalSuccess = true
-          this.issue = null
-          this.url = ''
-          this.canWithdrawIssue = false
-        })
-        .catch((e) => console.log(e))
+      this.oracleRequest(
+        this.$octobay.methods.withdrawFromIssue,
+        [this.issue.id],
+        (state) => (this.withdrawingFromIssue = state),
+        (state) => (this.waitingForOracle = state)
+      ).then(() => {
+        this.$store.commit('removeIssue', this.issue.id)
+        this.showWithdrawalSuccess = true
+        this.issue = null
+        this.url = ''
+        this.canWithdrawIssue = false
+      })
     },
     withdrawUserDeposit(id) {
       this.withdrawingUserDeposit = id

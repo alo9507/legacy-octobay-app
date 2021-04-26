@@ -2,7 +2,7 @@
   <div class="card shadow-sm d-flex flex-column">
     <div class="card-body pt-0" @click.stop>
       <h5 class="text-center text-muted-light py-2 px-4 mt-4">Wallet</h5>
-      <div v-if="success" class="alert alert-success mb-0">
+      <div v-if="verificationSuccess" class="alert alert-success mb-0">
         <font-awesome-icon :icon="['fas', 'check']" />
         Verification successful! :)
       </div>
@@ -214,19 +214,29 @@
         </a>
         <ConnectActionButton
           :action="register"
-          :disabled="loadingRegistration || checkingRepo"
+          :disabled="
+            waitingForOracleRequest ||
+            waitingForOracleFulfillment ||
+            checkingRepo
+          "
           :required="['wallet', 'github']"
           size="lg"
           class="mt-2"
         >
           <font-awesome-icon
-            v-if="loadingRegistration || checkingRepo"
+            v-if="
+              waitingForOracleRequest ||
+              waitingForOracleFulfillment ||
+              checkingRepo
+            "
             :icon="['fas', 'circle-notch']"
             spin
           />
           {{
-            loadingRegistration
+            waitingForOracleRequest
               ? 'Waiting for confirmation...'
+              : waitingForOracleFulfillment
+              ? 'Waiting for oracle'
               : checkingRepo
               ? 'Waiting for repository'
               : 'Verify Address'
@@ -246,8 +256,9 @@ export default {
   mixins: [helpers],
   data() {
     return {
-      success: false,
-      loadingRegistration: false,
+      verificationSuccess: false,
+      waitingForOracleRequest: false,
+      waitingForOracleFulfillment: false,
       copyAddressSuccess: null,
       checkingRepo: true,
       repoExists: false,
@@ -259,14 +270,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'connected',
-      'account',
-      'registeredAccounts',
-      'oracles',
-      'activeOracle',
-      'nfts',
-    ]),
+    ...mapGetters(['connected', 'account', 'registeredAccounts', 'nfts']),
     ...mapGetters('github', {
       githubUser: 'user',
       githubAccessToken: 'accessToken',
@@ -311,35 +315,19 @@ export default {
       }
     },
     register() {
-      this.loadingRegistration = true
-      // listening for request confirmation
-      const confirmListener = this.$octobay.events
-        .ChainlinkFulfilled()
-        .on('data', (event) => {
-          if (event.returnValues.id === this.registerRequestID) {
-            // stop listening and finish process
-            confirmListener.unsubscribe()
-            // this.$store.commit('setRegisteredAccount', this.account)
-            this.success = true
-            this.loadingRegistration = false
-            this.registerRequestID = null
-          }
-        })
-
-      this.$octobay.methods
-        .registerUserAddress(
-          this.nextOracle().ethAddress,
-          this.githubUser.node_id
-        )
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
-        .then((registerRequest) => {
-          this.registerRequestID =
-            registerRequest.events.ChainlinkRequested.returnValues.id
-        })
-        .catch(() => (this.loadingRegistration = false))
+      this.oracleRequest(
+        this.$octobay.methods.registerUserAddress,
+        [this.githubUser.node_id],
+        (state) => (this.waitingForOracleRequest = state),
+        (state) => (this.waitingForOracleFulfillment = state)
+      ).then(() => {
+        this.verificationSuccess = true
+        this.$axios
+          .$get(process.env.API_URL + '/graph/user/' + this.githubUser.node_id)
+          .then((user) => {
+            this.$store.commit('setRegisteredAccounts', user.addresses)
+          })
+      })
     },
     transferNft(nft, ethAddress) {
       this.transferingNFT = nft.id

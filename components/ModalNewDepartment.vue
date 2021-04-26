@@ -1,6 +1,10 @@
 <template>
   <div class="card shadow-sm d-flex flex-column">
-    <div v-if="!success" @click.stop>
+    <div v-if="success" class="alert alert-success mb-0">
+      <font-awesome-icon :icon="['fas', 'check']" />
+      Governance department created successfully! :)
+    </div>
+    <div v-else @click.stop>
       <div class="card-body modal-body flex-fill">
         <h5 class="text-center text-muted-light py-3 px-4 m-0">
           New Department
@@ -80,35 +84,33 @@
       <div class="card-body pt-0">
         <button
           class="btn btn-lg btn-primary w-100 shadow-sm"
-          :disabled="waitingForTransaction || waitingForOracle"
+          :disabled="waitingForOracleRequest || waitingForOracleFulfillment"
           @click="createNewDepartment()"
         >
           <font-awesome-icon
-            v-if="waitingForTransaction || waitingForOracle"
+            v-if="waitingForOracleRequest || waitingForOracleFulfillment"
             :icon="['fas', 'circle-notch']"
             spin
           />
           {{
-            waitingForTransaction
+            waitingForOracleRequest
               ? 'Waiting for confirmation...'
-              : waitingForOracle
+              : waitingForOracleFulfillment
               ? 'Waiting for oracle...'
               : 'Create new Department'
           }}
         </button>
       </div>
     </div>
-    <div v-else class="alert alert-success mb-0">
-      <font-awesome-icon :icon="['fas', 'check']" />
-      Governance department created successfully! :)
-    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   data() {
     return {
       success: false,
@@ -120,12 +122,11 @@ export default {
       organization: null,
       newProposalShare: null,
       minQuorum: null,
-      waitingForTransaction: false,
-      waitingForOracle: false,
+      waitingForOracleRequest: false,
+      waitingForOracleFulfillment: false,
     }
   },
   computed: {
-    ...mapGetters(['oracles', 'account']),
     ...mapGetters('github', { githubUser: 'user' }),
   },
   watch: {
@@ -180,57 +181,39 @@ export default {
         : this.organization
         ? this.organization.id
         : null
+
       if (projectId) {
-        this.waitingForTransaction = true
-
-        // listening for request confirmation
-        const confirmListener = this.$octobay.events
-          .ChainlinkFulfilled()
-          .on('data', (event) => {
-            if (event.returnValues.id === this.createDepartmentRequestID) {
-              // stop listening and finish process
-              confirmListener.unsubscribe()
-              // this.$store.commit('setRegisteredAccount', this.account)
-              this.success = true
-              this.waitingForOracle = false
-              this.createDepartmentRequestID = null
-              setTimeout(() => {
-                this.$store.dispatch('updateDepartments').then(() => {
-                  this.tokenName = null
-                  this.tokenSymbol = null
-                  this.projectUrl = ''
-                  this.repository = null
-                  this.organization = null
-                  this.newProposalShare = null
-                  this.minQuorum = null
-                  setTimeout(() => {
-                    this.$store.commit('setModalData', null)
-                    this.$store.commit('setShowModal', false)
-                  }, 1000)
-                })
-              }, 3000)
-            }
-          })
-
-        this.$octobay.methods
-          .createGovernanceToken(this.oracles[0].ethAddress, {
-            isValue: true,
-            githubUserId: this.githubUser.node_id,
-            name: this.tokenName,
-            symbol: this.tokenSymbol,
-            projectId,
-            newProposalShare: Number(this.newProposalShare) * 100,
-            minQuorum: Number(this.minQuorum) * 100,
-            creator: '0x0000000000000000000000000000000000000000',
-          })
-          .send({ from: this.account })
-          .then((createDepartmentRequest) => {
-            this.waitingForTransaction = false
-            this.waitingForOracle = true
-            this.createDepartmentRequestID =
-              createDepartmentRequest.events.ChainlinkRequested.returnValues.id
-          })
-          .catch(() => (this.waitingForTransaction = false))
+        this.oracleRequest(
+          this.$octobay.methods.createGovernanceToken,
+          [
+            {
+              isValue: true,
+              githubUserId: this.githubUser.node_id,
+              name: this.tokenName,
+              symbol: this.tokenSymbol,
+              projectId,
+              newProposalShare: Number(this.newProposalShare) * 100,
+              minQuorum: Number(this.minQuorum) * 100,
+              creator: '0x0000000000000000000000000000000000000000',
+            },
+          ],
+          (state) => (this.waitingForOracleRequest = state),
+          (state) => (this.waitingForOracleFulfillment = state)
+        ).then(() => {
+          this.success = true
+          this.tokenName = null
+          this.tokenSymbol = null
+          this.projectUrl = ''
+          this.repository = null
+          this.organization = null
+          this.newProposalShare = null
+          this.minQuorum = null
+          setTimeout(() => {
+            this.$store.dispatch('updateDepartments')
+            this.$store.commit('setModalData', null)
+            this.$store.commit('setShowModal', false)
+          }, 3000)
+        })
       }
     },
   },
