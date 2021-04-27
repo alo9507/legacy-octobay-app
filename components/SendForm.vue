@@ -66,8 +66,8 @@
             />
           </svg>
         </a>
-        <div v-if="loading || user">
-          <div v-if="loading" class="text-center mb-2">
+        <div v-if="loadingRecipient || user">
+          <div v-if="loadingRecipient" class="text-center mb-2">
             <font-awesome-icon
               :icon="['fas', 'circle-notch']"
               spin
@@ -121,8 +121,8 @@
             />
           </svg>
         </a>
-        <div v-if="loading || issue">
-          <div v-if="loading" class="text-center mb-2">
+        <div v-if="loadingRecipient || issue">
+          <div v-if="loadingRecipient" class="text-center mb-2">
             <font-awesome-icon
               :icon="['fas', 'circle-notch']"
               spin
@@ -230,7 +230,7 @@ export default {
       userEthAddress: null,
       issueUrl: '',
       issue: null,
-      loading: false,
+      loadingRecipient: false,
       amount: 0,
       sending: false,
       showSendSuccess: false,
@@ -282,7 +282,7 @@ export default {
       clearTimeout(this.loadRecipientTimeout)
       this.loadRecipientTimeout = setTimeout(() => {
         if (username.match(/^[\w-]+$/)) {
-          this.loading = true
+          this.loadingRecipient = true
           this.user = null
           this.loadUser(username)
             .then((user) => {
@@ -293,11 +293,11 @@ export default {
               this.user = null
               this.userEthAddress = null
             })
-            .finally(() => (this.loading = false))
+            .finally(() => (this.loadingRecipient = false))
         } else {
           this.user = null
           this.userEthAddress = null
-          this.loading = false
+          this.loadingRecipient = false
         }
       }, 500)
     },
@@ -311,7 +311,7 @@ export default {
           const owner = parts[1]
           const repo = parts[2]
           const number = parts[3]
-          this.loading = true
+          this.loadingRecipient = true
           this.issue = null
           this.$axios
             .$get(
@@ -323,10 +323,10 @@ export default {
             .catch(() => {
               this.issue = null
             })
-            .finally(() => (this.loading = false))
+            .finally(() => (this.loadingRecipient = false))
         } else {
           this.issue = null
-          this.loading = false
+          this.loadingRecipient = false
         }
       }, 500)
     },
