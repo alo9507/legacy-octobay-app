@@ -236,6 +236,11 @@ export const mutations = {
 }
 
 export const actions = {
+  updateNetworkId({ commit }) {
+    this.$web3.eth.net
+      .getId()
+      .then((chainId) => commit('setNetworkId', chainId))
+  },
   web3connect({ commit, dispatch }) {
     this.$web3.eth.requestAccounts().then((accounts) => {
       commit(

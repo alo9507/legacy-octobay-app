@@ -12,9 +12,7 @@ export default ({ store, app }, inject) => {
     })
 
     window.ethereum.on('chainChanged', () => {
-      app.$web3.eth.net.getId().then((chainId) => {
-        store.commit('setNetworkId', chainId)
-      })
+      store.dispatch('updateNetworkId')
     })
 
     /**
