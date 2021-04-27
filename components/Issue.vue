@@ -2,10 +2,7 @@
   <div>
     <div
       v-if="!loading && issueNode"
-      :class="[
-        'issue d-flex flex-column',
-        { pinned: issue.boostAmount > 0, showDetails },
-      ]"
+      :class="['issue d-flex flex-column', { showDetails }]"
       @click="showDetails = !showDetails"
     >
       <div class="position-relative">
@@ -303,8 +300,6 @@ export default {
       issueNode: null,
       showDetails: false,
       action: null,
-      pinAmount: 10,
-      pinningIssue: false,
       refundingDeposit: false,
       isRepoAdmin: false,
       linkedPullRequests: [],
@@ -412,31 +407,6 @@ export default {
         this.action = action
       }
     },
-    pin() {
-      if (this.$octobay) {
-        this.pinningIssue = true
-        this.$octobay.methods
-          .pinIssue(
-            this.issue.id,
-            this.$web3.utils.toWei(this.pinAmount, 'ether')
-          )
-          .send({
-            // useGSN: false,
-            from: this.account,
-          })
-          .then((result) => {
-            this.$store.dispatch('updatePins', this.issue.id)
-            this.$store.dispatch('updateEthBalance')
-            this.pinAmount = 0
-          })
-          .catch((e) => {
-            console.log(e)
-          })
-          .finally(() => {
-            this.pinningIssue = false
-          })
-      }
-    },
     refundIssueDeposit(id) {
       this.refundingDeposit = id
       this.$octobay.methods
@@ -463,11 +433,6 @@ export default {
   border-top: solid 1px fff
   cursor: pointer
   position: relative
-  &.pinned
-    box-shadow: inset 0 0 30px rgba(255, 187, 0, 0.1) !important
-    &.showDetails
-      box-shadow: inset 0 0 30px rgba(255, 187, 0, 0.1), inset 0 0 7px rgba(0, 0, 0, 0.2) !important
-
   &:hover
     background: #f8f8f8
   &.showDetails
