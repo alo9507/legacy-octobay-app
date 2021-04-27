@@ -9,9 +9,6 @@ export const state = () => ({
   githubAccessToken: null,
   balance: 0,
   issues: [],
-  tokenList: [],
-  showTokenList: false,
-  selectedToken: null,
   showRecipientTypeList: false,
   selectedRecipientType: 'User',
   showIntervalSelect: false,
@@ -62,15 +59,6 @@ export const getters = {
   },
   issues(state) {
     return state.issues
-  },
-  tokenList(state) {
-    return state.tokenList
-  },
-  showTokenList(state) {
-    return state.showTokenList
-  },
-  selectedToken(state) {
-    return state.selectedToken
   },
   showRecipientTypeList(state) {
     return state.showRecipientTypeList
@@ -193,15 +181,6 @@ export const mutations = {
         }
       }
     }
-  },
-  setTokenList(state, list) {
-    state.tokenList = list
-  },
-  setShowTokenList(state, show) {
-    state.showTokenList = show
-  },
-  setSelectedToken(state, address) {
-    state.selectedToken = address
   },
   setShowRecipientTypeList(state, show) {
     state.showRecipientTypeList = show

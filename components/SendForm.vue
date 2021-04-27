@@ -166,10 +166,7 @@
           class="form-control form-control-lg mb-2"
           placeholder="0.00"
         />
-        <span class="btn btn-light disabled">
-          <span v-if="selectedToken">{{ selectedToken.symbol }}</span>
-          <span v-else>ETH</span>
-        </span>
+        <span class="btn btn-light disabled">ETH</span>
       </div>
       <ConnectActionButton
         :action="confirm"
@@ -185,11 +182,6 @@
         />
         {{ sending ? 'Waiting for confirmation...' : 'Confirm' }}
       </ConnectActionButton>
-      <TokenList
-        :select="tokenListSelectCallback"
-        :show="showTokenList"
-        :hide="tokenListHideCallback"
-      />
     </div>
     <div
       v-if="accountsUserDeposits.length"
@@ -252,10 +244,7 @@ export default {
   computed: {
     ...mapGetters([
       'account',
-      'selectedToken',
       'selectedRecipientType',
-      'showTokenList',
-      'tokenList',
       'redirectPrefills',
       'departments',
       'githubUser',
@@ -359,12 +348,6 @@ export default {
     }
   },
   methods: {
-    tokenListSelectCallback(token) {
-      this.$store.commit('setSelectedToken', token)
-    },
-    tokenListHideCallback() {
-      this.$store.commit('setShowTokenList', false)
-    },
     confirm() {
       if (this.selectedRecipientType === 'User') {
         this.depositForUser()
@@ -462,9 +445,6 @@ export default {
         })
         .catch((e) => console.log(e))
         .finally(() => (this.refundingUserDeposit = 0))
-    },
-    token(symbol) {
-      return this.tokenList.tokens.find((token) => token.symbol === symbol)
     },
   },
 }
