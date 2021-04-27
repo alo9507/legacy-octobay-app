@@ -1,6 +1,4 @@
 export const state = () => ({
-  loaded: false,
-  loadError: null,
   isOctobayOwner: null,
   isOctobayAdmin: null,
   networkId: null,
@@ -27,12 +25,6 @@ export const state = () => ({
 })
 
 export const getters = {
-  loaded(state) {
-    return state.loaded
-  },
-  loadError(state) {
-    return state.loadError
-  },
   networkId(state) {
     return state.networkId
   },
@@ -127,12 +119,6 @@ export const getters = {
 }
 
 export const mutations = {
-  setLoaded(state, loaded) {
-    state.loaded = loaded
-  },
-  setLoadError(state, error) {
-    state.loadError = error
-  },
   setNetworkId(state, id) {
     state.networkId = id
   },
