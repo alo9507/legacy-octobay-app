@@ -373,7 +373,6 @@ export default {
           console.log(e)
         })
         .finally(() => {
-          this.loading = false
           this.sending = false
         })
     },
@@ -397,6 +396,12 @@ export default {
             this.showIssueDepositSuccess = true
             this.amount = 0
           })
+          .catch((e) => {
+            console.log(e)
+          })
+          .finally(() => {
+            this.sending = false
+          })
       } else {
         this.$octobay.methods
           .depositEthForIssue(this.issue.id)
@@ -410,6 +415,12 @@ export default {
             this.sending = false
             this.showIssueDepositSuccess = true
             this.amount = 0
+          })
+          .catch((e) => {
+            console.log(e)
+          })
+          .finally(() => {
+            this.sending = false
           })
       }
     },
