@@ -81,7 +81,9 @@ export default {
     this.$axios
       .$get(process.env.API_URL + '/graph/issue/' + this.issue.id)
       .then((issue) => {
-        this.deposits = issue.deposits
+        if (issue) {
+          this.deposits = issue.deposits
+        }
       })
   },
 }
