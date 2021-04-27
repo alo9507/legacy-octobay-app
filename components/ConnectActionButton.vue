@@ -22,7 +22,7 @@
     <a
       v-else-if="
         required.includes('verify') &&
-        !registeredAccounts.map((a) => a.address).includes(account)
+        !githubUser.ethAddresses.map((a) => a.address).includes(account)
       "
       :class="
         'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
@@ -68,11 +68,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['account', 'registeredAccounts']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAuthUrl: 'authUrl',
-    }),
+    ...mapGetters(['account', 'githubUser', 'githubAuthUrl']),
   },
   methods: {
     showWallet() {

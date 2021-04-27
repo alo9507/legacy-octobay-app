@@ -106,11 +106,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles', 'redirectPrefills']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account', 'redirectPrefills', 'githubUser']),
   },
   watch: {
     githubUser() {

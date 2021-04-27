@@ -6,7 +6,7 @@ export default function ({ store, app }) {
       app.$web3.eth.getAccounts(),
       app.$axios.$get('https://tokens.coingecko.com/uniswap/all.json'),
       app.$axios.$get(process.env.API_URL + '/graph/oracles'),
-      store.dispatch('github/login'),
+      store.dispatch('githubLogin'),
     ])
       .then((values) => {
         store.commit('setOctobayOwner', values[0].toLowerCase())
@@ -39,20 +39,6 @@ export default function ({ store, app }) {
                   .then((isOctobayAdmin) => {
                     store.commit('setOctobayAdmin', isOctobayAdmin)
                   })
-              }
-            })
-        }
-
-        if (store.state.github.user) {
-          app.$axios
-            .$get(
-              process.env.API_URL +
-                '/graph/user/' +
-                store.state.github.user.node_id
-            )
-            .then((user) => {
-              if (user) {
-                store.commit('setRegisteredAccounts', user.addresses)
               }
             })
         }

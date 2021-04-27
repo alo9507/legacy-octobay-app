@@ -52,7 +52,6 @@ export default {
   transition: 'fade',
   computed: {
     ...mapGetters(['view', 'account', 'octobayOwner', 'octobayAdmin']),
-    ...mapGetters('github', { githubUser: 'user' }),
   },
   mounted() {
     this.$store.commit('setView', 'send')

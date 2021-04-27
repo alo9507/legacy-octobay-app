@@ -361,11 +361,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles', 'nfts']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account', 'nfts']),
     canCreateNFT() {
       return (
         this.department.creator === this.account ||

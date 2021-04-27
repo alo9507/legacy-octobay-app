@@ -127,7 +127,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters(['githubUser']),
   },
   watch: {
     projectUrl(url) {

@@ -30,10 +30,6 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['ownDepartments']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAuthUrl: 'authUrl',
-    }),
   },
   mounted() {
     this.$store.dispatch('updateDepartments')

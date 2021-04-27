@@ -5,7 +5,8 @@ export const state = () => ({
   octobayAdmin: null,
   networkId: null,
   accounts: [],
-  registeredAccounts: [],
+  githubUser: null,
+  githubAccessToken: null,
   balance: 0,
   issues: [],
   tokenList: [],
@@ -50,8 +51,14 @@ export const getters = {
   connected(state) {
     return !!state.accounts.length
   },
-  registeredAccounts(state) {
-    return state.registeredAccounts
+  githubUser(state) {
+    return state.githubUser
+  },
+  githubAccessToken(state) {
+    return state.githubAccessToken
+  },
+  githubAuthUrl() {
+    return `https://github.com/login/oauth/authorize?scope=user:email,public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`
   },
   issues(state) {
     return state.issues
@@ -147,8 +154,14 @@ export const mutations = {
   setBalance(state, balance) {
     state.balance = balance
   },
-  setRegisteredAccounts(state, registeredAccounts) {
-    state.registeredAccounts = registeredAccounts
+  setGithubUser(state, user) {
+    state.githubUser = user
+  },
+  setGithubUserEthAddresses(state, addresses) {
+    state.githubUser.ethAddresses = addresses
+  },
+  setGithubAccessToken(state, accessToken) {
+    state.githubAccessToken = accessToken
   },
   setIssues(state, issues) {
     state.issues = issues
@@ -251,6 +264,38 @@ export const actions = {
         .getBalance(accounts[0])
         .then((balance) => commit('setBalance', balance))
     })
+  },
+  githubLogin({ commit, dispatch }) {
+    // in that case we look for an access token in localStorage
+    const accessToken = localStorage.getItem('github_access_token')
+    if (accessToken) {
+      // try to fetch user object
+      this.$axios
+        .$get('https://api.github.com/user', {
+          headers: {
+            Authorization: 'bearer ' + accessToken,
+          },
+        })
+        .then((response) => {
+          commit('setGithubAccessToken', accessToken)
+          commit('setGithubUser', response)
+          dispatch('updateGithubUserAddresses')
+        })
+    }
+  },
+  githubLogout({ commit }) {
+    localStorage.removeItem('github_access_token')
+    commit('setGithubUser', null)
+    commit('setGithubAccessToken', null)
+  },
+  updateGithubUserAddresses({ state, commit }) {
+    if (state.githubUser) {
+      this.$axios
+        .$get(process.env.API_URL + '/graph/user/' + state.githubUser.node_id)
+        .then((user) => {
+          commit('setGithubUserEthAddresses', user.addresses)
+        })
+    }
   },
   updateIssues({ commit }) {
     commit('setIssues', [])

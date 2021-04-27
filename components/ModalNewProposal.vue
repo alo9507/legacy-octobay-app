@@ -100,13 +100,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'oracles',
-      'ownDepartments',
-      'selectedDepartment',
-      'account',
-    ]),
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters(['ownDepartments', 'selectedDepartment', 'account']),
   },
   watch: {
     discussionUrl(url) {

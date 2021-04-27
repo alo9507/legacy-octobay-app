@@ -35,8 +35,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account']),
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters(['view']),
   },
   mounted() {
     this.$store.commit('setView', 'departments')

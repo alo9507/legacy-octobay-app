@@ -117,8 +117,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'balance', 'networkId']),
-    ...mapGetters('github', { githubUser: 'user', githubAuthUrl: 'authUrl' }),
+    ...mapGetters([
+      'connected',
+      'account',
+      'balance',
+      'networkId',
+      'githubUser',
+      'githubAuthUrl',
+    ]),
     formattedBalance() {
       return Number(
         this.$web3.utils.fromWei(this.balance.toString(), 'ether')

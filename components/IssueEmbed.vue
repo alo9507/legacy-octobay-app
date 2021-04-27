@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters(['githubUser']),
     amount() {
       return this.deposits.reduce(
         (amount, deposit) => BigInt(amount) + BigInt(deposit.amount),

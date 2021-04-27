@@ -222,11 +222,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account']),
   },
   mounted() {
     this.loading = true

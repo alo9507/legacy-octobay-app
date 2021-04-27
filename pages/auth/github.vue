@@ -32,9 +32,7 @@ export default {
           if (response.accessToken) {
             setTimeout(() => {
               localStorage.setItem('github_access_token', response.accessToken)
-              this.$store.dispatch('github/login').finally(() => {
-                this.$router.push('/')
-              })
+              this.$router.push('/')
             }, 1000)
           } else {
             this.error = true

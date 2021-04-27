@@ -251,17 +251,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'connected',
       'account',
       'selectedToken',
       'selectedRecipientType',
-      'selectedInterval',
       'showTokenList',
       'tokenList',
       'redirectPrefills',
       'departments',
+      'githubUser',
     ]),
-    ...mapGetters('github', { githubUser: 'user' }),
     confirmDisabled() {
       if (!this.sending && this.amount > 0) {
         if (this.selectedRecipientType === 'User' && this.user) {

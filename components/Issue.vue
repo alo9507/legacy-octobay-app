@@ -313,11 +313,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account', 'githubUser', 'githubAccessToken']),
     sortedLinkedPullRequests() {
       return this.linkedPullRequests
         .filter((pr) => pr)

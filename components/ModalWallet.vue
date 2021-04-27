@@ -7,7 +7,7 @@
         Verification successful! :)
       </div>
       <div
-        v-if="!registeredAccounts.length"
+        v-if="!githubUser.ethAddresses.length"
         class="alert bg-secondary text-white text-center"
       >
         To withdraw funds you need to fully verify your addresses.<br />
@@ -17,13 +17,16 @@
       </div>
       <div v-else class="mt-3">
         <small class="text-muted d-block text-center">Verified Addresses</small>
-        <div v-for="regAccount in registeredAccounts" :key="regAccount.address">
+        <div
+          v-for="regAddress in githubUser.ethAddresses"
+          :key="regAddress.address"
+        >
           <div
-            v-clipboard="regAccount.address"
-            v-clipboard:success="() => copiedAddress(regAccount.address)"
+            v-clipboard="regAddress.address"
+            v-clipboard:success="() => copiedAddress(regAddress.address)"
             :class="
               'd-flex justify-content-between align-items-center btn mt-2 position-relative' +
-              (regAccount.address === account
+              (regAddress.address === account
                 ? ' btn-dark text-white'
                 : ' btn-light')
             "
@@ -31,7 +34,7 @@
           >
             <transition name="fade" mode="out-in">
               <font-awesome-icon
-                v-if="copyAddressSuccess === regAccount.address"
+                v-if="copyAddressSuccess === regAddress.address"
                 key="check"
                 :icon="['fas', 'check']"
                 class="text-success"
@@ -39,17 +42,17 @@
               <font-awesome-icon v-else key="copy" :icon="['far', 'copy']" />
             </transition>
             <b class="my-auto">
-              <AddressShort :address="regAccount.address" length="medium" />
+              <AddressShort :address="regAddress.address" length="medium" />
             </b>
             <i
-              v-if="regAccount.address === account"
+              v-if="regAddress.address === account"
               class="bg-success d-flex rounded-xl"
               style="width: 8px; height: 8px"
             ></i>
             <i v-else></i>
           </div>
           <div
-            v-if="regAccount.address === account && nfts.length"
+            v-if="regAddress.address === account && nfts.length"
             class="border-light rounded-xl px-3 pb-3 position-relative"
             style="margin-top: -36px; padding-top: 32px; z-index: 0"
           >
@@ -145,8 +148,8 @@
       </div>
       <div
         v-if="
-          registeredAccounts.length &&
-          !registeredAccounts.map((a) => a.address).includes(account)
+          githubUser.ethAddresses.length &&
+          !githubUser.ethAddresses.map((a) => a.address).includes(account)
         "
         class="mt-3 alert bg-secondary text-white text-center"
       >
@@ -155,8 +158,8 @@
       </div>
       <h5
         v-if="
-          registeredAccounts.length &&
-          !registeredAccounts.map((a) => a.address).includes(account)
+          githubUser.ethAddresses.length &&
+          !githubUser.ethAddresses.map((a) => a.address).includes(account)
         "
         class="text-muted-light text-center pt-2"
       >
@@ -166,7 +169,7 @@
         v-if="
           githubUser &&
           connected &&
-          !registeredAccounts.map((a) => a.address).includes(account)
+          !githubUser.ethAddresses.map((a) => a.address).includes(account)
         "
         class="pb-2"
       >
@@ -270,12 +273,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['connected', 'account', 'registeredAccounts', 'nfts']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-      githubAuthUrl: 'authUrl',
-    }),
+    ...mapGetters([
+      'connected',
+      'account',
+      'nfts',
+      'githubUser',
+      'githubAccessToken',
+    ]),
   },
   watch: {
     account() {
@@ -293,7 +297,9 @@ export default {
       if (
         this.connected &&
         this.githubUser &&
-        !this.registeredAccounts.map((a) => a.address).includes(this.account)
+        !this.githubUser.ethAddresses
+          .map((a) => a.address)
+          .includes(this.account)
       ) {
         addressRepoExists(
           this.githubUser.login,
@@ -322,11 +328,7 @@ export default {
         (state) => (this.waitingForOracleFulfillment = state)
       ).then(() => {
         this.verificationSuccess = true
-        this.$axios
-          .$get(process.env.API_URL + '/graph/user/' + this.githubUser.node_id)
-          .then((user) => {
-            this.$store.commit('setRegisteredAccounts', user.addresses)
-          })
+        this.$store.dispatch('updateGithubUserAddresses')
       })
     },
     transferNft(nft, ethAddress) {
