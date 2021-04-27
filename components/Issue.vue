@@ -411,10 +411,7 @@ export default {
       this.refundingDeposit = id
       this.$octobay.methods
         .refundIssueDeposit(id)
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
+        .send({ from: this.account })
         .then(() => {
           this.$store.commit('removeDeposit', {
             issueId: this.issue.id,

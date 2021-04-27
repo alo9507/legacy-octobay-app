@@ -1,11 +1,8 @@
 const Web3 = require('web3')
-// const { RelayProvider } = require('@opengsn/gsn')
 
 export default ({ store, app }, inject) => {
   if (window.ethereum) {
-    const plainWeb3 = new Web3(window.ethereum)
-
-    const web3 = plainWeb3 // new Web3(gsnRelayProvider)
+    const web3 = new Web3(window.ethereum)
 
     window.ethereum.on('accountsChanged', (accounts) => {
       store.commit('setAccounts', accounts)

@@ -36,8 +36,6 @@ export default {
     APP_NAME: process.env.APP_NAME,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
-    GSN_RELAYHUB_ADDRESS: process.env.GSN_RELAYHUB_ADDRESS,
-    GSN_PAYMASTER_ADDRESS: process.env.GSN_PAYMASTER_ADDRESS,
   },
 
   /*
@@ -104,14 +102,7 @@ export default {
       '@nuxtjs/dotenv',
       {
         path: './',
-        only: [
-          'API_URL',
-          'APP_NAME',
-          'GITHUB_CLIENT_ID',
-          'OCTOBAY_ADDRESS',
-          'GSN_RELAYHUB_ADDRESS',
-          'GSN_PAYMASTER_ADDRESS',
-        ],
+        only: ['API_URL', 'APP_NAME', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS'],
       },
     ],
     '@nuxtjs/fontawesome',

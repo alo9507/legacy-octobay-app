@@ -360,7 +360,6 @@ export default {
       this.$octobay.methods
         .depositEthForGithubUser(this.user.id)
         .send({
-          // useGSN: false,
           from: this.account,
           value: this.$web3.utils.toWei(this.amount, 'ether'),
         })
@@ -388,7 +387,6 @@ export default {
             this.departmentForIssue.projectId
           )
           .send({
-            // useGSN: false,
             from: this.account,
             value: this.$web3.utils.toWei(this.amount, 'ether'),
           })
@@ -403,7 +401,6 @@ export default {
         this.$octobay.methods
           .depositEthForIssue(this.issue.id)
           .send({
-            // useGSN: false,
             from: this.account,
             value: this.$web3.utils.toWei(this.amount, 'ether'),
           })
@@ -435,10 +432,7 @@ export default {
       this.refundingUserDeposit = id
       this.$octobay.methods
         .refundUserDeposit(id)
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
+        .send({ from: this.account })
         .then(() => {
           this.$store.dispatch('updateEthBalance')
           setTimeout(() => this.updateUserDeposits(), 1000)

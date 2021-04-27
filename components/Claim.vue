@@ -174,10 +174,7 @@ export default {
       this.withdrawingUserDeposit = id
       this.$octobay.methods
         .withdrawUserDeposit(id)
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
+        .send({ from: this.account })
         .then(() => {
           setTimeout(() => this.updateUserDeposits(), 1000)
           this.$store.dispatch('updateEthBalance')
