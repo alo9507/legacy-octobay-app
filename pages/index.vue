@@ -20,7 +20,7 @@
         >Claim</a
       >
       <a
-        v-if="account && (account === octobayOwner || octobayAdmin)"
+        v-if="isOctobayOwner || isOctobayAdmin"
         href="#"
         :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')"
         @click="$store.commit('setView', 'admin')"
@@ -33,13 +33,7 @@
         <SendForm v-if="view == 'send'" />
         <IssuesList v-else-if="view == 'issues'" />
         <Claim v-else-if="view == 'claim'" />
-        <Admin
-          v-else-if="
-            account &&
-            (account === octobayOwner || octobayAdmin) &&
-            view == 'admin'
-          "
-        />
+        <Admin v-else-if="view == 'admin'" />
       </keep-alive>
     </transition>
   </div>
@@ -51,7 +45,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'octobayOwner', 'octobayAdmin']),
+    ...mapGetters(['view', 'account', 'isOctobayOwner', 'isOctobayAdmin']),
   },
   mounted() {
     this.$store.commit('setView', 'send')

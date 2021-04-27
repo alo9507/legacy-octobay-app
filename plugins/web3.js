@@ -10,23 +10,8 @@ export default ({ store, app }, inject) => {
     window.ethereum.on('accountsChanged', (accounts) => {
       store.commit('setAccounts', accounts)
       store.dispatch('updateEthBalance')
-
-      app.$octobayGovNFT.methods
-        .getTokenIDForUserInProject(
-          accounts[0],
-          'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
-        )
-        .call()
-        .then((tokenId) => {
-          if (tokenId) {
-            app.$octobayGovNFT.methods
-              .hasPermission(tokenId, 1)
-              .call()
-              .then((isOctobayAdmin) => {
-                store.commit('setOctobayAdmin', isOctobayAdmin)
-              })
-          }
-        })
+      store.dispatch('updateIsOctobayOwner')
+      store.dispatch('updateIsOctobayAdmin')
     })
 
     window.ethereum.on('chainChanged', () => {

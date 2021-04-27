@@ -1,8 +1,8 @@
 export const state = () => ({
   loaded: false,
   loadError: null,
-  octobayOwner: null,
-  octobayAdmin: null,
+  isOctobayOwner: null,
+  isOctobayAdmin: null,
   networkId: null,
   accounts: [],
   githubUser: null,
@@ -108,11 +108,11 @@ export const getters = {
   modalData(state) {
     return state.modalData
   },
-  octobayOwner(state) {
-    return state.octobayOwner
+  isOctobayOwner(state) {
+    return state.isOctobayOwner
   },
-  octobayAdmin(state) {
-    return state.octobayAdmin
+  isOctobayAdmin(state) {
+    return state.isOctobayAdmin
   },
   selectedDepartment(state) {
     return state.selectedDepartment
@@ -239,11 +239,11 @@ export const mutations = {
   setModalData(state, data) {
     state.modalData = data
   },
-  setOctobayOwner(state, owner) {
-    state.octobayOwner = owner
+  setIsOctobayOwner(state, isOwner) {
+    state.isOctobayOwner = isOwner
   },
-  setOctobayAdmin(state, isAdmin) {
-    state.octobayAdmin = isAdmin
+  setIsOctobayAdmin(state, isAdmin) {
+    state.isOctobayAdmin = isAdmin
   },
   setDepartments(state, departments) {
     state.departments = departments
@@ -259,8 +259,13 @@ export const mutations = {
 export const actions = {
   web3connect({ commit, dispatch }) {
     this.$web3.eth.requestAccounts().then((accounts) => {
-      commit('setAccounts', accounts)
+      commit(
+        'setAccounts',
+        accounts.map((a) => a.toLowerCase())
+      )
       dispatch('updateEthBalance')
+      dispatch('updateIsOctobayOwner')
+      dispatch('updateIsOctobayAdmin')
     })
   },
   updateEthBalance({ state, commit }) {
@@ -342,5 +347,31 @@ export const actions = {
     this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
       commit('setOracles', oracles)
     })
+  },
+  updateIsOctobayOwner({ state, commit }) {
+    this.$octobay.methods
+      .owner()
+      .call()
+      .then((owner) => {
+        commit('setIsOctobayOwner', state.accounts[0] === owner.toLowerCase())
+      })
+  },
+  updateIsOctobayAdmin({ state, commit }) {
+    this.$octobayGovNFT.methods
+      .getTokenIDForUserInProject(
+        state.accounts[0],
+        'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
+      )
+      .call()
+      .then((tokenId) => {
+        if (tokenId) {
+          this.$octobayGovNFT.methods
+            .hasPermission(tokenId, 1)
+            .call()
+            .then((isOctobayAdmin) =>
+              commit('setIsOctobayAdmin', isOctobayAdmin)
+            )
+        }
+      })
   },
 }
