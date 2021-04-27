@@ -241,8 +241,13 @@ export const actions = {
       .getId()
       .then((chainId) => commit('setNetworkId', chainId))
   },
-  web3connect({ commit, dispatch }) {
-    this.$web3.eth.requestAccounts().then((accounts) => {
+  web3connect({ dispatch }) {
+    this.$web3.eth.requestAccounts().then(() => {
+      dispatch('updateAccounts')
+    })
+  },
+  updateAccounts({ commit, dispatch }) {
+    this.$web3.eth.getAccounts().then((accounts) => {
       commit(
         'setAccounts',
         accounts.map((a) => a.toLowerCase())
