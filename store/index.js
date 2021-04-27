@@ -253,10 +253,8 @@ export const actions = {
     }
   },
   githubLogin({ commit, dispatch }) {
-    // in that case we look for an access token in localStorage
     const accessToken = localStorage.getItem('github_access_token')
     if (accessToken) {
-      // try to fetch user object
       this.$axios
         .$get('https://api.github.com/user', {
           headers: {
