@@ -257,13 +257,20 @@ export const mutations = {
 }
 
 export const actions = {
-  web3connect({ commit }) {
+  web3connect({ commit, dispatch }) {
     this.$web3.eth.requestAccounts().then((accounts) => {
       commit('setAccounts', accounts)
-      this.$web3.eth
-        .getBalance(accounts[0])
-        .then((balance) => commit('setBalance', balance))
+      dispatch('updateEthBalance')
     })
+  },
+  updateEthBalance({ state, commit }) {
+    if (state.accounts.length) {
+      this.$web3.eth
+        .getBalance(state.accounts[0])
+        .then((balance) => commit('setBalance', balance))
+    } else {
+      commit('setBalance', '0')
+    }
   },
   githubLogin({ commit, dispatch }) {
     // in that case we look for an access token in localStorage

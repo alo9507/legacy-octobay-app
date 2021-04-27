@@ -385,9 +385,7 @@ export default {
           this.amount = 0
           this.showSendSuccess = true
           setTimeout(() => this.updateUserDeposits(), 1000)
-          this.$web3.eth
-            .getBalance(this.account)
-            .then((balance) => this.$store.commit('setBalance', balance))
+          this.$store.dispatch('updateEthBalance')
         })
         .catch((e) => {
           console.log(e)
@@ -413,9 +411,7 @@ export default {
           })
           .then((tx) => {
             this.$store.dispatch('updateIssues')
-            this.$web3.eth
-              .getBalance(this.account)
-              .then((balance) => this.$store.commit('setBalance', balance))
+            this.$store.dispatch('updateEthBalance')
             this.sending = false
             this.showIssueDepositSuccess = true
             this.amount = 0
@@ -430,9 +426,7 @@ export default {
           })
           .then((tx) => {
             this.$store.dispatch('updateIssues')
-            this.$web3.eth
-              .getBalance(this.account)
-              .then((balance) => this.$store.commit('setBalance', balance))
+            this.$store.dispatch('updateEthBalance')
             this.sending = false
             this.showIssueDepositSuccess = true
             this.amount = 0
@@ -463,9 +457,7 @@ export default {
           from: this.account,
         })
         .then(() => {
-          this.$web3.eth
-            .getBalance(this.account)
-            .then((balance) => this.$store.commit('setBalance', balance))
+          this.$store.dispatch('updateEthBalance')
           setTimeout(() => this.updateUserDeposits(), 1000)
         })
         .catch((e) => console.log(e))

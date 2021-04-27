@@ -180,9 +180,7 @@ export default {
         })
         .then(() => {
           setTimeout(() => this.updateUserDeposits(), 1000)
-          this.$web3.eth
-            .getBalance(this.account)
-            .then((balance) => this.$store.commit('setBalance', balance))
+          this.$store.dispatch('updateEthBalance')
         })
         .catch((e) => console.log(e))
         .finally(() => (this.withdrawingUserDeposit = 0))

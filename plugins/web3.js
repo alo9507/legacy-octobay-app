@@ -9,9 +9,7 @@ export default ({ store, app }, inject) => {
 
     window.ethereum.on('accountsChanged', (accounts) => {
       store.commit('setAccounts', accounts)
-      app.$web3.eth
-        .getBalance(accounts[0])
-        .then((balance) => store.commit('setBalance', balance))
+      store.dispatch('updateEthBalance')
 
       app.$octobayGovNFT.methods
         .getTokenIDForUserInProject(

@@ -426,9 +426,7 @@ export default {
           })
           .then((result) => {
             this.$store.dispatch('updatePins', this.issue.id)
-            this.$web3.eth
-              .getBalance(this.account)
-              .then((balance) => this.$store.commit('setBalance', balance))
+            this.$store.dispatch('updateEthBalance')
             this.pinAmount = 0
           })
           .catch((e) => {
