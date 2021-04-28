@@ -1,11 +1,34 @@
 <template>
-  <div class="card shadow-sm d-flex flex-column">
-    <div class="card-body pt-0" @click.stop>
-      <h5 class="text-center text-muted-light py-2 px-4 mt-4">Wallet</h5>
+  <div class="card shadow-sm d-flex flex-column" @click.stop>
+    <div class="card-body">
+      <h5 class="text-center text-muted-light m-0">Wallet</h5>
       <div v-if="verificationSuccess" class="alert alert-success mb-0">
         <font-awesome-icon :icon="['fas', 'check']" />
         Verification successful! :)
       </div>
+    </div>
+    <div class="card-body px-0 border-top-light border-bottom-light">
+      <div class="d-flex justify-content-center align-items-center px-3">
+        <GithubAvatar
+          :profile-url="githubUser.html_url"
+          :avatar-url="githubUser.avatar_url"
+          size="2.5rem"
+        />
+        <h3 class="ml-2 mr-auto mb-0">
+          <a
+            :href="githubUser.html_url"
+            target="_blank"
+            class="font-weight-bold"
+          >
+            <b>{{ githubUser.login }}</b>
+          </a>
+        </h3>
+        <button class="btn btn-light shadow-sm" @click="githubLogout()">
+          logout
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
       <div
         v-if="!githubUser.ethAddresses.length"
         class="alert bg-secondary text-white text-center"
@@ -15,7 +38,7 @@
         Create a repository on GitHub, named after the address you are connected
         with.
       </div>
-      <div v-else class="mt-3">
+      <div v-else>
         <small class="text-muted d-block text-center">Verified Addresses</small>
         <div
           v-for="regAddress in githubUser.ethAddresses"
@@ -352,6 +375,10 @@ export default {
       setTimeout(() => {
         this.copyAddressSuccess = null
       }, 1000)
+    },
+    githubLogout() {
+      this.closeModal()
+      this.$store.dispatch('githubLogout')
     },
   },
 }
