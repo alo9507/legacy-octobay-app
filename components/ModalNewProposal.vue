@@ -83,8 +83,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   data() {
     return {
       success: false,
@@ -166,7 +168,7 @@ export default {
               this.quorum = null
               this.waitingForTransaction = false
               setTimeout(() => {
-                this.$store.commit('setShowModal', false)
+                this.closeModal()
               }, 1000)
             })
           }, 3000)

@@ -95,5 +95,9 @@ export default {
       this.$store.commit('setModalComponent', component)
       this.$store.commit('setShowModal', true)
     },
+    closeModal() {
+      this.$store.commit('setModalComponent', null)
+      this.$store.commit('setShowModal', false)
+    },
   },
 }

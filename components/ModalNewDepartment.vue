@@ -210,7 +210,7 @@ export default {
           this.minQuorum = null
           setTimeout(() => {
             this.$store.dispatch('updateDepartments')
-            this.$store.commit('setShowModal', false)
+            this.closeModal()
           }, 3000)
         })
       }
