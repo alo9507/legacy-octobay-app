@@ -1,6 +1,6 @@
 export const state = () => ({
-  isOctobayOwner: null,
-  isOctobayAdmin: null,
+  isOctobayOwner: false,
+  isOctobayAdmin: false,
   networkId: null,
   accounts: [],
   githubUser: null,
@@ -321,21 +321,25 @@ export const actions = {
       })
   },
   updateIsOctobayAdmin({ getters, commit }) {
-    this.$octobayGovNFT.methods
-      .getTokenIDForUserInProject(
-        getters.account,
-        'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
-      )
-      .call()
-      .then((tokenId) => {
-        if (tokenId) {
-          this.$octobayGovNFT.methods
-            .hasPermission(tokenId, 1)
-            .call()
-            .then((isOctobayAdmin) =>
-              commit('setIsOctobayAdmin', isOctobayAdmin)
-            )
-        }
-      })
+    if (getters.account) {
+      this.$octobayGovNFT.methods
+        .getTokenIDForUserInProject(
+          getters.account,
+          'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
+        )
+        .call()
+        .then((tokenId) => {
+          if (tokenId) {
+            this.$octobayGovNFT.methods
+              .hasPermission(tokenId, 1)
+              .call()
+              .then((isOctobayAdmin) =>
+                commit('setIsOctobayAdmin', isOctobayAdmin)
+              )
+          }
+        })
+    } else {
+      commit('setIsOctobayAdmin', false)
+    }
   },
 }
