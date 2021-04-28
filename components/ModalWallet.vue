@@ -198,12 +198,12 @@
       >
         <div
           v-clipboard="account"
-          v-clipboard:success="copiedAddress"
+          v-clipboard:success="() => copiedAddress(account)"
           class="d-flex justify-content-between align-items-center btn btn-light mt-3"
         >
           <transition name="fade" mode="out-in">
             <font-awesome-icon
-              v-if="copyAddressSuccess"
+              v-if="copyAddressSuccess === account"
               key="check"
               :icon="['fas', 'check']"
               class="text-success"
