@@ -1,8 +1,10 @@
-export default function ({ store }) {
+export default function ({ app, store }) {
+  store.dispatch('githubLogin')
   store.dispatch('updateIssues')
   store.dispatch('updateDepartments')
   store.dispatch('updateOracles')
-  store.dispatch('updateNetworkId')
-  store.dispatch('updateAccounts')
-  store.dispatch('githubLogin')
+  if (app.$web3) {
+    store.dispatch('updateNetworkId')
+    store.dispatch('updateAccounts')
+  }
 }
