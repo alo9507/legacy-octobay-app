@@ -1,13 +1,17 @@
 <template>
-  <div class="header my-3 p-3">
+  <div class="header d-flex align-items-center my-3 p-3">
+    <div class="mr-2">
+      <GithubAvatar
+        v-if="githubUser"
+        :profile-url="githubUser.html_url"
+        :avatar-url="githubUser.avatar_url"
+        size="2.5em"
+      />
+      <Logo v-else color="white" class="bg-secondary rounded-xl" size="md" />
+    </div>
     <transition name="fade" mode="out-in">
       <div v-if="connected && githubUser" :class="cssClasses">
-        <GithubAvatar
-          :profile-url="githubUser.html_url"
-          :avatar-url="githubUser.avatar_url"
-          size="2.5em"
-        />
-        <div class="d-flex ml-1">
+        <div class="d-flex">
           <div
             class="d-flex align-items-center bg-white pl-1 pr-5 rounded-xl border-light"
             style="margin-right: -55px"
@@ -45,54 +49,8 @@
           </div>
         </div>
       </div>
-
-      <div v-else-if="connected" :class="cssClasses">
-        <Logo
-          color="white"
-          class="mr-2"
-          size="md"
-          style="background-color: #652fff; border-radius: 50%"
-        />
-        <a :href="githubAuthUrl" class="ml-2 btn btn-lg btn-light shadow-sm">
-          Connect GitHub
-        </a>
-      </div>
-
       <div v-else :class="cssClasses">
-        <GithubAvatar
-          v-if="githubUser"
-          :profile-url="githubUser.html_url"
-          :avatar-url="githubUser.avatar_url"
-          size="2.5em"
-        />
-        <Logo
-          v-else
-          color="white"
-          class="mr-2"
-          size="md"
-          style="background-color: #652fff; border-radius: 50%"
-        />
-        <span
-          v-if="!connected"
-          key="disconnected"
-          class="d-flex align-items-center"
-        >
-          <button
-            v-if="$web3"
-            class="ml-2 btn btn-lg btn-light shadow-sm"
-            @click="$store.dispatch('web3connect')"
-          >
-            Connect Wallet
-          </button>
-          <a
-            v-else
-            href="https://metamask.io"
-            target="_blank"
-            class="ml-2 btn btn-lg btn-light shadow-sm"
-          >
-            Install MetaMask
-          </a>
-        </span>
+        <ConnectActionButton :required="['wallet', 'github']" size="lg" />
       </div>
     </transition>
   </div>
