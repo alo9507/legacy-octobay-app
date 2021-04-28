@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
       <ConnectActionButton
-        :action="newDepartment"
+        :action="() => openModal('ModalNewDepartment')"
         :required="['wallet']"
         size="lg"
       >
@@ -26,20 +26,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   computed: {
     ...mapGetters(['ownDepartments']),
   },
   mounted() {
     this.$store.dispatch('updateDepartments')
-  },
-  methods: {
-    newDepartment() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalNewDepartment')
-      this.$store.commit('setShowModal', true)
-    },
   },
 }
 </script>

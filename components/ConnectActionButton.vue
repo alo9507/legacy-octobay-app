@@ -27,7 +27,7 @@
       :class="
         'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
       "
-      @click="showWallet()"
+      @click="openModal('ModalWallet')"
     >
       Verify Address
     </a>
@@ -47,8 +47,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   props: {
     action: {
       type: Function,
@@ -69,13 +71,6 @@ export default {
   },
   computed: {
     ...mapGetters(['account', 'githubUser', 'githubAuthUrl']),
-  },
-  methods: {
-    showWallet() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalWallet')
-      this.$store.commit('setShowModal', true)
-    },
   },
 }
 </script>

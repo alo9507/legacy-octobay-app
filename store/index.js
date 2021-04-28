@@ -18,7 +18,6 @@ export const state = () => ({
   showOracleList: false,
   showModal: false,
   modalComponent: null,
-  modalData: null,
   selectedDepartment: null,
   departments: [],
   nfts: [],
@@ -84,9 +83,6 @@ export const getters = {
   },
   modalComponent(state) {
     return state.modalComponent
-  },
-  modalData(state) {
-    return state.modalData
   },
   isOctobayOwner(state) {
     return state.isOctobayOwner
@@ -200,9 +196,6 @@ export const mutations = {
   },
   setModalComponent(state, component) {
     state.modalComponent = component
-  },
-  setModalData(state, data) {
-    state.modalData = data
   },
   setIsOctobayOwner(state, isOwner) {
     state.isOctobayOwner = isOwner

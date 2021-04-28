@@ -91,5 +91,9 @@ export default {
           .catch((e) => reject(e))
       })
     },
+    openModal(component) {
+      this.$store.commit('setModalComponent', component)
+      this.$store.commit('setShowModal', true)
+    },
   },
 }

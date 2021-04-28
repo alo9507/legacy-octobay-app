@@ -14,7 +14,7 @@
           >
             <button
               class="btn btn-sm btn-primary shadow-sm mr-2"
-              @click="showWallet()"
+              @click="openModal('ModalWallet')"
             >
               <font-awesome-icon :icon="['fas', 'wallet']" />
             </button>
@@ -107,8 +107,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   data() {
     return {
       cssClasses:
@@ -128,13 +130,6 @@ export default {
       return Number(
         this.$web3.utils.fromWei(this.balance.toString(), 'ether')
       ).toFixed(2)
-    },
-  },
-  methods: {
-    showWallet() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalWallet')
-      this.$store.commit('setShowModal', true)
     },
   },
 }

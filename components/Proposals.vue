@@ -2,7 +2,7 @@
   <div>
     <div class="card-body">
       <ConnectActionButton
-        :action="newProposal"
+        :action="() => openModal('ModalNewProposal')"
         :required="['wallet']"
         size="lg"
       >
@@ -38,8 +38,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   computed: {
     ...mapGetters(['ownDepartments']),
     selectedDepartment: {
@@ -59,13 +61,6 @@ export default {
           []
         )
       }
-    },
-  },
-  methods: {
-    newProposal() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalNewProposal')
-      this.$store.commit('setShowModal', true)
     },
   },
 }
