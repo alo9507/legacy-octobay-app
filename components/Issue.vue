@@ -318,17 +318,21 @@ export default {
   watch: {
     showDetails(show) {
       if (show) {
-        this.$axios
-          .$get(
-            `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`,
-            {
-              headers: {
-                Authorization: 'bearer ' + this.githubAccessToken,
-              },
-            }
-          )
-          .then((isRepoAdmin) => (this.isRepoAdmin = isRepoAdmin))
-          .catch(() => (this.isRepoAdmin = false))
+        if (this.githubUser) {
+          this.$axios
+            .$get(
+              `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`,
+              {
+                headers: {
+                  Authorization: 'bearer ' + this.githubAccessToken,
+                },
+              }
+            )
+            .then((isRepoAdmin) => (this.isRepoAdmin = isRepoAdmin))
+            .catch(() => (this.isRepoAdmin = false))
+        } else {
+          this.isRepoAdmin = false
+        }
 
         this.linkedPullRequests = []
         this.$axios
@@ -364,14 +368,18 @@ export default {
             labels: issue.labels.edges.map((label) => label.node),
             closed: issue.closed,
           }
-          this.$axios
-            .$get(
-              process.env.API_URL +
-                `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issueNode.id}`
-            )
-            .then((can) => {
-              this.canWithdrawIssue = can
-            })
+          if (this.githubUser) {
+            this.$axios
+              .$get(
+                process.env.API_URL +
+                  `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issueNode.id}`
+              )
+              .then((can) => {
+                this.canWithdrawIssue = can
+              })
+          } else {
+            this.canWithdrawIssue = false
+          }
         }
       })
       .finally(() => (this.loading = false))

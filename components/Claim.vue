@@ -135,14 +135,18 @@ export default {
           this.loadIssue(owner, repo, number)
             .then((issue) => {
               this.issue = issue
-              this.$axios
-                .$get(
-                  process.env.API_URL +
-                    `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issue.id}`
-                )
-                .then((can) => {
-                  this.canWithdrawIssue = can
-                })
+              if (this.githubUser) {
+                this.$axios
+                  .$get(
+                    process.env.API_URL +
+                      `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issue.id}`
+                  )
+                  .then((can) => {
+                    this.canWithdrawIssue = can
+                  })
+              } else {
+                this.canWithdrawIssue = false
+              }
             })
             .finally(() => (this.loadingIssue = false))
         }
