@@ -166,7 +166,6 @@ export default {
               this.quorum = null
               this.waitingForTransaction = false
               setTimeout(() => {
-                this.$store.commit('setModalData', null)
                 this.$store.commit('setShowModal', false)
               }, 1000)
             })

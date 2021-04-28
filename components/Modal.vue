@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     close() {
-      this.$store.commit('setModalData', null)
       this.$store.commit('setShowModal', false)
     },
   },
