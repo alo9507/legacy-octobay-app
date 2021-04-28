@@ -1,7 +1,17 @@
 <template>
   <div>
+    <a
+      v-if="!$web3"
+      href="https://metamask.io"
+      target="_blank"
+      :class="
+        'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
+      "
+    >
+      Install MetaMask
+    </a>
     <button
-      v-if="required.includes('wallet') && !account"
+      v-else-if="required.includes('wallet') && !account"
       :class="
         'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
       "
@@ -32,7 +42,7 @@
       Verify Address
     </a>
     <button
-      v-else-if="$web3"
+      v-else
       :class="
         'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
       "
@@ -41,7 +51,6 @@
     >
       <slot></slot>
     </button>
-    <div v-else class="alert bg-secondary text-white">Browser unsupported.</div>
   </div>
 </template>
 
