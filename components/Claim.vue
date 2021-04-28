@@ -33,8 +33,8 @@
         v-if="issue && canWithdrawIssue === false"
         class="alert bg-secondary text-white text-center border-0 mb-2 mt-3"
       >
-        This issue has not been closed by your pull request and was not released
-        to you manually.
+        This issue has not been closed by a pull request of yours and was not
+        released to you manually.
       </div>
       <ConnectActionButton
         :action="withdrawFromIssue"
