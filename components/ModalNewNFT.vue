@@ -120,7 +120,7 @@ export default {
     btnDisabled() {
       return (
         this.creatingNFT ||
-        !this.$web3.utils.isAddress(this.ethAddress) ||
+        !this.$web3utils.isAddress(this.ethAddress) ||
         !Object.values(this.permissions).find((perm) => perm === true)
       )
     },

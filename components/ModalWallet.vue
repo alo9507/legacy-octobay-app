@@ -125,7 +125,7 @@
                   class="btn btn-primary shadow-sm w-100 mt-2"
                   :disabled="
                     transferingNFT ||
-                    !$web3.utils.isAddress(nftTransferAddress[nft.id])
+                    !$web3utils.isAddress(nftTransferAddress[nft.id])
                   "
                   @click="transferNft(nft, nftTransferAddress[nft.id])"
                 >

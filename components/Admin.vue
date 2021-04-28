@@ -243,7 +243,7 @@ export default {
           this.newOracle.ethAddress,
           this.newOracle.name,
           ['register'],
-          [[this.$web3.utils.toHex(this.newOracle.registerJobId), jobFee]]
+          [[this.$web3utils.toHex(this.newOracle.registerJobId), jobFee]]
         )
         .send({ from: this.account })
         .then(() => {
@@ -263,7 +263,7 @@ export default {
       this.oracleUpdating = oracle
       this.jobUpdating = type
       this.$octobay.methods
-        .setOracleJob(oracle, type, this.$web3.utils.toHex(jobId), jobFee)
+        .setOracleJob(oracle, type, this.$web3utils.toHex(jobId), jobFee)
         .send({ from: this.account })
         .then(() => {
           this.oracleUpdating = false
@@ -285,7 +285,7 @@ export default {
       this.addingOracleJob = true
       this.$octobay.methods
         .addOracleJob(this.newOracleJob.oracle, this.newOracleJob.jobName, [
-          this.$web3.utils.toHex(this.newOracleJob.jobId),
+          this.$web3utils.toHex(this.newOracleJob.jobId),
           this.newOracleJob.jobFee,
         ])
         .send({ from: this.account })

@@ -197,7 +197,7 @@
           <GithubUser :github-user-id="deposit.user.id" />
         </small>
         <div class="d-flex flex-column mb-0 ml-auto mr-2 text-right">
-          <b>{{ $web3.utils.fromWei(deposit.amount, 'ether') }}</b>
+          <b>{{ $web3utils.fromWei(deposit.amount, 'ether') }}</b>
           <sup class="pt-2">ETH</sup>
         </div>
         <button
@@ -361,7 +361,7 @@ export default {
         .depositEthForGithubUser(this.user.id)
         .send({
           from: this.account,
-          value: this.$web3.utils.toWei(this.amount, 'ether'),
+          value: this.$web3utils.toWei(this.amount, 'ether'),
         })
         .then(() => {
           this.amount = 0
@@ -387,7 +387,7 @@ export default {
           )
           .send({
             from: this.account,
-            value: this.$web3.utils.toWei(this.amount, 'ether'),
+            value: this.$web3utils.toWei(this.amount, 'ether'),
           })
           .then(() => {
             this.$store.dispatch('updateIssues')
@@ -407,7 +407,7 @@ export default {
           .depositEthForIssue(this.issue.id)
           .send({
             from: this.account,
-            value: this.$web3.utils.toWei(this.amount, 'ether'),
+            value: this.$web3utils.toWei(this.amount, 'ether'),
           })
           .then(() => {
             this.$store.dispatch('updateIssues')

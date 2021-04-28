@@ -65,7 +65,7 @@
           <GithubUser :from-address="deposit.from" :force-show-address="true" />
         </small>
         <div class="d-flex flex-column mb-0 ml-auto mr-2 text-right">
-          <b>{{ $web3.utils.fromWei(deposit.amount, 'ether') }}</b>
+          <b>{{ $web3utils.fromWei(deposit.amount, 'ether') }}</b>
           <sup class="pt-2">ETH</sup>
         </div>
         <ConnectActionButton

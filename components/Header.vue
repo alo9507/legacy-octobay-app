@@ -121,7 +121,7 @@ export default {
     ]),
     formattedBalance() {
       return Number(
-        this.$web3.utils.fromWei(this.balance.toString(), 'ether')
+        this.$web3utils.fromWei(this.balance.toString(), 'ether')
       ).toFixed(2)
     },
   },

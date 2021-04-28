@@ -46,7 +46,7 @@
         </a>
       </small>
       <span v-if="amount" class="font-weight-bold">
-        {{ Number($web3.utils.fromWei(amount.toString(), 'ether')).toFixed(2) }}
+        {{ Number($web3utils.fromWei(amount.toString(), 'ether')).toFixed(2) }}
         ETH
       </span>
     </span>

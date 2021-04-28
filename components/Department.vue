@@ -53,7 +53,7 @@
                 Current supply<br />
                 <b>
                   <span v-if="totalSupply !== null">
-                    {{ $web3.utils.fromWei(totalSupply, 'ether') }}
+                    {{ $web3utils.fromWei(totalSupply, 'ether') }}
                   </span>
                   <font-awesome-icon
                     v-else
@@ -71,7 +71,7 @@
                 <b v-if="department.holders.length">
                   {{
                     (
-                      Number($web3.utils.fromWei(totalSupply, 'ether')) /
+                      Number($web3utils.fromWei(totalSupply, 'ether')) /
                       department.holders.length
                     ).toFixed(0)
                   }}
@@ -156,7 +156,7 @@
                       />
                     </small>
                     <small>
-                      {{ $web3.utils.fromWei(holder.balance, 'ether') }}
+                      {{ $web3utils.fromWei(holder.balance, 'ether') }}
                       {{ department.symbol }}
                     </small>
                   </div>

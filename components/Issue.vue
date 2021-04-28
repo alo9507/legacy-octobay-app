@@ -34,7 +34,7 @@
             <div class="mb-0 d-flex align-items-center">
               <div class="text-center d-flex flex-column align-items-end">
                 <div>
-                  {{ $web3.utils.fromWei(issue.depositAmount, 'ether') }}
+                  {{ $web3utils.fromWei(issue.depositAmount, 'ether') }}
                   <img src="/eth-logo.png" width="16px" height="16" />
                 </div>
               </div>
@@ -156,7 +156,7 @@
                 >
                   <div class="d-flex flex-column">
                     <h5 class="mb-0">
-                      {{ Number($web3.utils.fromWei(deposit.amount, 'ether')) }}
+                      {{ Number($web3utils.fromWei(deposit.amount, 'ether')) }}
                       <small>ETH</small>
                     </h5>
                     <small class="text-muted">
