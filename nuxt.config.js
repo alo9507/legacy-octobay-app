@@ -82,7 +82,6 @@ export default {
     '@/plugins/tooltips',
     '@/plugins/clipboard',
     '@/plugins/web3',
-    '@/plugins/octobay',
     '@/plugins/octicons',
   ],
   /*
