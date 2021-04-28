@@ -25,7 +25,7 @@
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
       <a
-        :href="'https://kovan.etherscan.io/address/' + $octobay.options.address"
+        :href="'https://kovan.etherscan.io/address/' + octobayAddress"
         class="text-white px-2"
       >
         <font-awesome-icon :icon="['fab', 'ethereum']" />
@@ -59,6 +59,16 @@
     </div>
   </footer>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      octobayAddress: process.env.OCTOBAY_ADDRESS,
+    }
+  },
+}
+</script>
 
 <style lang="sass" scoped>
 footer
