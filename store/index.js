@@ -31,7 +31,7 @@ export const getters = {
     return state.accounts
   },
   account(state) {
-    return state.accounts.length ? state.accounts[0].toLowerCase() : null
+    return state.accounts.length ? state.accounts[0] : null
   },
   balance(state) {
     return state.balance
@@ -96,15 +96,13 @@ export const getters = {
   departments(state) {
     return state.departments
   },
-  ownDepartments(state) {
-    return state.departments.filter((d) => {
-      return (
-        state.accounts.length &&
-        (d.creator === state.accounts[0] ||
-          d.nfts.find((nft) => nft.ownerAddress === state.accounts[0]) ||
-          d.holders.find((holder) => holder.ethAddress === state.accounts[0]))
-      )
-    })
+  ownDepartments(state, getters) {
+    return state.departments.filter(
+      (d) =>
+        d.creator === getters.account ||
+        d.nfts.find((nft) => nft.ownerAddress === getters.account) ||
+        d.holders.find((holder) => holder.ethAddress === getters.account)
+    )
   },
   proposals(state) {
     return state.proposals
@@ -236,10 +234,10 @@ export const actions = {
       dispatch('updateIsOctobayAdmin')
     })
   },
-  updateEthBalance({ state, commit }) {
+  updateEthBalance({ state, getters, commit }) {
     if (state.accounts.length) {
       this.$web3.eth
-        .getBalance(state.accounts[0])
+        .getBalance(getters.account)
         .then((balance) => commit('setBalance', balance))
     } else {
       commit('setBalance', '0')
@@ -298,12 +296,12 @@ export const actions = {
         commit('setDepartments', departments)
       })
   },
-  updateNFTs({ state, commit }) {
+  updateNFTs({ getters, commit }) {
     return this.$axios
       .$get(
         process.env.API_URL +
           '/graph/permission-nfts-by-owner/' +
-          state.accounts[0]
+          getters.account
       )
       .then((nfts) => {
         commit('setNFTs', nfts)
@@ -314,18 +312,18 @@ export const actions = {
       commit('setOracles', oracles)
     })
   },
-  updateIsOctobayOwner({ state, commit }) {
+  updateIsOctobayOwner({ getters, commit }) {
     this.$octobay.methods
       .owner()
       .call()
       .then((owner) => {
-        commit('setIsOctobayOwner', state.accounts[0] === owner.toLowerCase())
+        commit('setIsOctobayOwner', getters.account === owner.toLowerCase())
       })
   },
-  updateIsOctobayAdmin({ state, commit }) {
+  updateIsOctobayAdmin({ getters, commit }) {
     this.$octobayGovNFT.methods
       .getTokenIDForUserInProject(
-        state.accounts[0],
+        getters.account,
         'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
       )
       .call()
