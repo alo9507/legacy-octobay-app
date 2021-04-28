@@ -33,7 +33,12 @@
     >
       Verify Address
     </a>
-    <button v-else :class="cssClasses" :disabled="disabled" @click="action()">
+    <button
+      v-else-if="action"
+      :class="cssClasses"
+      :disabled="disabled"
+      @click="action()"
+    >
       <slot></slot>
     </button>
   </div>
