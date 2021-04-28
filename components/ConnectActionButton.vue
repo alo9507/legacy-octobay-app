@@ -41,7 +41,7 @@
     >
       <slot></slot>
     </button>
-    <div v-else class="alert alert-warning">Browser unsupported.</div>
+    <div v-else class="alert bg-secondary text-white">Browser unsupported.</div>
   </div>
 </template>
 
