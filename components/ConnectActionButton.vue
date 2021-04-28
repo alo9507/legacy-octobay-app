@@ -4,17 +4,13 @@
       v-if="!$web3"
       href="https://metamask.io"
       target="_blank"
-      :class="
-        'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
-      "
+      :class="cssClasses"
     >
       Install MetaMask
     </a>
     <button
       v-else-if="required.includes('wallet') && !account"
-      :class="
-        'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
-      "
+      :class="cssClasses"
       @click="$store.dispatch('web3connect')"
     >
       Connect Wallet
@@ -22,9 +18,7 @@
     <a
       v-else-if="required.includes('github') && !githubUser"
       :href="githubAuthUrl"
-      :class="
-        'btn btn-light shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
-      "
+      :class="cssClasses"
     >
       <font-awesome-icon :icon="['fab', 'github']" />
       Connect GitHub
@@ -34,21 +28,12 @@
         required.includes('verify') &&
         !githubUser.ethAddresses.map((a) => a.address).includes(account)
       "
-      :class="
-        'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
-      "
+      :class="cssClasses"
       @click="openModal('ModalWallet')"
     >
       Verify Address
     </a>
-    <button
-      v-else
-      :class="
-        'btn btn-primary shadow-sm d-block w-100' + (size ? ' btn-' + size : '')
-      "
-      :disabled="disabled"
-      @click="action()"
-    >
+    <button v-else :class="cssClasses" :disabled="disabled" @click="action()">
       <slot></slot>
     </button>
   </div>
@@ -77,6 +62,13 @@ export default {
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      cssClasses:
+        'btn btn-light shadow-sm d-block w-100' +
+        (this.size ? ' btn-' + this.size : ''),
+    }
   },
   computed: {
     ...mapGetters(['account', 'githubUser', 'githubAuthUrl']),
