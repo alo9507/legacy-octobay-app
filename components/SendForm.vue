@@ -363,7 +363,7 @@ export default {
           from: this.account,
           value: this.$web3.utils.toWei(this.amount, 'ether'),
         })
-        .then((result) => {
+        .then(() => {
           this.amount = 0
           this.showSendSuccess = true
           setTimeout(() => this.updateUserDeposits(), 1000)
@@ -389,7 +389,7 @@ export default {
             from: this.account,
             value: this.$web3.utils.toWei(this.amount, 'ether'),
           })
-          .then((tx) => {
+          .then(() => {
             this.$store.dispatch('updateIssues')
             this.$store.dispatch('updateEthBalance')
             this.sending = false
@@ -409,7 +409,7 @@ export default {
             from: this.account,
             value: this.$web3.utils.toWei(this.amount, 'ether'),
           })
-          .then((tx) => {
+          .then(() => {
             this.$store.dispatch('updateIssues')
             this.$store.dispatch('updateEthBalance')
             this.sending = false

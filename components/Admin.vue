@@ -250,7 +250,7 @@ export default {
           this.newOracle.ethAddress = ''
           this.newOracle.name = ''
           this.newOracle.registerJobId = ''
-          this.$store.dispatch('updateOracles').then((oracles) => {
+          this.$store.dispatch('updateOracles').then(() => {
             this.addingNewOracle = false
           })
         })
@@ -276,7 +276,7 @@ export default {
         .removeOracle(address)
         .send({ from: this.account })
         .then(() => {
-          this.$store.dispatch('updateOracles').then((oracles) => {
+          this.$store.dispatch('updateOracles').then(() => {
             this.removingOralce = false
           })
         })

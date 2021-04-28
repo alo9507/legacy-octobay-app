@@ -312,7 +312,7 @@ export default {
     sortedLinkedPullRequests() {
       return this.linkedPullRequests
         .filter((pr) => pr)
-        .sort((a, b) => (a.state === 'MERGED' ? -1 : 1))
+        .sort((a) => (a.state === 'MERGED' ? -1 : 1))
     },
   },
   watch: {
