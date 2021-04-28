@@ -31,7 +31,7 @@
                       ? 'Rinkeby'
                       : networkId === 42
                       ? 'Kovan'
-                      : 'Unknown Testnet'
+                      : 'Unknown Network'
                   }}
                 </sup>
               </small>
