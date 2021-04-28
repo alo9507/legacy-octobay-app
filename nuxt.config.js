@@ -12,9 +12,6 @@ export default {
    ** See https://nuxtjs.org/api/configuration-target
    */
   target: 'static',
-  router: {
-    base: process.env.BASE_PATH,
-  },
 
   env: {
     OCTOBAY_ABI: JSON.parse(
@@ -33,7 +30,6 @@ export default {
      ** for Vercel
      */
     API_URL: process.env.API_URL,
-    APP_NAME: process.env.APP_NAME,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
   },
@@ -102,7 +98,7 @@ export default {
       '@nuxtjs/dotenv',
       {
         path: './',
-        only: ['API_URL', 'APP_NAME', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS'],
+        only: ['API_URL', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS'],
       },
     ],
     '@nuxtjs/fontawesome',
