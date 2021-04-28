@@ -12,9 +12,9 @@
         <GithubAvatar
           :profile-url="githubUser.html_url"
           :avatar-url="githubUser.avatar_url"
-          size="2.5rem"
+          size="2.3rem"
         />
-        <h3 class="ml-2 mr-auto mb-0">
+        <h4 class="ml-2 mr-auto mb-0">
           <a
             :href="githubUser.html_url"
             target="_blank"
@@ -22,7 +22,7 @@
           >
             <b>{{ githubUser.login }}</b>
           </a>
-        </h3>
+        </h4>
         <button class="btn btn-light shadow-sm" @click="githubLogout()">
           logout
         </button>
