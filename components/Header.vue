@@ -2,12 +2,11 @@
   <div class="header my-3 p-3">
     <transition name="fade" mode="out-in">
       <div v-if="connected && githubUser" :class="cssClasses">
-        <a
-          :href="githubUser.html_url"
-          target="_blank"
-          class="rounded-circle avatar mr-1 shadow-sm"
-          :style="'background-image: url(' + githubUser.avatar_url + ')'"
-        ></a>
+        <GithubAvatar
+          :profile-url="githubUser.html_url"
+          :avatar-url="githubUser.avatar_url"
+          size="2.5em"
+        />
         <div class="d-flex ml-1">
           <div
             class="d-flex align-items-center bg-white pl-1 pr-5 rounded-xl border-light"
@@ -60,13 +59,12 @@
       </div>
 
       <div v-else :class="cssClasses">
-        <a
+        <GithubAvatar
           v-if="githubUser"
-          :href="githubUser.html_url"
-          target="_blank"
-          class="rounded-circle avatar mr-1 shadow-sm"
-          :style="'background-image: url(' + githubUser.avatar_url + ')'"
-        ></a>
+          :profile-url="githubUser.html_url"
+          :avatar-url="githubUser.avatar_url"
+          size="2.5em"
+        />
         <Logo
           v-else
           color="white"
@@ -113,7 +111,8 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      cssClasses: 'd-flex justify-content-between align-items-top text-muted',
+      cssClasses:
+        'd-flex justify-content-between align-items-center text-muted',
     }
   },
   computed: {
@@ -140,13 +139,3 @@ export default {
   },
 }
 </script>
-
-<style lang="sass">
-.avatar
-  display: block
-  width: 40px
-  height: 40px
-  background-repeat: no-repeat
-  background-position: center center
-  background-size: 100%
-</style>

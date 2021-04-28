@@ -3,15 +3,16 @@
     class="border rounded-xl px-1"
     style="margin-top: -56px; padding-top: 56px"
   >
-    <a
-      :href="user.url"
-      target="_blank"
-      class="avatar"
-      :style="'background-image: url(' + user.avatarUrl + ')'"
-    ></a>
     <div class="embed rounded-top pb-3 px-2">
       <div class="d-flex justify-content-between">
-        <b class="text-nowrap text-truncate">{{ user.name }}</b>
+        <div class="d-flex">
+          <GithubAvatar
+            :profile-url="user.url"
+            :avatar-url="user.avatarUrl"
+            size="1.5rem"
+          />
+          <b class="text-nowrap text-truncate">{{ user.name }}</b>
+        </div>
         <div class="text-nowrap">
           <div
             v-clipboard="getDirectLink(user.login)"
@@ -140,18 +141,3 @@ export default {
   },
 }
 </script>
-
-<style lang="sass" scoped>
-.avatar
-  border: solid 2px ccc
-  border-radius: 50%
-  width: 32px
-  height: 32px
-  position: absolute
-  z-index: 4
-  top: 8px
-  right: 10px
-  background-repeat: no-repeat
-  background-position: center center
-  background-size: 100%
-</style>

@@ -443,13 +443,4 @@ export default {
         max-height: 100px
       &.deposits
         max-height: 350px
-
-.avatar
-  border: solid 2px ccc
-  border-radius: 50%
-  width: 32px
-  height: 32px
-  background-repeat: no-repeat
-  background-position: center center
-  background-size: 100%
 </style>

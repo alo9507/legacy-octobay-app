@@ -34,7 +34,7 @@
           v-model="username"
           type="text"
           class="form-control form-control-lg form-control-with-embed mb-2"
-          style="padding-right: 5rem"
+          style="padding-right: 2.5rem"
           placeholder="Username"
         />
         <span
@@ -53,7 +53,7 @@
           v-if="user"
           href="#"
           class="position-absolute text-muted-light"
-          style="top: 12px; right: 50px; z-index: 2"
+          style="top: 12px; right: 12px; z-index: 2"
           @click="
             user = null
             username = ''

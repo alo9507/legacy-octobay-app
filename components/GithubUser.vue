@@ -1,12 +1,10 @@
 <template>
   <div>
     <div v-if="githubUser" class="d-flex align-items-center">
-      <a
-        :href="githubUser.url"
-        target="_blank"
-        class="rounded-circle avatar mr-1 shadow-sm"
-        :style="`width: 2em; height: 2em; background-image: url(${githubUser.avatarUrl})`"
-      ></a>
+      <GithubAvatar
+        :profile-url="githubUser.url"
+        :avatar-url="githubUser.avatarUrl"
+      />
       <div class="d-flex flex-column">
         <a :href="githubUser.url" target="_blank" class="font-weight-bold">
           {{ githubUser.login }}
