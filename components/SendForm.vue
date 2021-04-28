@@ -131,28 +131,26 @@
           </div>
           <IssueEmbed v-if="issue" :issue="issue" />
           <div
-            v-if="issue"
+            v-if="issue && ownDepartments.length"
             class="border rounded-xl mt-3 px-3 pt-2"
-            style="margin-bottom: -48px; padding-bottom: 52px"
+            style="margin-bottom: -48px; padding-bottom: 60px"
           >
-            <div v-if="departments.length" class="py-2">
-              <div class="text-muted d-block text-center mb-2">
-                Which governance token shall be minted for the contributor?
-              </div>
-              <select
-                v-model="departmentForIssue"
-                class="custom-select rounded-xl"
-              >
-                <option :value="null">No Governance Minting</option>
-                <option
-                  v-for="department in departments"
-                  :key="department.id"
-                  :value="department"
-                >
-                  {{ department.name }} ({{ department.symbol }})
-                </option>
-              </select>
+            <div class="text-muted d-block text-center mb-2">
+              Which governance token shall be minted for the contributor?
             </div>
+            <select
+              v-model="departmentForIssue"
+              class="custom-select rounded-xl"
+            >
+              <option :value="null">No Governance Minting</option>
+              <option
+                v-for="department in ownDepartments"
+                :key="department.id"
+                :value="department"
+              >
+                {{ department.name }} ({{ department.symbol }})
+              </option>
+            </select>
           </div>
         </div>
       </div>
@@ -246,7 +244,7 @@ export default {
       'account',
       'selectedRecipientType',
       'redirectPrefills',
-      'departments',
+      'ownDepartments',
       'githubUser',
     ]),
     confirmDisabled() {
