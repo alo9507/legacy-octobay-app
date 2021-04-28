@@ -35,7 +35,7 @@
         @click="$store.commit('setShowOracleList', true)"
       >
         <img
-          :src="'./chainlink-icon.png'"
+          :src="'/chainlink-icon.png'"
           width="36px"
           class="rounded-circle py-1 pl-1"
         />

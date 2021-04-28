@@ -60,8 +60,8 @@ export default {
       },
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: './icon.png' },
-      { rel: 'shortcut icon', type: 'image/png', href: './icon.png' },
+      { rel: 'icon', type: 'image/png', href: '/icon.png' },
+      { rel: 'shortcut icon', type: 'image/png', href: '/icon.png' },
     ],
   },
   loading: {
