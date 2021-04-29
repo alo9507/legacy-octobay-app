@@ -70,7 +70,7 @@ The [`/auth/github`](https://github.com/Octobay/app/blob/main/pages/auth/github.
 
 The state can also be prepopulated by certain deeplinks. Currently the send form can be prefilled with the following links:
 
-`/#/u/<username>`
-`/#/u/<username>/<amount>`
-`/#/i/<username>/<repository>/<issue number>`
-`/#/i/<username>/<repository>/<issue number>/<amount>`
+- `/#/u/<username>`
+- `/#/u/<username>/<amount>`
+- `/#/i/<username>/<repository>/<issue number>`
+- `/#/i/<username>/<repository>/<issue number>/<amount>`
