@@ -46,7 +46,7 @@ From the main contract the other "module" contracts are derived. Their addresses
 
 > (!) The app mostly just writes to these contracts. It reads data from the [Octobay Subgraph](https://github.com/Octobay/subgraph) ([Explorer](https://thegraph.com/explorer/subgraph/octobay/octobay)).
 
-The main contract, the Governor and the Governance NFT contract are initialized in the [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js). In components, the store and everywhere you can access the [Nuxt context object](https://nuxtjs.org/docs/2.x/internals-glossary/context/) these contracts are available as `$octobay`, `$octobayGovernor`, `$octobayGovNFT`. Since there are multiple instances of governance tokens, `$octobayGovToken` returns a function that takes the address of the actual deployed contract as a parameter and initializes the `web3.eth.Contract` instance on demand.
+The main contract, the Governor and the Governance NFT contract are initialized in the [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js). In components, the store and everywhere you can access the [Nuxt context object](https://nuxtjs.org/docs/2.x/internals-glossary/context/) these contracts are available as `$octobay`, `$octobayGovernor` and `$octobayGovNFT`. Since there are multiple instances of governance tokens, `$octobayGovToken` returns a function that takes the address of the actual deployed contract as a parameter and initializes the `web3.eth.Contract` instance on demand.
 
 The ABIs of the contracts live in the [`contract-abi`](https://github.com/Octobay/app/blob/main/contract-abi) directory and are loaded into `process.env` in [`nuxt.config.js`](https://github.com/Octobay/app/blob/main/nuxt.config.js).
 
@@ -64,4 +64,13 @@ The [default layout ](https://github.com/Octobay/app/blob/main/layouts/default.v
 
 ## GitHub Authentication
 
-The [`/auth/github`](https://github.com/Octobay/app/blob/main/pages/auth/github.vue) is the redirect page for our OAuth app and takes an auth code and exchanges it for an access token via our API, stores it in the browser's local storage and redirects to `/`, where the `load` middleware loads the profile information of the GitHub user.
+The [`/auth/github`](https://github.com/Octobay/app/blob/main/pages/auth/github.vue) page is the redirect page for our OAuth app and takes an auth code and exchanges it for an access token via our API, stores it in the browser's local storage and redirects to `/`, where the `load` middleware loads the profile information of the GitHub user.
+
+## Deeplinks
+
+The state can also be prepopulated by certain deeplinks. Currently the send form can be prefilled with the following links:
+
+`/#/u/<username>`
+`/#/u/<username>/<amount>`
+`/#/i/<username>/<repository>/<issue number>`
+`/#/i/<username>/<repository>/<issue number>/<amount>`
