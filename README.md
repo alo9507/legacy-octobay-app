@@ -74,3 +74,5 @@ The state can also be prepopulated by certain deeplinks. Currently the send form
 - `/#/u/<username>/<amount>`
 - `/#/i/<username>/<repository>/<issue number>`
 - `/#/i/<username>/<repository>/<issue number>/<amount>`
+
+The values are fetched from the location hash in the [`deeplinks` middleware](https://github.com/Octobay/app/blob/main/middleware/deeplinks.js) used in the default layout for `/` and `/gov`.
