@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="card-body">
-      <button
-        v-if="departments.length"
-        class="btn btn-lg btn-primary w-100 shadow-sm"
-        @click="newProposal()"
+      <ConnectActionButton
+        :action="() => openModal('ModalNewProposal')"
+        :required="['wallet']"
+        size="lg"
       >
         New Proposal
-      </button>
+      </ConnectActionButton>
     </div>
     <div class="card-body border-top">
       <select v-model="selectedDepartment" class="custom-select rounded-xl">
         <option :value="null">Select Department</option>
         <option
-          v-for="department in departments"
+          v-for="department in ownDepartments"
           :key="department.address"
           :value="department"
         >
@@ -38,10 +38,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   computed: {
-    ...mapGetters(['departments']),
+    ...mapGetters(['ownDepartments']),
     selectedDepartment: {
       get() {
         return this.$store.state.selectedDepartment
@@ -54,18 +56,11 @@ export default {
       if (this.selectedDepartment) {
         return this.selectedDepartment.proposals
       } else {
-        return this.departments.reduce(
+        return this.ownDepartments.reduce(
           (proposals, department) => [...proposals, ...department.proposals],
           []
         )
       }
-    },
-  },
-  methods: {
-    newProposal() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalNewProposal')
-      this.$store.commit('setShowModal', true)
     },
   },
 }

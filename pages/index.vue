@@ -13,23 +13,14 @@
         @click="$store.commit('setView', 'issues')"
         >Pinboard</a
       >
-      <!-- <a href="#" :class="'mx-2 text-' + (view === 'contributors' ? 'primary' : 'muted')" @click="$store.commit('setView', 'contributors')">Contributors</a> -->
       <a
-        v-if="registeredAccount === account"
         href="#"
         :class="'mx-2 text-' + (view === 'claim' ? 'primary' : 'muted')"
         @click="$store.commit('setView', 'claim')"
         >Claim</a
       >
       <a
-        v-else
-        href="#"
-        :class="'mx-2 text-' + (view === 'register' ? 'primary' : 'muted')"
-        @click="$store.commit('setView', 'register')"
-        >Register</a
-      >
-      <a
-        v-if="account && account === octoBayOwner"
+        v-if="isOctobayOwner || isOctobayAdmin"
         href="#"
         :class="'mx-2 text-' + (view === 'admin' ? 'primary' : 'muted-light')"
         @click="$store.commit('setView', 'admin')"
@@ -41,12 +32,8 @@
       <keep-alive>
         <SendForm v-if="view == 'send'" />
         <IssuesList v-else-if="view == 'issues'" />
-        <Contributors v-else-if="view == 'contributors'" />
         <Claim v-else-if="view == 'claim'" />
-        <Register v-else-if="view == 'register'" />
-        <Admin
-          v-else-if="account && account === octoBayOwner && view == 'admin'"
-        />
+        <Admin v-else-if="view == 'admin'" />
       </keep-alive>
     </transition>
   </div>
@@ -58,8 +45,7 @@ import { mapGetters } from 'vuex'
 export default {
   transition: 'fade',
   computed: {
-    ...mapGetters(['view', 'account', 'registeredAccount', 'octoBayOwner']),
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters(['view', 'account', 'isOctobayOwner', 'isOctobayAdmin']),
   },
   mounted() {
     this.$store.commit('setView', 'send')

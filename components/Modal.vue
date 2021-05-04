@@ -3,7 +3,7 @@
     <div
       v-if="showModal"
       class="overlay d-flex justify-content-center align-items-center"
-      @click="close()"
+      @click="closeModal()"
     >
       <component :is="modalComponent"></component>
     </div>
@@ -12,18 +12,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ModalTwitterPost from './ModalTwitterPost.vue'
+import helpers from '@/mixins/helpers'
 
 export default {
-  components: { ModalTwitterPost },
+  mixins: [helpers],
   computed: {
     ...mapGetters(['showModal', 'modalComponent']),
-  },
-  methods: {
-    close() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setShowModal', false)
-    },
   },
 }
 </script>

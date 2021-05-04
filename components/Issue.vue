@@ -2,10 +2,7 @@
   <div>
     <div
       v-if="!loading && issueNode"
-      :class="[
-        'issue d-flex flex-column',
-        { pinned: issue.boostAmount > 0, showDetails },
-      ]"
+      :class="['issue d-flex flex-column', { showDetails }]"
       @click="showDetails = !showDetails"
     >
       <div class="position-relative">
@@ -37,7 +34,7 @@
             <div class="mb-0 d-flex align-items-center">
               <div class="text-center d-flex flex-column align-items-end">
                 <div>
-                  {{ $web3.utils.fromWei(issue.depositAmount, 'ether') }}
+                  {{ $web3utils.fromWei(issue.depositAmount, 'ether') }}
                   <img src="/eth-logo.png" width="16px" height="16" />
                 </div>
               </div>
@@ -71,35 +68,6 @@
           >
             {{ label.name }}
           </span>
-        </div>
-        <!-- funding goal bar -->
-        <div
-          class="d-flex align-items-end position-absolute w-100"
-          style="bottom: 0"
-        >
-          <div class="flex-fill">
-            <div
-              class="bg-success"
-              :style="`height: 5px; width: ${Math.min(
-                (Number($web3.utils.fromWei(issue.depositAmount, 'ether')) /
-                  fundingGoal) *
-                  100,
-                100
-              ).toFixed(2)}%`"
-            ></div>
-          </div>
-          <small
-            :class="['px-2 text-muted', { 'bg-light': !showDetails }]"
-            style="border-top-left-radius: 1rem"
-          >
-            <small>
-              <font-awesome-icon
-                :icon="['fas', 'check']"
-                class="text-success mr-1"
-              />
-              {{ fundingGoal }} ETH Goal
-            </small>
-          </small>
         </div>
       </div>
       <!-- details -->
@@ -136,30 +104,6 @@
             >
               <font-awesome-icon :icon="['fas', 'coins']" />
             </button>
-            <!-- twitter -->
-            <button
-              v-tooltip="{ content: 'Post via @OctoBayApp', trigger: 'hover' }"
-              class="btn btn-sm btn-light text-muted"
-              @click="twitterPost()"
-            >
-              <font-awesome-icon :icon="['fab', 'twitter']" />
-            </button>
-            <!-- pin -->
-            <button
-              v-tooltip="{ content: 'Pin issue', trigger: 'hover' }"
-              :class="[
-                'btn btn-sm btn-light text-muted',
-                { active: action === 'pin' },
-              ]"
-              @click="changeAction('pin')"
-            >
-              <svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z"
-                />
-              </svg>
-            </button>
             <!-- pull requests -->
             <button
               v-tooltip="{ content: 'Pull Requests', trigger: 'hover' }"
@@ -170,17 +114,6 @@
               @click="changeAction('pull-requests')"
             >
               <span v-html="$octicons['git-pull-request'].toSVG()"></span>
-            </button>
-            <!-- project -->
-            <button
-              v-tooltip="{ content: 'Project', trigger: 'hover' }"
-              :class="[
-                'btn btn-sm btn-light text-muted',
-                { active: action === 'project' },
-              ]"
-              @click="changeAction('project')"
-            >
-              <span v-html="$octicons.repo.toSVG()"></span>
             </button>
             <!-- github -->
             <a
@@ -202,6 +135,14 @@
                 class="text-muted-light ml-1"
               />
             </a>
+            <button
+              v-if="canWithdrawIssue"
+              v-tooltip="{ content: 'Claim', trigger: 'hover' }"
+              class="btn btn-sm btn-primary shadow-sm"
+              @click="claimIssue()"
+            >
+              <font-awesome-icon :icon="['fas', 'hand-holding-usd']" />
+            </button>
           </div>
           <!-- details content -->
           <div class="w-100 px-3">
@@ -215,11 +156,11 @@
                 >
                   <div class="d-flex flex-column">
                     <h5 class="mb-0">
-                      {{ Number($web3.utils.fromWei(deposit.amount, 'ether')) }}
+                      {{ Number($web3utils.fromWei(deposit.amount, 'ether')) }}
                       <small>ETH</small>
                     </h5>
                     <small class="text-muted">
-                      From: <AddressShort :address="deposit.from" />
+                      <GithubUser :from-address="deposit.from" />
                     </small>
                   </div>
                   <button
@@ -234,46 +175,6 @@
                       spin
                     />
                     <span v-else>withdraw</span>
-                  </button>
-                </div>
-              </div>
-              <!-- pin -->
-              <div v-if="action === 'pin'" key="pin" class="py-3">
-                <div class="d-flex align-items-center">
-                  <div class="select-input flex-fill mr-2">
-                    <input
-                      v-model="pinAmount"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      novalidate
-                      class="form-control"
-                      placeholder="0.00"
-                    />
-                    <span class="text-muted mr-2">OPIN</span>
-                  </div>
-                  <button
-                    class="btn btn-primary shadow-sm text-nowrap"
-                    :disabled="pinningIssue || !Number(pinAmount)"
-                    @click="pin()"
-                  >
-                    <font-awesome-icon
-                      v-if="pinningIssue"
-                      :icon="['fas', 'circle-notch']"
-                      spin
-                    />
-                    <span v-else>
-                      <svg
-                        style="width: 18px; height: 18px"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z"
-                        />
-                      </svg>
-                      Pin
-                    </span>
                   </button>
                 </div>
               </div>
@@ -341,69 +242,17 @@
                     />
                   </a>
                 </div>
-                <small v-else class="text-muted d-block text-center">
+                <small v-else class="text-muted d-block text-center mt-2">
                   No linked pull requests yet.
                 </small>
-              </div>
-              <!-- project -->
-              <div v-if="action === 'project'" key="project" class="py-3">
-                <div class="d-flex justify-content-around text-center">
-                  <div>
-                    <small class="text-muted d-block">Total released:</small>
-                    <h5 class="text-center">$46,500</h5>
-                  </div>
-                  <div>
-                    <small class="text-muted d-block">Past 12 months:</small>
-                    <h5 class="text-center">
-                      <small>$10,800</small>
-                    </h5>
-                  </div>
-                </div>
-                <div
-                  v-if="Math.floor(Math.random() * 3) + 1 === 1"
-                  class="d-flex flex-column text-center mt-3"
-                >
-                  <span
-                    class="d-flex align-items-center justify-content-center rounded-circle bg-success p-2 mb-2 mx-auto"
+                <small class="d-block text-center">
+                  <a
+                    href="https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword"
+                    target="_blank"
                   >
-                    <font-awesome-icon
-                      :icon="['fas', 'check-double']"
-                      class="text-white fa-fw"
-                    />
-                  </span>
-                  <small class="text-muted d-block">
-                    This project has proven to be trustworthy.
-                  </small>
-                </div>
-                <div
-                  v-else-if="Math.floor(Math.random() * 3) + 1 === 2"
-                  class="d-flex flex-column text-center mt-3"
-                >
-                  <span
-                    class="d-flex align-items-center justify-content-center rounded-circle bg-muted-light p-2 mb-2 mx-auto"
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'check']"
-                      class="text-white fa-fw"
-                    />
-                  </span>
-                  <small class="text-muted d-block">
-                    This project has just started out on Octobay.
-                  </small>
-                </div>
-                <div v-else class="d-flex flex-column text-center mt-3">
-                  <span
-                    class="d-flex align-items-center justify-content-center rounded-circle bg-danger p-2 mb-2 mx-auto"
-                  >
-                    <font-awesome-icon
-                      :icon="['fas', 'exclamation']"
-                      class="text-white fa-fw"
-                    />
-                  </span>
-                  <small class="text-muted d-block">
-                    People have flagged this project.
-                  </small>
-                </div>
+                    What does that mean?
+                  </a>
+                </small>
               </div>
             </transition>
           </div>
@@ -436,11 +285,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import loadFromGithub from '@/mixins/loadFromGithub'
 import helpers from '@/mixins/helpers'
 
 export default {
-  mixins: [loadFromGithub, helpers],
+  mixins: [helpers],
   props: {
     issue: {
       type: Object,
@@ -452,41 +300,39 @@ export default {
       issueNode: null,
       showDetails: false,
       action: null,
-      pinAmount: 10,
-      pinningIssue: false,
       refundingDeposit: false,
       isRepoAdmin: false,
-      fundingGoal: Math.floor(Math.random() * 5) + 1,
       linkedPullRequests: [],
       loading: false,
+      canWithdrawIssue: false,
     }
   },
   computed: {
-    ...mapGetters(['account', 'registeredAccount', 'oracles']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account', 'githubUser', 'githubAccessToken']),
     sortedLinkedPullRequests() {
       return this.linkedPullRequests
         .filter((pr) => pr)
-        .sort((a, b) => (a.state === 'MERGED' ? -1 : 1))
+        .sort((a) => (a.state === 'MERGED' ? -1 : 1))
     },
   },
   watch: {
     showDetails(show) {
       if (show) {
-        this.$axios
-          .$get(
-            `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`,
-            {
-              headers: {
-                Authorization: 'bearer ' + this.githubAccessToken,
-              },
-            }
-          )
-          .then((isRepoAdmin) => (this.isRepoAdmin = isRepoAdmin))
-          .catch(() => (this.isRepoAdmin = false))
+        if (this.githubUser) {
+          this.$axios
+            .$get(
+              `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`,
+              {
+                headers: {
+                  Authorization: 'bearer ' + this.githubAccessToken,
+                },
+              }
+            )
+            .then((isRepoAdmin) => (this.isRepoAdmin = isRepoAdmin))
+            .catch(() => (this.isRepoAdmin = false))
+        } else {
+          this.isRepoAdmin = false
+        }
 
         this.linkedPullRequests = []
         this.$axios
@@ -522,6 +368,18 @@ export default {
             labels: issue.labels.edges.map((label) => label.node),
             closed: issue.closed,
           }
+          if (this.githubUser) {
+            this.$axios
+              .$get(
+                process.env.API_URL +
+                  `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issueNode.id}`
+              )
+              .then((can) => {
+                this.canWithdrawIssue = can
+              })
+          } else {
+            this.canWithdrawIssue = false
+          }
         }
       })
       .finally(() => (this.loading = false))
@@ -537,10 +395,18 @@ export default {
       })
       this.$store.commit('setView', 'send')
     },
-    twitterPost() {
-      this.$store.commit('setModalData', this.issueNode)
-      this.$store.commit('setModalComponent', 'ModalTwitterPost')
-      this.$store.commit('setShowModal', true)
+    claimIssue() {
+      this.$store.commit('setRedirectPrefills', {
+        type: 'claim-issue',
+        url:
+          'https://github.com/' +
+          this.issueNode.owner +
+          '/' +
+          this.issueNode.repository +
+          '/issues/' +
+          this.issueNode.number,
+      })
+      this.$store.commit('setView', 'claim')
     },
     changeAction(action) {
       if (this.action === action) {
@@ -549,42 +415,11 @@ export default {
         this.action = action
       }
     },
-    pin() {
-      if (this.$octoBay) {
-        this.pinningIssue = true
-        this.$octoBay.methods
-          .pinIssue(
-            this.issue.id,
-            this.$web3.utils.toWei(this.pinAmount, 'ether')
-          )
-          .send({
-            // useGSN: false,
-            from: this.account,
-          })
-          .then((result) => {
-            this.$store.dispatch('updatePins', this.issue.id)
-            this.$store.dispatch('updateOvtBalance')
-            this.$web3.eth
-              .getBalance(this.account)
-              .then((balance) => this.$store.commit('setBalance', balance))
-            this.pinAmount = 0
-          })
-          .catch((e) => {
-            console.log(e)
-          })
-          .finally(() => {
-            this.pinningIssue = false
-          })
-      }
-    },
     refundIssueDeposit(id) {
       this.refundingDeposit = id
-      this.$octoBay.methods
+      this.$octobay.methods
         .refundIssueDeposit(id)
-        .send({
-          // useGSN: false,
-          from: this.account,
-        })
+        .send({ from: this.account })
         .then(() => {
           this.$store.commit('removeDeposit', {
             issueId: this.issue.id,
@@ -603,11 +438,6 @@ export default {
   border-top: solid 1px fff
   cursor: pointer
   position: relative
-  &.pinned
-    box-shadow: inset 0 0 30px rgba(255, 187, 0, 0.1) !important
-    &.showDetails
-      box-shadow: inset 0 0 30px rgba(255, 187, 0, 0.1), inset 0 0 7px rgba(0, 0, 0, 0.2) !important
-
   &:hover
     background: #f8f8f8
   &.showDetails
@@ -620,13 +450,4 @@ export default {
         max-height: 100px
       &.deposits
         max-height: 350px
-
-.avatar
-  border: solid 2px ccc
-  border-radius: 50%
-  width: 32px
-  height: 32px
-  background-repeat: no-repeat
-  background-position: center center
-  background-size: 100%
 </style>

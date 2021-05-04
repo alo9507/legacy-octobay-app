@@ -1,16 +1,12 @@
 export const state = () => ({
-  loaded: false,
-  loadError: null,
-  octoBayOwner: null,
+  isOctobayOwner: false,
+  isOctobayAdmin: false,
   networkId: null,
   accounts: [],
-  registeredAccounts: [],
+  githubUser: null,
+  githubAccessToken: null,
   balance: 0,
-  ovtBalance: 0,
   issues: [],
-  tokenList: [],
-  showTokenList: false,
-  selectedToken: null,
   showRecipientTypeList: false,
   selectedRecipientType: 'User',
   showIntervalSelect: false,
@@ -20,24 +16,14 @@ export const state = () => ({
   oracles: [],
   activeOracle: null,
   showOracleList: false,
-  forks: [],
-  showForkList: false,
   showModal: false,
   modalComponent: null,
-  modalData: null,
-  twitterAccountId: null,
-  twitterFollowers: 0,
   selectedDepartment: null,
   departments: [],
+  nfts: [],
 })
 
 export const getters = {
-  loaded(state) {
-    return state.loaded
-  },
-  loadError(state) {
-    return state.loadError
-  },
   networkId(state) {
     return state.networkId
   },
@@ -45,36 +31,25 @@ export const getters = {
     return state.accounts
   },
   account(state) {
-    return state.accounts.length ? state.accounts[0].toLowerCase() : null
+    return state.accounts.length ? state.accounts[0] : null
   },
   balance(state) {
     return state.balance
   },
-  ovtBalance(state) {
-    return state.ovtBalance
-  },
   connected(state) {
     return !!state.accounts.length
   },
-  registeredAccounts(state) {
-    return state.registeredAccounts
+  githubUser(state) {
+    return state.githubUser
   },
-  registeredAccount(state) {
-    return state.registeredAccounts.length
-      ? state.registeredAccounts[0].address.toLowerCase()
-      : null
+  githubAccessToken(state) {
+    return state.githubAccessToken
+  },
+  githubAuthUrl() {
+    return `https://github.com/login/oauth/authorize?scope=user:email,public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`
   },
   issues(state) {
     return state.issues
-  },
-  tokenList(state) {
-    return state.tokenList
-  },
-  showTokenList(state) {
-    return state.showTokenList
-  },
-  selectedToken(state) {
-    return state.selectedToken
   },
   showRecipientTypeList(state) {
     return state.showRecipientTypeList
@@ -103,29 +78,17 @@ export const getters = {
   showOracleList(state) {
     return state.showOracleList
   },
-  forks(state) {
-    return state.forks
-  },
-  showForkList(state) {
-    return state.showForkList
-  },
   showModal(state) {
     return state.showModal
   },
   modalComponent(state) {
     return state.modalComponent
   },
-  modalData(state) {
-    return state.modalData
+  isOctobayOwner(state) {
+    return state.isOctobayOwner
   },
-  octoBayOwner(state) {
-    return state.octoBayOwner
-  },
-  twitterAccountId(state) {
-    return state.twitterAccountId
-  },
-  twitterFollowers(state) {
-    return state.twitterFollowers
+  isOctobayAdmin(state) {
+    return state.isOctobayAdmin
   },
   selectedDepartment(state) {
     return state.selectedDepartment
@@ -133,32 +96,40 @@ export const getters = {
   departments(state) {
     return state.departments
   },
+  ownDepartments(state, getters) {
+    return state.departments.filter(
+      (d) =>
+        d.creator === getters.account ||
+        d.nfts.find((nft) => nft.ownerAddress === getters.account) ||
+        d.holders.find((holder) => holder.ethAddress === getters.account)
+    )
+  },
   proposals(state) {
     return state.proposals
+  },
+  nfts(state) {
+    return state.nfts
   },
 }
 
 export const mutations = {
-  setLoaded(state, loaded) {
-    state.loaded = loaded
-  },
-  setLoadError(state, error) {
-    state.loadError = error
-  },
   setNetworkId(state, id) {
     state.networkId = id
   },
   setAccounts(state, accounts) {
-    state.accounts = accounts
+    state.accounts = accounts.map((address) => address.toLowerCase())
   },
   setBalance(state, balance) {
     state.balance = balance
   },
-  setOvtBalance(state, balance) {
-    state.ovtBalance = balance
+  setGithubUser(state, user) {
+    state.githubUser = user
   },
-  setRegisteredAccounts(state, registeredAccounts) {
-    state.registeredAccounts = registeredAccounts
+  setGithubUserEthAddresses(state, addresses) {
+    state.githubUser.ethAddresses = addresses
+  },
+  setGithubAccessToken(state, accessToken) {
+    state.githubAccessToken = accessToken
   },
   setIssues(state, issues) {
     state.issues = issues
@@ -191,23 +162,6 @@ export const mutations = {
       }
     }
   },
-  updatePins(state, { issueId, pins }) {
-    const existingIssue = state.issues.find((issue) => issue.id === issueId)
-    if (existingIssue) {
-      existingIssue.boostAmount = Number(
-        this.$web3.utils.fromWei(pins, 'ether')
-      )
-    }
-  },
-  setTokenList(state, list) {
-    state.tokenList = list
-  },
-  setShowTokenList(state, show) {
-    state.showTokenList = show
-  },
-  setSelectedToken(state, address) {
-    state.selectedToken = address
-  },
   setShowRecipientTypeList(state, show) {
     state.showRecipientTypeList = show
   },
@@ -235,29 +189,17 @@ export const mutations = {
   setShowOracleList(state, show) {
     state.showOracleList = show
   },
-  setFork(state, fork) {
-    state.forks.push(fork)
-  },
-  setShowForkList(state, show) {
-    state.showForkList = show
-  },
   setShowModal(state, show) {
     state.showModal = show
   },
   setModalComponent(state, component) {
     state.modalComponent = component
   },
-  setModalData(state, data) {
-    state.modalData = data
+  setIsOctobayOwner(state, isOwner) {
+    state.isOctobayOwner = isOwner
   },
-  setOctoBayOwner(state, owner) {
-    state.octoBayOwner = owner
-  },
-  setTwitterAccountId(state, id) {
-    state.twitterAccountId = id
-  },
-  setTwitterFollowers(state, followers) {
-    state.twitterFollowers = followers
+  setIsOctobayAdmin(state, isAdmin) {
+    state.isOctobayAdmin = isAdmin
   },
   setDepartments(state, departments) {
     state.departments = departments
@@ -265,57 +207,139 @@ export const mutations = {
   setSelectedDepartment(state, department) {
     state.selectedDepartment = department
   },
+  setNFTs(state, nfts) {
+    state.nfts = nfts
+  },
 }
 
 export const actions = {
-  updateIssues({ commit }) {
-    commit('setIssues', [])
-    if (this.$octoBay) {
-      this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
-        issues.forEach(async (issue) => {
-          // TODO: this all has to go to graph as well
-          let depositAmount = BigInt(0)
-          issue.deposits.forEach((deposit) => {
-            depositAmount += BigInt(deposit.amount)
-          })
-          issue.depositAmount = depositAmount.toString()
-          if (issue.depositAmount) {
-            const boostAmount = await this.$octoBay.methods
-              .issuePins(issue.id)
-              .call()
-            issue.boostAmount = Number(
-              this.$web3.utils.fromWei(boostAmount, 'ether')
-            )
-            commit('addIssue', issue)
-          }
-        })
-      })
+  updateNetworkId({ commit }) {
+    this.$web3.eth.net
+      .getId()
+      .then((chainId) => commit('setNetworkId', chainId))
+  },
+  web3connect({ dispatch }) {
+    this.$web3.eth.requestAccounts().then(() => {
+      dispatch('updateAccounts')
+    })
+  },
+  updateAccounts({ commit, dispatch }) {
+    this.$web3.eth.getAccounts().then((accounts) => {
+      commit(
+        'setAccounts',
+        accounts.map((a) => a.toLowerCase())
+      )
+      dispatch('updateEthBalance')
+      dispatch('updateIsOctobayOwner')
+      dispatch('updateIsOctobayAdmin')
+    })
+  },
+  updateEthBalance({ state, getters, commit }) {
+    if (state.accounts.length) {
+      this.$web3.eth
+        .getBalance(getters.account)
+        .then((balance) => commit('setBalance', balance))
+    } else {
+      commit('setBalance', '0')
     }
   },
-  updateDepartments({ commit }) {
-    if (this.$octoBay) {
+  githubLogin({ commit, dispatch }) {
+    const accessToken = localStorage.getItem('github_access_token')
+    if (accessToken) {
       this.$axios
-        .$get(process.env.API_URL + '/graph/departments')
-        .then((departments) => {
-          commit('setDepartments', departments)
+        .$get('https://api.github.com/user', {
+          headers: {
+            Authorization: 'bearer ' + accessToken,
+          },
+        })
+        .then((response) => {
+          commit('setGithubAccessToken', accessToken)
+          commit('setGithubUser', response)
+          dispatch('updateGithubUserAddresses')
         })
     }
+  },
+  githubLogout({ commit }) {
+    localStorage.removeItem('github_access_token')
+    commit('setGithubUser', null)
+    commit('setGithubAccessToken', null)
+  },
+  updateGithubUserAddresses({ state, commit }) {
+    if (state.githubUser) {
+      this.$axios
+        .$get(process.env.API_URL + '/graph/user/' + state.githubUser.node_id)
+        .then((user) => {
+          commit('setGithubUserEthAddresses', user.addresses)
+        })
+    }
+  },
+  updateIssues({ commit }) {
+    commit('setIssues', [])
+    this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
+      issues.forEach((issue) => {
+        // TODO: this all has to go to graph as well
+        let depositAmount = BigInt(0)
+        issue.deposits.forEach((deposit) => {
+          depositAmount += BigInt(deposit.amount)
+        })
+        issue.depositAmount = depositAmount.toString()
+        if (issue.depositAmount) {
+          commit('addIssue', issue)
+        }
+      })
+    })
+  },
+  updateDepartments({ commit }) {
+    this.$axios
+      .$get(process.env.API_URL + '/graph/departments')
+      .then((departments) => {
+        commit('setDepartments', departments)
+      })
+  },
+  updateNFTs({ getters, commit }) {
+    return this.$axios
+      .$get(
+        process.env.API_URL +
+          '/graph/permission-nfts-by-owner/' +
+          getters.account
+      )
+      .then((nfts) => {
+        commit('setNFTs', nfts)
+      })
   },
   updateOracles({ commit }) {
     this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
       commit('setOracles', oracles)
     })
   },
-  updateOvtBalance({ state, commit }) {
-    this.$ovt.methods
-      .balanceOf(state.accounts[0])
+  updateIsOctobayOwner({ getters, commit }) {
+    this.$octobay.methods
+      .owner()
       .call()
-      .then((balance) => commit('setOvtBalance', balance))
+      .then((owner) => {
+        commit('setIsOctobayOwner', getters.account === owner.toLowerCase())
+      })
   },
-  updatePins({ commit }, issueId) {
-    this.$octoBay.methods
-      .issuePins(issueId)
-      .call()
-      .then((pins) => commit('updatePins', { issueId, pins }))
+  updateIsOctobayAdmin({ getters, commit }) {
+    if (getters.account) {
+      this.$octobayGovNFT.methods
+        .getTokenIDForUserInProject(
+          getters.account,
+          'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
+        )
+        .call()
+        .then((tokenId) => {
+          if (tokenId) {
+            this.$octobayGovNFT.methods
+              .hasPermission(tokenId, 1)
+              .call()
+              .then((isOctobayAdmin) =>
+                commit('setIsOctobayAdmin', isOctobayAdmin)
+              )
+          }
+        })
+    } else {
+      commit('setIsOctobayAdmin', false)
+    }
   },
 }

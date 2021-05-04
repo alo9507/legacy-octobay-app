@@ -1,42 +1,40 @@
 <template>
   <div>
     <div class="card-body pb-0">
-      <div v-if="departments.length" class="department-list">
+      <div v-if="ownDepartments.length" class="department-list">
         <Department
-          v-for="department in departments"
+          v-for="department in ownDepartments"
           :key="department.address"
           :department="department"
         />
       </div>
-      <div v-else class="text-center text-muted my-3">No departments.</div>
+      <div v-else class="text-center text-muted my-3">
+        You have not created any<br />departments yet.
+      </div>
     </div>
     <div class="card-body">
-      <button
-        class="btn btn-lg btn-primary w-100 shadow-sm"
-        @click="newDepartment()"
+      <ConnectActionButton
+        :action="() => openModal('ModalNewDepartment')"
+        :required="['wallet']"
+        size="lg"
       >
         New Department
-      </button>
+      </ConnectActionButton>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   computed: {
-    ...mapGetters(['departments']),
+    ...mapGetters(['ownDepartments']),
   },
   mounted() {
     this.$store.dispatch('updateDepartments')
-  },
-  methods: {
-    newDepartment() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalNewDepartment')
-      this.$store.commit('setShowModal', true)
-    },
   },
 }
 </script>

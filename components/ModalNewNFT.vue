@@ -4,32 +4,94 @@
       <h5 class="text-center text-muted-light py-3 px-4 m-0">
         New Permission NFT
       </h5>
-      <div class="d-flex mt-2">
-        <input type="checkbox" class="mr-2" />
-        <div class="d-flex flex-column">
-          Manage Settings
-          <small class="text-muted">includes creating/revoking NFTs</small>
-        </div>
+      <div
+        class="d-flex w-100 justify-content-around align-items-center text-center py-2 px-3"
+      >
+        <small class="w-25">Create<br />NFTs</small>
+        <small class="w-25">Transfer</small>
+        <small class="w-25">Bounty<br />Minting</small>
+        <small class="w-25">Create<br />Proposals</small>
       </div>
-      <div class="d-flex">
-        <input type="checkbox" class="mr-2" />
-        <div class="d-flex flex-column">
-          Create Proposals
-          <small class="text-muted">regardless of token holdings</small>
+      <div class="d-flex justify-content-around align-items-center px-3">
+        <div class="text-center py-2 w-25">
+          <div class="custom-control custom-switch ml-2">
+            <input
+              id="customSwitch1"
+              v-model="permissions['MINT']"
+              type="checkbox"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="customSwitch1"></label>
+          </div>
+        </div>
+        <div class="text-center py-2 w-25">
+          <div class="custom-control custom-switch ml-2">
+            <input
+              id="customSwitch2"
+              v-model="permissions['TRANSFER']"
+              type="checkbox"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="customSwitch2"></label>
+          </div>
+        </div>
+        <div class="text-center py-2 w-25">
+          <div class="custom-control custom-switch ml-2">
+            <input
+              id="customSwitch3"
+              v-model="permissions['SET_ISSUE_GOVTOKEN']"
+              type="checkbox"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="customSwitch3"></label>
+          </div>
+        </div>
+        <div class="text-center py-2 w-25">
+          <div class="custom-control custom-switch ml-2">
+            <input
+              id="customSwitch4"
+              v-model="permissions['CREATE_PROPOSAL']"
+              type="checkbox"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="customSwitch4"></label>
+          </div>
         </div>
       </div>
       <div class="d-flex flex-column mt-3">
         Recipient Address
         <input
+          v-model="ethAddress"
           type="input"
           class="form-control form-control-lg"
-          :value="account"
         />
       </div>
     </div>
     <div class="card-body pt-0">
-      <button class="btn btn-lg btn-primary w-100 shadow-sm">
-        Create Permission-NFT
+      <div v-if="showSuccess" class="alert alert-success border-0">
+        <button
+          type="button"
+          class="close text-success"
+          @click="showSuccess = false"
+        >
+          <span>&times;</span>
+        </button>
+        <font-awesome-icon :icon="['fas', 'check']" />
+        Permission-NFT created! :)
+      </div>
+      <button
+        class="btn btn-lg btn-primary w-100 shadow-sm"
+        :disabled="btnDisabled"
+        @click="createNFT()"
+      >
+        <font-awesome-icon
+          v-if="creatingNFT"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
+        {{
+          creatingNFT ? 'Waiting for confirmation...' : 'Create Permission-NFT'
+        }}
       </button>
     </div>
   </div>
@@ -42,10 +104,38 @@ export default {
   data() {
     return {
       loading: false,
+      creatingNFT: false,
+      showSuccess: false,
+      ethAddress: null,
+      permissions: {
+        MINT: false,
+        TRANSFER: false,
+        SET_ISSUE_GOVTOKEN: false,
+        CREATE_PROPOSAL: false,
+      },
     }
   },
   computed: {
-    ...mapGetters(['oracles', 'account']),
+    ...mapGetters(['account']),
+    btnDisabled() {
+      return (
+        this.creatingNFT ||
+        !this.$web3utils.isAddress(this.ethAddress) ||
+        !Object.values(this.permissions).find((perm) => perm === true)
+      )
+    },
+  },
+  mounted() {
+    this.ethAddress = this.account
+  },
+  methods: {
+    createNFT() {
+      this.creatingNFT = true
+      setTimeout(() => {
+        this.creatingNFT = false
+        this.showSuccess = true
+      }, 3000)
+    },
   },
 }
 </script>

@@ -18,7 +18,7 @@
           <select v-model="proposalDepartment" class="custom-select rounded-xl">
             <option :value="null">Select department</option>
             <option
-              v-for="department in departments"
+              v-for="department in ownDepartments"
               :key="department.address"
               :value="department"
             >
@@ -75,7 +75,7 @@
       </div>
     </div>
     <div v-else class="alert alert-success mb-0">
-      <CheckIcon />
+      <font-awesome-icon :icon="['fas', 'check']" />
       Proposal created successfully! :)
     </div>
   </div>
@@ -83,8 +83,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
 
 export default {
+  mixins: [helpers],
   data() {
     return {
       success: false,
@@ -100,8 +102,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['oracles', 'departments', 'selectedDepartment', 'account']),
-    ...mapGetters('github', { githubUser: 'user' }),
+    ...mapGetters(['ownDepartments', 'selectedDepartment', 'account']),
   },
   watch: {
     discussionUrl(url) {
@@ -167,8 +168,7 @@ export default {
               this.quorum = null
               this.waitingForTransaction = false
               setTimeout(() => {
-                this.$store.commit('setModalData', null)
-                this.$store.commit('setShowModal', false)
+                this.closeModal()
               }, 1000)
             })
           }, 3000)

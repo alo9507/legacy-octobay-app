@@ -1,31 +1,36 @@
+import { mapGetters } from 'vuex'
+
 export default {
+  computed: {
+    ...mapGetters(['oracles', 'activeOracle']),
+  },
   methods: {
-    getAge(createdAt) {
-      return (
-        (new Date().getTime() - new Date(createdAt).getTime()) /
-        (60 * 60 * 24 * 1000)
-      )
+    loadIssue(owner, repo, number) {
+      return this.$axios
+        .get(`${process.env.API_URL}/github/issue/${owner}/${repo}/${number}`)
+        .then((res) => res.data)
     },
-    daysBetween(first, second) {
-      // Copy date parts of the timestamps, discarding the time parts.
-      const one = new Date(
-        first.getFullYear(),
-        first.getMonth(),
-        first.getDate()
-      )
-      const two = new Date(
-        second.getFullYear(),
-        second.getMonth(),
-        second.getDate()
-      )
-
-      // Do the math.
-      const millisecondsPerDay = 1000 * 60 * 60 * 24
-      const millisBetween = two.getTime() - one.getTime()
-      const days = millisBetween / millisecondsPerDay
-
-      // Round down.
-      return Math.floor(days)
+    loadIssueById(issueId) {
+      return this.$axios
+        .get(`${process.env.API_URL}/github/issue-by-id/${issueId}`)
+        .then((res) => res.data)
+    },
+    loadUser(username) {
+      return this.$axios
+        .get(`${process.env.API_URL}/github/user/${username}`)
+        .then((res) => res.data)
+    },
+    loadProjectById(id) {
+      return new Promise((resolve) => {
+        resolve({
+          id: '123',
+        })
+      })
+    },
+    loadDiscussionById(discussionId) {
+      return this.$axios
+        .get(`${process.env.API_URL}/github/discussion-by-id/${discussionId}`)
+        .then((res) => res.data)
     },
     brightnessByColor(color) {
       color = '' + color
@@ -57,6 +62,42 @@ export default {
       }
 
       return this.oracles[Math.floor(Math.random() * this.oracles.length)]
+    },
+    oracleRequest(method, params, waitingForRequest, waitingForOracle) {
+      return new Promise((resolve, reject) => {
+        waitingForRequest(true)
+        waitingForOracle(false)
+        let requestID
+
+        // listening for oracle request fulfillment
+        const fulfillmentListener = this.$octobay.events
+          .ChainlinkFulfilled()
+          .on('data', (event) => {
+            if (event.returnValues.id === requestID) {
+              // stop listening and finish process
+              fulfillmentListener.unsubscribe()
+              waitingForOracle(false)
+              resolve()
+            }
+          })
+
+        method(this.nextOracle().ethAddress, ...params)
+          .send({ from: this.account })
+          .then((rId) => {
+            requestID = rId
+            waitingForRequest(false)
+            waitingForOracle(true)
+          })
+          .catch((e) => reject(e))
+      })
+    },
+    openModal(component) {
+      this.$store.commit('setModalComponent', component)
+      this.$store.commit('setShowModal', true)
+    },
+    closeModal() {
+      this.$store.commit('setModalComponent', null)
+      this.$store.commit('setShowModal', false)
     },
   },
 }

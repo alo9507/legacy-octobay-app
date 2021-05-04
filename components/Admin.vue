@@ -1,32 +1,69 @@
 <template>
   <div class="card-body" style="max-width: 360px">
     <div>
-      <b>OctoBay Contract</b>
+      <b>Octobay Contract</b>
       <div>
         <input
           type="text"
-          :value="$octoBay.options.address"
+          :value="$octobay.options.address"
           class="form-control"
           readonly
         />
       </div>
     </div>
-    <div class="mt-3">
-      <b>Twitter Account ID</b>
-      <div class="input-with-button">
-        <input v-model="twitterAccountId" type="text" class="form-control" />
-        <button
-          class="btn btn-primary btn-sm shadow-sm"
-          :disabled="updatingTwitterAccountId"
-          @click="updateTwitterAccountId()"
-        >
-          <font-awesome-icon
-            v-if="updatingTwitterAccountId"
-            :icon="['fas', 'circle-notch']"
-            spin
-          />
-          <font-awesome-icon v-else :icon="['fas', 'check']" />
-        </button>
+    <div class="mt-2">
+      <small><b>OctobayGovernor Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="$octobayGovernor.options.address"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>OctobayGovNFT Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="$octobayGovNFT.options.address"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>OracleStorage Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="oracleStorageAddress"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>DepositStorage Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="depositStorageAddress"
+          class="form-control form-control-sm"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <small><b>UserAddressStorage Contract</b></small>
+      <div>
+        <input
+          type="text"
+          :value="userAddressStorageAddress"
+          class="form-control form-control-sm"
+          readonly
+        />
       </div>
     </div>
     <div class="mt-3">
@@ -160,7 +197,6 @@ export default {
       jobUpdating: false,
       addingNewOracle: false,
       removingOralce: false,
-      updatingTwitterAccountId: false,
       newOracleJob: {
         oracle: null,
         jobName: null,
@@ -168,29 +204,29 @@ export default {
         jobFee: null,
       },
       addingOracleJob: false,
+      oracleStorageAddress: '',
+      depositStorageAddress: '',
+      userAddressStorageAddress: '',
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles', 'twitterAccountId']),
-    twitterAccountId: {
-      get() {
-        return this.$store.state.twitterAccountId
-      },
-      set(id) {
-        this.$store.commit('setTwitterAccountId', id)
-      },
-    },
+    ...mapGetters(['account', 'oracles']),
+  },
+  mounted() {
+    this.$octobay.methods
+      .oracleStorage()
+      .call()
+      .then((address) => (this.oracleStorageAddress = address))
+    this.$octobay.methods
+      .depositStorage()
+      .call()
+      .then((address) => (this.depositStorageAddress = address))
+    this.$octobay.methods
+      .userAddressStorage()
+      .call()
+      .then((address) => (this.userAddressStorageAddress = address))
   },
   methods: {
-    updateTwitterAccountId() {
-      this.updatingTwitterAccountId = true
-      this.$octoBay.methods
-        .setTwitterAccountId(this.twitterAccountId)
-        .send({ from: this.account })
-        .then(() => {
-          this.updatingTwitterAccountId = false
-        })
-    },
     isNewOracleValid() {
       return (
         this.newOracle.ethAddress.length === 42 &&
@@ -202,19 +238,19 @@ export default {
     addNewOracle() {
       this.addingNewOracle = true
       const jobFee = '10000000000000000'
-      this.$octoBay.methods
+      this.$octobay.methods
         .addOracle(
           this.newOracle.ethAddress,
           this.newOracle.name,
           ['register'],
-          [[this.$web3.utils.toHex(this.newOracle.registerJobId), jobFee]]
+          [[this.$web3utils.toHex(this.newOracle.registerJobId), jobFee]]
         )
         .send({ from: this.account })
         .then(() => {
           this.newOracle.ethAddress = ''
           this.newOracle.name = ''
           this.newOracle.registerJobId = ''
-          this.$store.dispatch('updateOracles').then((oracles) => {
+          this.$store.dispatch('updateOracles').then(() => {
             this.addingNewOracle = false
           })
         })
@@ -226,8 +262,8 @@ export default {
 
       this.oracleUpdating = oracle
       this.jobUpdating = type
-      this.$octoBay.methods
-        .setOracleJob(oracle, type, this.$web3.utils.toHex(jobId), jobFee)
+      this.$octobay.methods
+        .setOracleJob(oracle, type, this.$web3utils.toHex(jobId), jobFee)
         .send({ from: this.account })
         .then(() => {
           this.oracleUpdating = false
@@ -236,20 +272,20 @@ export default {
     },
     removeOracle(address) {
       this.removingOralce = address
-      this.$octoBay.methods
+      this.$octobay.methods
         .removeOracle(address)
         .send({ from: this.account })
         .then(() => {
-          this.$store.dispatch('updateOracles').then((oracles) => {
+          this.$store.dispatch('updateOracles').then(() => {
             this.removingOralce = false
           })
         })
     },
     addOracleJob() {
       this.addingOracleJob = true
-      this.$octoBay.methods
+      this.$octobay.methods
         .addOracleJob(this.newOracleJob.oracle, this.newOracleJob.jobName, [
-          this.$web3.utils.toHex(this.newOracleJob.jobId),
+          this.$web3utils.toHex(this.newOracleJob.jobId),
           this.newOracleJob.jobFee,
         ])
         .send({ from: this.account })

@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="!loading && projectNode"
-      :class="['issue d-flex flex-column', { showDetails }]"
+      :class="['department d-flex flex-column', { showDetails }]"
       @click="showDetails = !showDetails"
     >
       <div class="position-relative">
@@ -53,7 +53,7 @@
                 Current supply<br />
                 <b>
                   <span v-if="totalSupply !== null">
-                    {{ $web3.utils.fromWei(totalSupply, 'ether') }}
+                    {{ $web3utils.fromWei(totalSupply, 'ether') }}
                   </span>
                   <font-awesome-icon
                     v-else
@@ -71,7 +71,7 @@
                 <b v-if="department.holders.length">
                   {{
                     (
-                      Number($web3.utils.fromWei(totalSupply, 'ether')) /
+                      Number($web3utils.fromWei(totalSupply, 'ether')) /
                       department.holders.length
                     ).toFixed(0)
                   }}
@@ -139,10 +139,10 @@
             </button>
           </div>
           <!-- details content -->
-          <div class="w-100 px-3">
+          <div class="w-100">
             <transition name="fade" mode="out-in">
               <!-- holders -->
-              <div v-if="action === 'holders'" key="holders" class="py-3">
+              <div v-if="action === 'holders'" key="holders" class="p-3">
                 <div v-if="department.holders.length">
                   <div
                     v-for="holder in department.holders"
@@ -156,7 +156,7 @@
                       />
                     </small>
                     <small>
-                      {{ $web3.utils.fromWei(holder.balance, 'ether') }}
+                      {{ $web3utils.fromWei(holder.balance, 'ether') }}
                       {{ department.symbol }}
                     </small>
                   </div>
@@ -166,109 +166,139 @@
                 </div>
               </div>
               <!-- nfts -->
-              <div v-if="action === 'nfts'" key="nfts" class="py-3">
+              <div v-if="action === 'nfts'" key="nfts" class="pt-3">
+                <div v-if="canCreateNFT" class="px-3 pb-3 border-bottom-light">
+                  <button
+                    class="btn btn-sm btn-primary w-100 shadow-sm"
+                    @click="openModal('ModalNewNFT')"
+                  >
+                    New Permission-NFT
+                  </button>
+                </div>
                 <div v-if="department.nfts.length">
-                  <small class="d-block">
-                    <table class="w-100">
-                      <tr>
-                        <td></td>
-                        <td class="text-center">
-                          <small>Create NFTs</small>
-                        </td>
-                        <td class="text-center">
-                          <small>Transfer</small>
-                        </td>
-                        <td class="text-center">
-                          <small>Bounty Minting</small>
-                        </td>
-                        <td class="text-center">
-                          <small>Create Proposals</small>
-                        </td>
-                        <td></td>
-                      </tr>
-                      <tr v-for="nft in department.nfts" :key="nft.id">
-                        <td>
-                          <AddressShort
-                            :address="nft.ownerAddress"
-                            class="text-muted"
+                  <div
+                    class="d-flex w-100 justify-content-around align-items-center text-center py-2"
+                  >
+                    <small class="w-25">Create<br />NFTs</small>
+                    <small class="w-25">Transfer</small>
+                    <small class="w-25">Bounty<br />Minting</small>
+                    <small class="w-25">Create<br />Proposals</small>
+                  </div>
+                  <div
+                    v-for="nft in department.nfts"
+                    :key="nft.id"
+                    class="py-2 border-top-light"
+                  >
+                    <div
+                      class="d-flex justify-content-around align-items-center"
+                    >
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="nft.permissions.includes('MINT')"
+                            :icon="['fas', 'check']"
+                            class="text-success"
                           />
-                        </td>
-                        <td class="text-center">
-                          <input
-                            type="checkbox"
-                            :checked="nft.permissions.includes('MINT')"
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
                           />
-                        </td>
-                        <td class="text-center">
-                          <input
-                            type="checkbox"
-                            :checked="nft.permissions.includes('TRANSFER')"
+                        </span>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="nft.permissions.includes('TRANSFER')"
+                            :icon="['fas', 'check']"
+                            class="text-success"
                           />
-                        </td>
-                        <td class="text-center">
-                          <input
-                            type="checkbox"
-                            :checked="
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
+                          />
+                        </span>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="
                               nft.permissions.includes('SET_ISSUE_GOVTOKEN')
                             "
+                            :icon="['fas', 'check']"
+                            class="text-success"
                           />
-                        </td>
-                        <td class="text-center">
-                          <input
-                            type="checkbox"
-                            :checked="
-                              nft.permissions.includes('CREATE_PROPOSAL')
-                            "
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
                           />
-                        </td>
-                        <td class="text-right">
-                          <div class="btn-group shadow-sm rounded-xl">
-                            <button
-                              v-tooltip="{ content: 'Save', trigger: 'hover' }"
-                              class="btn btn-sm btn-primary"
-                            >
-                              <font-awesome-icon :icon="['fas', 'check']" />
-                            </button>
-                            <button
-                              v-tooltip="{ content: 'Burn', trigger: 'hover' }"
-                              class="btn btn-sm btn-primary"
-                            >
-                              <font-awesome-icon :icon="['fas', 'fire']" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </small>
+                        </span>
+                      </div>
+                      <div class="text-center py-2 w-25">
+                        <span class="border-light rounded-xl py-1 px-2">
+                          <font-awesome-icon
+                            v-if="nft.permissions.includes('CREATE_PROPOSAL')"
+                            :icon="['fas', 'check']"
+                            class="text-success"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            :icon="['fas', 'ban']"
+                            class="text-danger"
+                          />
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-between align-items-center pb-2 px-3"
+                    >
+                      <small class="mr-2">
+                        <GithubUser
+                          :from-address="nft.ownerAddress"
+                          :force-show-address="true"
+                        />
+                      </small>
+                      <div class="btn-group shadow-sm rounded-xl ml-2">
+                        <button class="btn btn-sm btn-primary">
+                          <font-awesome-icon :icon="['fas', 'share']" />
+                          Transfer
+                        </button>
+                        <button class="btn btn-sm btn-primary">
+                          <font-awesome-icon :icon="['fas', 'fire']" />
+                          Burn
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div v-else class="text-muted text-center">
                   <small>No Permission-NFTs yet.</small>
                 </div>
-                <button
-                  class="btn btn-sm btn-primary w-100 mt-2 shadow-sm"
-                  @click="newNFT()"
-                >
-                  New Permission-NFT
-                </button>
               </div>
               <!-- settings -->
-              <div v-if="action === 'settings'" key="settings" class="py-3">
+              <div v-if="action === 'settings'" key="settings" class="p-3">
                 <div class="d-flex align-items-end">
                   <div class="mr-1">
-                    <small class="d-flex">Shares to create proposals</small>
+                    <small class="d-block text-center mb-2">
+                      Shares to<br />create proposals
+                    </small>
                     <input
                       v-model="requiredSharesToCreateProposals"
                       type="text"
-                      class="form-control form-control-sm form-control-with-embed mb-2"
+                      class="form-control form-control-sm form-control-with-embed mb-2 w-50 mx-auto"
                       placeholder="1-100 %"
                     />
                   </div>
                   <div class="ml-1">
-                    <small class="d-flex">Minimum Quorum</small>
+                    <small class="d-block text-center mb-2">
+                      Minimum<br />Quorum
+                    </small>
                     <input
                       v-model="minQuorum"
                       type="text"
-                      class="form-control form-control-sm form-control-with-embed mb-2"
+                      class="form-control form-control-sm form-control-with-embed mb-2 w-50 mx-auto"
                       placeholder="1-100 %"
                     />
                   </div>
@@ -308,11 +338,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import loadFromGithub from '@/mixins/loadFromGithub'
 import helpers from '@/mixins/helpers'
 
 export default {
-  mixins: [loadFromGithub, helpers],
+  mixins: [helpers],
   props: {
     department: {
       type: Object,
@@ -332,13 +361,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'registeredAccount', 'oracles']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account', 'nfts']),
+    canCreateNFT() {
+      return (
+        this.department.creator === this.account ||
+        !!this.nfts.find(
+          (nft) =>
+            nft.permissions.includes('MINT') &&
+            nft.department.id === this.department.id
+        )
+      )
+    },
   },
   mounted() {
+    this.$store.dispatch('updateNFTs')
     this.requiredSharesToCreateProposals =
       this.department.requiredSharesToCreateProposals / 100
     this.minQuorum = this.department.minQuorum / 100
@@ -368,11 +404,6 @@ export default {
       this.$store.commit('setView', 'proposals')
       this.$store.commit('setSelectedDepartment', this.department)
     },
-    newNFT() {
-      this.$store.commit('setModalData', null)
-      this.$store.commit('setModalComponent', 'ModalNewNFT')
-      this.$store.commit('setShowModal', true)
-    },
     changeAction(action) {
       if (this.action === action) {
         this.action = null
@@ -391,7 +422,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.issue
+.department
   border-top: solid 1px fff
   cursor: pointer
   position: relative
@@ -407,13 +438,4 @@ export default {
         max-height: 100px
       &.deposits
         max-height: 350px
-
-.avatar
-  border: solid 2px ccc
-  border-radius: 50%
-  width: 32px
-  height: 32px
-  background-repeat: no-repeat
-  background-position: center center
-  background-size: 100%
 </style>

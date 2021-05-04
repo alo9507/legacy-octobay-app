@@ -4,7 +4,7 @@
   >
     <div class="mb-3">
       <a
-        href="https://twitter.com/OctoBayApp"
+        href="https://twitter.com/OctobayApp"
         target="_blank"
         class="text-white px-2"
       >
@@ -25,7 +25,7 @@
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
       <a
-        :href="'https://kovan.etherscan.io/address/' + octoBayAddress"
+        :href="'https://kovan.etherscan.io/address/' + octobayAddress"
         class="text-white px-2"
       >
         <font-awesome-icon :icon="['fab', 'ethereum']" />
@@ -35,7 +35,7 @@
         @click="$store.commit('setShowOracleList', true)"
       >
         <img
-          :src="'./chainlink-icon.png'"
+          :src="'/chainlink-icon.png'"
           width="36px"
           class="rounded-circle py-1 pl-1"
         />
@@ -61,17 +61,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  computed: {
-    ...mapGetters(['activeOracle']),
-    appName() {
-      return process.env.APP_NAME
-    },
-    octoBayAddress() {
-      return process.env.OCTOBAY_ADDRESS
-    },
+  data() {
+    return {
+      octobayAddress: process.env.OCTOBAY_ADDRESS,
+    }
   },
 }
 </script>

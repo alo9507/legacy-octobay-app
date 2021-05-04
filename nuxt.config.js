@@ -12,16 +12,10 @@ export default {
    ** See https://nuxtjs.org/api/configuration-target
    */
   target: 'static',
-  router: {
-    base: process.env.BASE_PATH,
-  },
 
   env: {
     OCTOBAY_ABI: JSON.parse(
       fs.readFileSync('./contract-abi/Octobay.json').toString()
-    ).abi,
-    OVT_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/OctobayVisibilityToken.json').toString()
     ).abi,
     OCTOBAY_GOVERNOR_ABI: JSON.parse(
       fs.readFileSync('./contract-abi/OctobayGovernor.json').toString()
@@ -29,17 +23,15 @@ export default {
     OCTOBAY_GOV_TOKEN_ABI: JSON.parse(
       fs.readFileSync('./contract-abi/OctobayGovToken.json').toString()
     ).abi,
+    OCTOBAY_NFT_ABI: JSON.parse(
+      fs.readFileSync('./contract-abi/OctobayGovNFT.json').toString()
+    ).abi,
     /*
      ** for Vercel
      */
     API_URL: process.env.API_URL,
-    APP_NAME: process.env.APP_NAME,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
-    OCTOBAY_GOVERNOR_ADDRESS: process.env.OCTOBAY_GOVERNOR_ADDRESS,
-    OVT_ADDRESS: process.env.OVT_ADDRESS,
-    GSN_RELAYHUB_ADDRESS: process.env.GSN_RELAYHUB_ADDRESS,
-    GSN_PAYMASTER_ADDRESS: process.env.GSN_PAYMASTER_ADDRESS,
   },
 
   /*
@@ -47,7 +39,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-head
    */
   head: {
-    title: 'OctoBay',
+    title: 'Octobay',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -56,22 +48,27 @@ export default {
         name: 'description',
         content: process.env.npm_package_description || '',
       },
-      { property: 'og:title', content: 'OctoBay' },
+      { property: 'og:title', content: 'Octobay' },
       {
         property: 'og:image',
         content: 'https://octobay.github.io/app/cover.png',
       },
-      { property: 'twitter:title', content: 'OctoBay' },
+      { property: 'twitter:title', content: 'Octobay' },
       {
         property: 'twitter:image',
         content: 'https://octobay.github.io/app/cover.png',
       },
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: './icon.png' },
-      { rel: 'shortcut icon', type: 'image/png', href: './icon.png' },
+      { rel: 'icon', type: 'image/png', href: '/icon.png' },
+      { rel: 'shortcut icon', type: 'image/png', href: '/icon.png' },
     ],
   },
+  loading: {
+    color: '#652FFF',
+    height: '5px',
+  },
+
   /*
    ** Global CSS
    */
@@ -85,7 +82,6 @@ export default {
     '@/plugins/tooltips',
     '@/plugins/clipboard',
     '@/plugins/web3',
-    '@/plugins/octobay',
     '@/plugins/octicons',
   ],
   /*
@@ -101,16 +97,7 @@ export default {
       '@nuxtjs/dotenv',
       {
         path: './',
-        only: [
-          'API_URL',
-          'APP_NAME',
-          'GITHUB_CLIENT_ID',
-          'OCTOBAY_ADDRESS',
-          'OCTOBAY_GOVERNOR_ADDRESS',
-          'OVT_ADDRESS',
-          'GSN_RELAYHUB_ADDRESS',
-          'GSN_PAYMASTER_ADDRESS',
-        ],
+        only: ['API_URL', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS'],
       },
     ],
     '@nuxtjs/fontawesome',
@@ -126,7 +113,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
-    extend(config, ctx) {
+    extend(config) {
       config.node = {
         fs: 'empty',
       }
@@ -144,6 +131,7 @@ export default {
         'faCalendarAlt',
       ],
       solid: [
+        'faCopy',
         'faShareAlt',
         'faPlus',
         'faMinus',
@@ -187,6 +175,8 @@ export default {
         'faComments',
         'faVoteYea',
         'faFire',
+        'faWallet',
+        'faShare',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },

@@ -127,7 +127,7 @@
               <a
                 v-tooltip="{
                   content:
-                    'Show Discussion on GitHub<br><span class=\'text-danger\'>(Has been altered after submission. Check edit log on GitHub.)</span>',
+                    'Show Discussion on GitHub<br><span class=\'text-dark\'><small class=\'d-flex justify-content-center my-2\'>Has been altered after submission.<br>Check edit log on GitHub.</small></span><img src=\'/edit-log.png\' class=\'w-100\' />',
                   trigger: 'hover',
                 }"
                 :href="discussionNode.url"
@@ -202,11 +202,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import loadFromGithub from '@/mixins/loadFromGithub'
 import helpers from '@/mixins/helpers'
 
 export default {
-  mixins: [loadFromGithub, helpers],
+  mixins: [helpers],
   props: {
     proposal: {
       type: Object,
@@ -223,11 +222,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account', 'registeredAccount', 'oracles']),
-    ...mapGetters('github', {
-      githubUser: 'user',
-      githubAccessToken: 'accessToken',
-    }),
+    ...mapGetters(['account']),
   },
   mounted() {
     this.loading = true
@@ -295,13 +290,4 @@ export default {
         max-height: 100px
       &.deposits
         max-height: 350px
-
-.avatar
-  border: solid 2px ccc
-  border-radius: 50%
-  width: 32px
-  height: 32px
-  background-repeat: no-repeat
-  background-position: center center
-  background-size: 100%
 </style>

@@ -1,11 +1,15 @@
 <template>
-  <div class="d-flex flex-column" style="min-height: 100vh">
+  <div class="d-flex flex-column pt-5" style="min-height: 100vh">
     <div
-      v-if="showWarning"
-      class="alert text-white bg-secondary border-0 mt-5 mx-auto"
-      style="max-width: 360px; background-color: rgba(255, 255, 255, 0.1)"
+      v-if="showPrototypeWarning"
+      class="alert text-white bg-secondary border-0 mx-auto"
+      style="max-width: 360px"
     >
-      <button type="button" class="close p-1" @click="showWarning = false">
+      <button
+        type="button"
+        class="close p-1"
+        @click="showPrototypeWarning = false"
+      >
         <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
           <path
             fill="#ffffff"
@@ -13,7 +17,7 @@
           />
         </svg>
       </button>
-      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
+      <font-awesome-icon :icon="['fas', 'info-circle']" />
       <b>This is a prototype!</b>
       <div class="mt-2 d-flex flex-column">
         <div>
@@ -37,7 +41,7 @@
             <font-awesome-icon :icon="['fab', 'discord']" />
           </a>
           <a
-            href="https://twitter.com/OctoBayApp"
+            href="https://twitter.com/OctobayApp"
             target="_blank"
             class="ml-1 btn btn-sm btn-outline-light"
           >
@@ -63,6 +67,29 @@
       </div>
     </div>
     <div
+      v-if="!$web3 && showCompatibilityWarning"
+      class="alert bg-primary text-white border-0 mb-3 mx-auto"
+      style="max-width: 360px"
+    >
+      <button
+        type="button"
+        class="close p-1"
+        @click="showCompatibilityWarning = false"
+      >
+        <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
+          <path
+            fill="#ffffff"
+            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+          />
+        </svg>
+      </button>
+      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
+      <b>Unsupported Browser!</b>
+      <div class="mt-2">
+        You need an Ethereum compatible browser to use this service.
+      </div>
+    </div>
+    <div
       class="container-fluid main d-flex flex-column align-items-center pb-5"
     >
       <Header />
@@ -72,7 +99,6 @@
     <RecipientTypeList />
     <IntervalSelect />
     <OracleList />
-    <ForkList />
     <Modal />
   </div>
 </template>
@@ -82,7 +108,8 @@ export default {
   middleware: ['load', 'deeplinks'],
   data() {
     return {
-      showWarning: true,
+      showPrototypeWarning: true,
+      showCompatibilityWarning: true,
     }
   },
 }
