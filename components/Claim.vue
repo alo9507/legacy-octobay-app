@@ -120,36 +120,34 @@ export default {
         this.url = this.redirectPrefills.url
       }
     },
-    url(newUrl, oldUrl) {
+    url(url) {
       this.issue = null
-      // TODO: use regex here
-      if (newUrl.includes('https://github.com')) {
-        const urlParts = newUrl.split('/')
-        const number = Number(urlParts.pop())
-        urlParts.pop()
-        const repo = urlParts.pop()
-        const owner = urlParts.pop()
-        if (newUrl.includes('/issues/') && number) {
-          this.loadingIssue = true
-          this.canWithdrawIssue = null
-          this.loadIssue(owner, repo, number)
-            .then((issue) => {
-              this.issue = issue
-              if (this.githubUser) {
-                this.$axios
-                  .$get(
-                    process.env.API_URL +
-                      `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issue.id}`
-                  )
-                  .then((can) => {
-                    this.canWithdrawIssue = can
-                  })
-              } else {
-                this.canWithdrawIssue = false
-              }
-            })
-            .finally(() => (this.loadingIssue = false))
-        }
+      const parts = url.match(
+        /^https:\/\/github\.com\/([\w-]+)\/([\w-]+)\/issues\/(\d+)$/
+      )
+      if (parts) {
+        const owner = parts[1]
+        const repo = parts[2]
+        const number = parts[3]
+        this.loadingIssue = true
+        this.canWithdrawIssue = null
+        this.loadIssue(owner, repo, number)
+          .then((issue) => {
+            this.issue = issue
+            if (this.githubUser) {
+              this.$axios
+                .$get(
+                  process.env.API_URL +
+                    `/github/can-withdraw-from-issue/${this.githubUser.node_id}/${this.issue.id}`
+                )
+                .then((can) => {
+                  this.canWithdrawIssue = can
+                })
+            } else {
+              this.canWithdrawIssue = false
+            }
+          })
+          .finally(() => (this.loadingIssue = false))
       }
     },
   },
