@@ -91,13 +91,15 @@ export default {
           .catch((e) => reject(e))
       })
     },
-    openModal(component) {
+    openModal(component, blocksUi = false) {
       this.$store.commit('setModalComponent', component)
       this.$store.commit('setShowModal', true)
+      this.$store.commit('setModalBlocksUi', blocksUi)
     },
     closeModal() {
       this.$store.commit('setModalComponent', null)
       this.$store.commit('setShowModal', false)
+      this.$store.commit('setModalBlocksUi', false)
     },
   },
 }

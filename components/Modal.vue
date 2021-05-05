@@ -3,7 +3,7 @@
     <div
       v-if="showModal"
       class="overlay d-flex justify-content-center align-items-center"
-      @click="closeModal()"
+      @click="modalBlocksUi || closeModal()"
     >
       <component :is="modalComponent"></component>
     </div>
@@ -17,7 +17,7 @@ import helpers from '@/mixins/helpers'
 export default {
   mixins: [helpers],
   computed: {
-    ...mapGetters(['showModal', 'modalComponent']),
+    ...mapGetters(['showModal', 'modalComponent', 'modalBlocksUi']),
   },
 }
 </script>
