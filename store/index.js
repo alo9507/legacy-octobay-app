@@ -313,15 +313,19 @@ export const actions = {
     })
   },
   updateIsOctobayOwner({ getters, commit }) {
-    this.$octobay.methods
-      .owner()
-      .call()
-      .then((owner) => {
-        commit('setIsOctobayOwner', getters.account === owner.toLowerCase())
-      })
+    if (this.$octobay) {
+      this.$octobay.methods
+        .owner()
+        .call()
+        .then((owner) => {
+          commit('setIsOctobayOwner', getters.account === owner.toLowerCase())
+        })
+    } else {
+      commit('setIsOctobayOwner', false)
+    }
   },
   updateIsOctobayAdmin({ getters, commit }) {
-    if (getters.account) {
+    if (this.$octobayGovNFT && getters.account) {
       this.$octobayGovNFT.methods
         .getTokenIDForUserInProject(
           getters.account,
