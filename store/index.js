@@ -6,6 +6,8 @@ export const state = () => ({
   githubAccessToken: null,
   balance: 0,
   issues: [],
+  incomingUserDeposits: [],
+  outgoingUserDeposits: [],
   showRecipientTypeList: false,
   selectedRecipientType: 'User',
   showIntervalSelect: false,
@@ -69,6 +71,12 @@ export const getters = {
   },
   issues(state) {
     return state.issues
+  },
+  incomingUserDeposits(state) {
+    return state.incomingUserDeposits
+  },
+  outgoingUserDeposits(state) {
+    return state.outgoingUserDeposits
   },
   showRecipientTypeList(state) {
     return state.showRecipientTypeList
@@ -155,6 +163,12 @@ export const mutations = {
   },
   addIssue(state, issue) {
     state.issues.push(issue)
+  },
+  setIncomingUserDeposits(state, deposits) {
+    state.incomingUserDeposits = deposits
+  },
+  setOutgoingUserDeposits(state, deposits) {
+    state.outgoingUserDeposits = deposits
   },
   removeIssue(state, issueId) {
     const existingIssueIndex = state.issues.findIndex((i) => i.id === issueId)
@@ -300,6 +314,28 @@ export const actions = {
         }
       })
     })
+  },
+  updateIncomingUserDeposits({ state, commit }) {
+    if (state.githubUser) {
+      this.$axios
+        .$get(process.env.API_URL + '/graph/user/' + state.githubUser.node_id)
+        .then((user) => {
+          if (user) {
+            commit('setIncomingUserDeposits', user.deposits)
+          }
+        })
+    }
+  },
+  updateOutgoingUserDeposits({ getters, commit }) {
+    this.$axios
+      .$get(
+        process.env.API_URL + '/graph/outgoing-user-deposits/' + getters.account
+      )
+      .then((deposits) => {
+        if (deposits) {
+          commit('setOutgoingUserDeposits', deposits)
+        }
+      })
   },
   updateDepartments({ commit }) {
     this.$axios

@@ -182,12 +182,12 @@
       </ConnectActionButton>
     </div>
     <div
-      v-if="accountsUserDeposits.length"
+      v-if="outgoingUserDeposits.length"
       class="card-body mt-2 pt-2 border-top"
     >
       <h5 class="text-center text-muted-light py-2 px-4">Pending</h5>
       <div
-        v-for="(deposit, index) in accountsUserDeposits"
+        v-for="(deposit, index) in outgoingUserDeposits"
         :key="index"
         class="d-flex justify-content-between align-items-center mt-2"
       >
@@ -234,7 +234,6 @@ export default {
       showSendSuccess: false,
       showIssueDepositSuccess: false,
       loadRecipientTimeout: null,
-      accountsUserDeposits: [],
       refundingUserDeposit: 0,
       departmentForIssue: null,
     }
@@ -246,6 +245,7 @@ export default {
       'redirectPrefills',
       'ownDepartments',
       'githubUser',
+      'outgoingUserDeposits',
     ]),
     confirmDisabled() {
       if (!this.sending && this.amount > 0) {
@@ -261,7 +261,7 @@ export default {
   },
   watch: {
     account() {
-      this.updateUserDeposits()
+      this.$store.dispatch('updateOutgoingUserDeposits')
     },
     redirectPrefills() {
       if (this.redirectPrefills) {
@@ -342,7 +342,7 @@ export default {
       }
     }
     if (this.account) {
-      this.updateUserDeposits()
+      this.$store.dispatch('updateOutgoingUserDeposits')
     }
   },
   methods: {
@@ -364,7 +364,10 @@ export default {
         .then(() => {
           this.amount = 0
           this.showSendSuccess = true
-          setTimeout(() => this.updateUserDeposits(), 1000)
+          setTimeout(
+            () => this.$store.dispatch('updateOutgoingUserDeposits'),
+            1000
+          )
           this.$store.dispatch('updateEthBalance')
         })
         .catch((e) => {
@@ -422,21 +425,6 @@ export default {
           })
       }
     },
-    updateUserDeposits() {
-      if (this.githubUser) {
-        this.$axios
-          .$get(
-            process.env.API_URL +
-              '/graph/outgoing-user-deposits/' +
-              this.account
-          )
-          .then((deposits) => {
-            if (deposits) {
-              this.accountsUserDeposits = deposits
-            }
-          })
-      }
-    },
     refundUserDeposit(id) {
       this.refundingUserDeposit = id
       this.octobay.methods
@@ -444,7 +432,10 @@ export default {
         .send({ from: this.account })
         .then(() => {
           this.$store.dispatch('updateEthBalance')
-          setTimeout(() => this.updateUserDeposits(), 1000)
+          setTimeout(
+            () => this.$store.dispatch('updateOutgoingUserDeposits'),
+            1000
+          )
         })
         .catch((e) => console.log(e))
         .finally(() => (this.refundingUserDeposit = 0))

@@ -52,12 +52,15 @@
         {{ waitingForOracleRequest ? 'Waiting for confirmation...' : 'Claim' }}
       </ConnectActionButton>
     </div>
-    <div v-if="userDeposits.length" class="card-body border-top mt-2 pt-2">
+    <div
+      v-if="incomingUserDeposits.length"
+      class="card-body border-top mt-2 pt-2"
+    >
       <h5 class="text-center text-muted-light py-2 px-4 mt-2">
         Claim funds sent to your GitHub account.
       </h5>
       <div
-        v-for="(deposit, index) in userDeposits"
+        v-for="(deposit, index) in incomingUserDeposits"
         :key="index"
         class="d-flex justify-content-between align-items-center mt-2"
       >
@@ -100,17 +103,21 @@ export default {
       waitingForOracleRequest: false,
       waitingForOracleFulfillment: false,
       showWithdrawalSuccess: false,
-      userDeposits: [],
       withdrawingUserDeposit: 0,
       canWithdrawIssue: null,
     }
   },
   computed: {
-    ...mapGetters(['account', 'redirectPrefills', 'githubUser']),
+    ...mapGetters([
+      'account',
+      'redirectPrefills',
+      'githubUser',
+      'incomingUserDeposits',
+    ]),
   },
   watch: {
     githubUser() {
-      this.updateUserDeposits()
+      this.$store.dispatch('updateIncomingUserDeposits')
     },
     redirectPrefills() {
       if (
@@ -152,7 +159,7 @@ export default {
     },
   },
   mounted() {
-    this.updateUserDeposits()
+    this.$store.dispatch('updateIncomingUserDeposits')
     if (this.redirectPrefills && this.redirectPrefills.type === 'claim-issue') {
       this.url = this.redirectPrefills.url
     }
@@ -178,22 +185,14 @@ export default {
         .withdrawUserDeposit(id)
         .send({ from: this.account })
         .then(() => {
-          setTimeout(() => this.updateUserDeposits(), 1000)
+          setTimeout(
+            () => this.$store.dispatch('updateIncomingUserDeposits'),
+            1000
+          )
           this.$store.dispatch('updateEthBalance')
         })
         .catch((e) => console.log(e))
         .finally(() => (this.withdrawingUserDeposit = 0))
-    },
-    updateUserDeposits() {
-      if (this.githubUser) {
-        this.$axios
-          .$get(process.env.API_URL + '/graph/user/' + this.githubUser.node_id)
-          .then((user) => {
-            if (user) {
-              this.userDeposits = user.deposits
-            }
-          })
-      }
     },
   },
 }
