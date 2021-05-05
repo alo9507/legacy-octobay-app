@@ -16,7 +16,7 @@
       <div>
         <input
           type="text"
-          :value="$octobayGovernor.options.address"
+          :value="config.octobayGovernor"
           class="form-control form-control-sm"
           readonly
         />
@@ -27,7 +27,7 @@
       <div>
         <input
           type="text"
-          :value="$octobayGovNFT.options.address"
+          :value="config.octobayGovNFT"
           class="form-control form-control-sm"
           readonly
         />
@@ -38,7 +38,7 @@
       <div>
         <input
           type="text"
-          :value="oracleStorageAddress"
+          :value="config.oracleStorage"
           class="form-control form-control-sm"
           readonly
         />
@@ -49,7 +49,7 @@
       <div>
         <input
           type="text"
-          :value="depositStorageAddress"
+          :value="config.depositStorage"
           class="form-control form-control-sm"
           readonly
         />
@@ -60,7 +60,7 @@
       <div>
         <input
           type="text"
-          :value="userAddressStorageAddress"
+          :value="config.userAddressStorage"
           class="form-control form-control-sm"
           readonly
         />
@@ -204,27 +204,10 @@ export default {
         jobFee: null,
       },
       addingOracleJob: false,
-      oracleStorageAddress: '',
-      depositStorageAddress: '',
-      userAddressStorageAddress: '',
     }
   },
   computed: {
-    ...mapGetters(['account', 'oracles']),
-  },
-  mounted() {
-    this.$octobay.methods
-      .oracleStorage()
-      .call()
-      .then((address) => (this.oracleStorageAddress = address))
-    this.$octobay.methods
-      .depositStorage()
-      .call()
-      .then((address) => (this.depositStorageAddress = address))
-    this.$octobay.methods
-      .userAddressStorage()
-      .call()
-      .then((address) => (this.userAddressStorageAddress = address))
+    ...mapGetters(['config', 'account', 'oracles']),
   },
   methods: {
     isNewOracleValid() {

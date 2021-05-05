@@ -1,6 +1,5 @@
 export const state = () => ({
-  isOctobayOwner: false,
-  isOctobayAdmin: false,
+  config: {},
   networkId: null,
   accounts: [],
   githubUser: null,
@@ -25,6 +24,25 @@ export const state = () => ({
 })
 
 export const getters = {
+  config(state) {
+    return state.config
+  },
+  isOctobayOwner(state, getters) {
+    return getters.account === state.config.owner
+  },
+  isOctobayAdmin(state) {
+    /**
+     * Gives access to the admin dashboard. (like isOctobayOwner)
+     * Currently you are considered an admin if you hold an NFT with MINT permission
+     * from any governance department that belongs to the Octobay GitHub org.
+     * Should be changed in the future to either a special ADMIN permission.
+     */
+    return state.nfts.find(
+      (nft) =>
+        nft.department.projectId === 'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4' &&
+        nft.permissions.includes('MINT')
+    )
+  },
   networkId(state) {
     return state.networkId
   },
@@ -88,12 +106,6 @@ export const getters = {
   modalBlocksUi(state) {
     return state.modalBlocksUi
   },
-  isOctobayOwner(state) {
-    return state.isOctobayOwner
-  },
-  isOctobayAdmin(state) {
-    return state.isOctobayAdmin
-  },
   selectedDepartment(state) {
     return state.selectedDepartment
   },
@@ -117,6 +129,9 @@ export const getters = {
 }
 
 export const mutations = {
+  setConfig(state, config) {
+    state.config = config
+  },
   setNetworkId(state, id) {
     state.networkId = id
   },
@@ -202,12 +217,6 @@ export const mutations = {
   setModalBlocksUi(state, blocksUi) {
     state.modalBlocksUi = blocksUi
   },
-  setIsOctobayOwner(state, isOwner) {
-    state.isOctobayOwner = isOwner
-  },
-  setIsOctobayAdmin(state, isAdmin) {
-    state.isOctobayAdmin = isAdmin
-  },
   setDepartments(state, departments) {
     state.departments = departments
   },
@@ -234,8 +243,7 @@ export const actions = {
     this.$web3.eth.getAccounts().then((accounts) => {
       commit('setAccounts', accounts)
       dispatch('updateEthBalance')
-      dispatch('updateIsOctobayOwner')
-      dispatch('updateIsOctobayAdmin')
+      dispatch('updateNFTs')
     })
   },
   updateEthBalance({ state, getters, commit }) {
@@ -316,38 +324,13 @@ export const actions = {
       commit('setOracles', oracles)
     })
   },
-  updateIsOctobayOwner({ getters, commit }) {
-    if (this.$octobay) {
-      this.$octobay.methods
-        .owner()
-        .call()
-        .then((owner) => {
-          commit('setIsOctobayOwner', getters.account === owner.toLowerCase())
-        })
-    } else {
-      commit('setIsOctobayOwner', false)
-    }
-  },
-  updateIsOctobayAdmin({ getters, commit }) {
-    if (this.$octobayGovNFT && getters.account) {
-      this.$octobayGovNFT.methods
-        .getTokenIDForUserInProject(
-          getters.account,
-          'MDEyOk9yZ2FuaXphdGlvbjc3NDAyNTM4'
-        )
-        .call()
-        .then((tokenId) => {
-          if (tokenId) {
-            this.$octobayGovNFT.methods
-              .hasPermission(tokenId, 1)
-              .call()
-              .then((isOctobayAdmin) =>
-                commit('setIsOctobayAdmin', isOctobayAdmin)
-              )
-          }
-        })
-    } else {
-      commit('setIsOctobayAdmin', false)
-    }
+  updateConfig({ commit }) {
+    this.$axios
+      .$get(
+        `${process.env.API_URL}/graph/config/${process.env.OCTOBAY_ADDRESS}`
+      )
+      .then((config) => {
+        commit('setConfig', config)
+      })
   },
 }
