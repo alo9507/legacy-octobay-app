@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 export default {
   /*
    ** Nuxt rendering mode
@@ -12,28 +10,6 @@ export default {
    ** See https://nuxtjs.org/api/configuration-target
    */
   target: 'static',
-
-  env: {
-    OCTOBAY_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/Octobay.json').toString()
-    ).abi,
-    OCTOBAY_GOVERNOR_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/OctobayGovernor.json').toString()
-    ).abi,
-    OCTOBAY_GOV_TOKEN_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/OctobayGovToken.json').toString()
-    ).abi,
-    OCTOBAY_NFT_ABI: JSON.parse(
-      fs.readFileSync('./contract-abi/OctobayGovNFT.json').toString()
-    ).abi,
-    /*
-     ** for Vercel
-     */
-    API_URL: process.env.API_URL,
-    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-    OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
-    CHAIN_ID: process.env.CHAIN_ID,
-  },
 
   /*
    ** Headers of the page

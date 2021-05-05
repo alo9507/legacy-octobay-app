@@ -24,7 +24,7 @@ export default async ({ app, store }, inject) => {
     inject(
       'octobay',
       new app.$web3.eth.Contract(
-        process.env.OCTOBAY_ABI,
+        require('./../contract-abi/Octobay.json').abi,
         process.env.OCTOBAY_ADDRESS
       )
     )
@@ -36,7 +36,7 @@ export default async ({ app, store }, inject) => {
     inject(
       'octobayGovernor',
       new app.$web3.eth.Contract(
-        process.env.OCTOBAY_GOVERNOR_ABI,
+        require('./../contract-abi/OctobayGovernor.json').abi,
         await app.$octobay.methods.octobayGovernor().call()
       )
     )
@@ -44,7 +44,7 @@ export default async ({ app, store }, inject) => {
     inject(
       'octobayGovNFT',
       new app.$web3.eth.Contract(
-        process.env.OCTOBAY_NFT_ABI,
+        require('./../contract-abi/OctobayGovNFT.json').abi,
         await app.$octobay.methods.octobayGovNFT().call()
       )
     )
@@ -56,7 +56,10 @@ export default async ({ app, store }, inject) => {
     inject(
       'octobayGovToken',
       (address) =>
-        new app.$web3.eth.Contract(process.env.OCTOBAY_GOV_TOKEN_ABI, address)
+        new app.$web3.eth.Contract(
+          require('./../contract-abi/OctobayGovToken.json').abi,
+          address
+        )
     )
   } else {
     /**
