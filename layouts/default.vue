@@ -104,13 +104,29 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import helpers from '@/mixins/helpers'
+
 export default {
+  mixins: [helpers],
   middleware: ['load', 'deeplinks'],
   data() {
     return {
       showPrototypeWarning: true,
       showCompatibilityWarning: true,
     }
+  },
+  computed: {
+    ...mapGetters(['networkId']),
+  },
+  watch: {
+    networkId() {
+      if (this.networkId !== Number(process.env.CHAIN_ID)) {
+        this.openModal('ModalWrongNetwork', true)
+      } else {
+        this.closeModal()
+      }
+    },
   },
 }
 </script>
