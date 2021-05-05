@@ -26,17 +26,7 @@
               <small><AddressShort :address="account" /></small>
               <small>
                 <sup class="text-nowrap">
-                  {{
-                    networkId === 1
-                      ? 'Mainnet'
-                      : networkId === 3
-                      ? 'Ropsten'
-                      : networkId === 4
-                      ? 'Rinkeby'
-                      : networkId === 42
-                      ? 'Kovan'
-                      : 'Unknown Network'
-                  }}
+                  {{ networkName(networkId) }}
                 </sup>
               </small>
             </div>

@@ -101,5 +101,17 @@ export default {
       this.$store.commit('setShowModal', false)
       this.$store.commit('setModalBlocksUi', false)
     },
+    networkName(id) {
+      id = Number(id)
+      return id === 1
+        ? 'Mainnet'
+        : id === 3
+        ? 'Ropsten'
+        : id === 4
+        ? 'Rinkeby'
+        : id === 42
+        ? 'Kovan'
+        : 'Unknown Network'
+    },
   },
 }
