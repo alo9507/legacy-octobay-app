@@ -32,6 +32,7 @@ export default {
     API_URL: process.env.API_URL,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
+    CHAIN_ID: process.env.CHAIN_ID,
   },
 
   /*
@@ -97,7 +98,7 @@ export default {
       '@nuxtjs/dotenv',
       {
         path: './',
-        only: ['API_URL', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS'],
+        only: ['API_URL', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS', 'CHAIN_ID'],
       },
     ],
     '@nuxtjs/fontawesome',
