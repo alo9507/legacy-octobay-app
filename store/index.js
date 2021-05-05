@@ -232,10 +232,7 @@ export const actions = {
   },
   updateAccounts({ commit, dispatch }) {
     this.$web3.eth.getAccounts().then((accounts) => {
-      commit(
-        'setAccounts',
-        accounts.map((a) => a.toLowerCase())
-      )
+      commit('setAccounts', accounts)
       dispatch('updateEthBalance')
       dispatch('updateIsOctobayOwner')
       dispatch('updateIsOctobayAdmin')
