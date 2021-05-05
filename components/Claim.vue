@@ -160,7 +160,7 @@ export default {
   methods: {
     withdrawFromIssue() {
       this.oracleRequest(
-        this.$octobay.methods.withdrawFromIssue,
+        this.octobay.methods.withdrawFromIssue,
         [this.issue.id],
         (state) => (this.waitingForOracleRequest = state),
         (state) => (this.waitingForOracleFulfillment = state)
@@ -174,7 +174,7 @@ export default {
     },
     withdrawUserDeposit(id) {
       this.withdrawingUserDeposit = id
-      this.$octobay.methods
+      this.octobay.methods
         .withdrawUserDeposit(id)
         .send({ from: this.account })
         .then(() => {

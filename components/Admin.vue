@@ -5,7 +5,7 @@
       <div>
         <input
           type="text"
-          :value="$octobay.options.address"
+          :value="octobay.options.address"
           class="form-control"
           readonly
         />
@@ -221,7 +221,7 @@ export default {
     addNewOracle() {
       this.addingNewOracle = true
       const jobFee = '10000000000000000'
-      this.$octobay.methods
+      this.octobay.methods
         .addOracle(
           this.newOracle.ethAddress,
           this.newOracle.name,
@@ -245,7 +245,7 @@ export default {
 
       this.oracleUpdating = oracle
       this.jobUpdating = type
-      this.$octobay.methods
+      this.octobay.methods
         .setOracleJob(oracle, type, this.$web3utils.toHex(jobId), jobFee)
         .send({ from: this.account })
         .then(() => {
@@ -255,7 +255,7 @@ export default {
     },
     removeOracle(address) {
       this.removingOralce = address
-      this.$octobay.methods
+      this.octobay.methods
         .removeOracle(address)
         .send({ from: this.account })
         .then(() => {
@@ -266,7 +266,7 @@ export default {
     },
     addOracleJob() {
       this.addingOracleJob = true
-      this.$octobay.methods
+      this.octobay.methods
         .addOracleJob(this.newOracleJob.oracle, this.newOracleJob.jobName, [
           this.$web3utils.toHex(this.newOracleJob.jobId),
           this.newOracleJob.jobFee,

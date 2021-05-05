@@ -147,7 +147,7 @@ export default {
       const quorum = Number(this.quorum) * 100
 
       this.waitingForTransaction = true
-      this.$octobayGovernor.methods
+      this.octobayGovernor.methods
         .createProposal(
           this.proposalDepartment.tokenAddress,
           projectId,

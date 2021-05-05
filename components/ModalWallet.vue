@@ -345,7 +345,7 @@ export default {
     },
     register() {
       this.oracleRequest(
-        this.$octobay.methods.registerUserAddress,
+        this.octobay.methods.registerUserAddress,
         [this.githubUser.node_id],
         (state) => (this.waitingForOracleRequest = state),
         (state) => (this.waitingForOracleFulfillment = state)
@@ -356,7 +356,7 @@ export default {
     },
     transferNft(nft, ethAddress) {
       this.transferingNFT = nft.id
-      this.$octobayGovNFT.methods
+      this.octobayGovNFT.methods
         .safeTransferFrom(this.account, ethAddress, nft.id)
         .send({ from: this.account })
         .then(() => {

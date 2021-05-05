@@ -392,7 +392,7 @@ export default {
       })
       .finally(() => (this.loading = false))
 
-    this.$octobayGovToken(this.department.tokenAddress)
+    this.octobayGovToken(this.department.tokenAddress)
       .methods.totalSupply()
       .call()
       .then((totalSupply) => {

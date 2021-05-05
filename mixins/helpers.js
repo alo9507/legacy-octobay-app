@@ -70,7 +70,7 @@ export default {
         let requestID
 
         // listening for oracle request fulfillment
-        const fulfillmentListener = this.$octobay.events
+        const fulfillmentListener = this.octobay.events
           .ChainlinkFulfilled()
           .on('data', (event) => {
             if (event.returnValues.id === requestID) {

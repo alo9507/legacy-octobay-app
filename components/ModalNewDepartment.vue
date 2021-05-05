@@ -184,7 +184,7 @@ export default {
 
       if (projectId) {
         this.oracleRequest(
-          this.$octobay.methods.createGovernanceToken,
+          this.octobay.methods.createGovernanceToken,
           [
             {
               isValue: true,

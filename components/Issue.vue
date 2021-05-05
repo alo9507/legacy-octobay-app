@@ -417,7 +417,7 @@ export default {
     },
     refundIssueDeposit(id) {
       this.refundingDeposit = id
-      this.$octobay.methods
+      this.octobay.methods
         .refundIssueDeposit(id)
         .send({ from: this.account })
         .then(() => {

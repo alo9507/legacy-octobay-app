@@ -1,6 +1,8 @@
-const Web3 = require('web3')
+import Web3 from 'web3'
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
 
-export default async ({ app, store }, inject) => {
+export default ({ app, store }, inject) => {
   /**
    * Inject standalone web3 utils (for non-web3 browsers)
    */
@@ -17,50 +19,37 @@ export default async ({ app, store }, inject) => {
       store.dispatch('updateNetworkId')
     })
 
-    /**
-     * Initialize Octobay Contract
-     * In components: this.$octobay
-     */
-    inject(
-      'octobay',
-      new app.$web3.eth.Contract(
-        require('./../contract-abi/Octobay.json').abi,
-        process.env.OCTOBAY_ADDRESS
-      )
-    )
-
-    /**
-     * Initialize Governor and GovNFT Contracts, derived from Octobay Contract
-     * In components: this.$octobayGovernor, this.octobayGovNFT
-     */
-    inject(
-      'octobayGovernor',
-      new app.$web3.eth.Contract(
-        require('./../contract-abi/OctobayGovernor.json').abi,
-        await app.$octobay.methods.octobayGovernor().call()
-      )
-    )
-
-    inject(
-      'octobayGovNFT',
-      new app.$web3.eth.Contract(
-        require('./../contract-abi/OctobayGovNFT.json').abi,
-        await app.$octobay.methods.octobayGovNFT().call()
-      )
-    )
-
-    /**
-     * Dynamic initializer for gov token contracts
-     * In components: this.octobayGovToken(<govTokenAddress>)
-     */
-    inject(
-      'octobayGovToken',
-      (address) =>
-        new app.$web3.eth.Contract(
-          require('./../contract-abi/OctobayGovToken.json').abi,
-          address
-        )
-    )
+    Vue.mixin({
+      computed: {
+        ...mapGetters(['config']),
+        octobay() {
+          return new app.$web3.eth.Contract(
+            require('./../contract-abi/Octobay.json').abi,
+            process.env.OCTOBAY_ADDRESS
+          )
+        },
+        octobayGovernor() {
+          return new app.$web3.eth.Contract(
+            require('./../contract-abi/OctobayGovernor.json').abi,
+            this.config.octobayGovernor
+          )
+        },
+        octobayGovNFT() {
+          return new app.$web3.eth.Contract(
+            require('./../contract-abi/OctobayGovNFT.json').abi,
+            this.config.octobayGovNFT
+          )
+        },
+      },
+      methods: {
+        octobayGovToken(address) {
+          return new app.$web3.eth.Contract(
+            require('./../contract-abi/OctobayGovToken.json').abi,
+            address
+          )
+        },
+      },
+    })
   } else {
     /**
      * Set web3 to null for non-web3 browsers (for some in-template checks to work)

@@ -247,14 +247,14 @@ export default {
     },
     castVote(against) {
       this.waitingForVoteTransaction = true
-      this.$octobayGovToken(this.proposal.department.tokenAddress)
+      this.octobayGovToken(this.proposal.department.tokenAddress)
         .methods.balanceOfAsPercentAt(
           this.account,
           this.proposal.balanceSnapshotId
         )
         .call()
         .then((percentage) => {
-          this.$octobayGovernor.methods
+          this.octobayGovernor.methods
             .castVote(
               this.proposal.department.projectId,
               this.proposal.count,
