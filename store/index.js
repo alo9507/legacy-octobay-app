@@ -281,7 +281,7 @@ export const actions = {
       this.$axios
         .$get(process.env.API_URL + '/graph/user/' + state.githubUser.node_id)
         .then((user) => {
-          commit('setGithubUserEthAddresses', user.addresses)
+          commit('setGithubUserEthAddresses', user ? user.addresses : [])
         })
     }
   },
