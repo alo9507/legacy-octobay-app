@@ -297,7 +297,7 @@ export default {
           this.userEthAddress = null
           this.loadingRecipient = false
         }
-      }, 500)
+      }, 800)
     },
     issueUrl(url) {
       clearTimeout(this.loadRecipientTimeout)
