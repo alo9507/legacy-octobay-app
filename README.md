@@ -25,9 +25,14 @@ The general design guideline is:
 
 The app aims to expose all its content and features even to browsers without web3 support and without being connected to a wallet or GitHub. Browsing the content should be without barriers. Buttons are replaced with ["connect" buttons](https://github.com/Octobay/app/blob/main/components/ConnectActionButton.vue) whereever needed.
 
+## Nuxt/Vue
+
+The app is build with [Nuxt.js](https://nuxtjs.org/) on top of [Vue.js](https://vuejs.org/) (v2). As part of a future update we will migrate to [Vue.js v3](https://v3.vuejs.org/). Some basic experience with these frameworks (or similar ones like React) is required to get comfortable with the app's codebase quickly.
+
+
 ## Web3
 
-The [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js) injects [`web3.js`](https://web3js.readthedocs.io/) into the app for web3 enabled browsers and [`web3.utils` ](https://web3js.readthedocs.io/en/v1.3.4/web3-utils.html#utils) for all browsers. It starts listeners for account and chain changes and initializes the Octobay contracts.
+The [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js) injects [`web3.js`](https://web3js.readthedocs.io/) into the app for web3 enabled browsers and [`web3.utils` ](https://web3js.readthedocs.io/en/v1.3.4/web3-utils.html#utils) for all browsers. It starts listeners for account and chain changes, to trigger necessary state updates, and adds a [global mixing](https://vuejs.org/v2/guide/mixins.html) to make our contracts accessible in the app's components.
 
 > (!) Currently only MetaMask is supported. Other wallet integrations will be outsourced to the community as bounties.
 
@@ -35,7 +40,7 @@ The [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js) inje
 
 The address of the main [Octobay contract](https://github.com/Octobay/contracts/blob/main/contracts/Octobay.sol) needs to to be set in `.env`. The most recent development deployment address is set in `.env.sample`.
 
-From the main contract the other "module" contracts are derived. Their addresses are exposed as public properties of the Octobay contract.
+From the main contract the other "module" contracts are derived. Their addresses are exposed as public properties of the Octobay contract and indexed as part of a [config object in our Subgraph](https://github.com/Octobay/subgraph/blob/8de938b36f783ef2dca0c0be8327d8a5862009c5/schema.graphql#L1-L11).
 
 - **Governor**: Manages governance departments and creates new governance tokens for projects.
 - **Governance Token Template**: Deployed for each governance department by the Governor.
@@ -46,9 +51,32 @@ From the main contract the other "module" contracts are derived. Their addresses
 
 > (!) The app mostly just writes to these contracts. It reads data from the [Octobay Subgraph](https://github.com/Octobay/subgraph) ([Explorer](https://thegraph.com/explorer/subgraph/octobay/octobay)).
 
-The main contract, the Governor and the Governance NFT contract are initialized in the [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js). In components, the store and everywhere you can access the [Nuxt context object](https://nuxtjs.org/docs/2.x/internals-glossary/context/) these contracts are available as `$octobay`, `$octobayGovernor` and `$octobayGovNFT`. Since there are multiple instances of governance tokens, `$octobayGovToken` returns a function that takes the address of the actual deployed contract as a parameter and initializes the `web3.eth.Contract` instance on demand.
+The main contract, the Governor and the Governance NFT contract are initialized on demand, as computed component properties.
 
-The ABIs of the contracts live in the [`contract-abi`](https://github.com/Octobay/app/blob/main/contract-abi) directory and are loaded into `process.env` in [`nuxt.config.js`](https://github.com/Octobay/app/blob/main/nuxt.config.js).
+```
+computed: {
+  ...mapGetters(['config']),
+  octobay() {
+    return new app.$web3.eth.Contract(
+      require('./../contract-abi/Octobay.json').abi,
+      process.env.OCTOBAY_ADDRESS
+    )
+  },
+  octobayGovernor() { ...
+```
+
+In every component, they are available as `this.octobay`, `this.octobayGovernor` and `this.octobayGovNFT`. Since there are multiple instances of Octobay governance tokens, `this.octobayGovToken` is a function that takes the address of the deployed token contract to initializes the `web3.eth.Contract`.
+
+```
+methods: {
+  octobayGovToken(address) {
+    return new app.$web3.eth.Contract(
+      require('./../contract-abi/OctobayGovToken.json').abi,
+      address
+    )
+  },
+},
+```
 
 ## API
 
