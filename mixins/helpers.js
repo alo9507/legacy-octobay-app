@@ -17,7 +17,7 @@ export default {
     },
     loadUser(username) {
       return this.$axios
-        .get(`${process.env.API_URL}/github/user/${username}`)
+        .get(`${process.env.API_URL}/github/user-by-username/${username}`)
         .then((res) => res.data)
     },
     loadProjectById(id) {
