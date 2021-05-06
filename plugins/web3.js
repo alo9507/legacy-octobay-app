@@ -17,6 +17,7 @@ export default ({ app, store }, inject) => {
 
     window.ethereum.on('chainChanged', () => {
       store.dispatch('updateNetworkId')
+      store.dispatch('updateAccounts')
     })
 
     Vue.mixin({
