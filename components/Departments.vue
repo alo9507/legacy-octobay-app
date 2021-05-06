@@ -15,7 +15,6 @@
     <div class="card-body">
       <ConnectActionButton
         :action="() => openModal('ModalNewDepartment')"
-        :required="['wallet']"
         size="lg"
       >
         New Department
