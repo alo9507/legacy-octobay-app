@@ -6,7 +6,6 @@ export const state = () => ({
   githubAccessToken: null,
   balance: 0,
   issues: [],
-  incomingUserDeposits: [],
   outgoingUserDeposits: [],
   showRecipientTypeList: false,
   selectedRecipientType: 'User',
@@ -71,9 +70,6 @@ export const getters = {
   },
   issues(state) {
     return state.issues
-  },
-  incomingUserDeposits(state) {
-    return state.incomingUserDeposits
   },
   outgoingUserDeposits(state) {
     return state.outgoingUserDeposits
@@ -163,9 +159,6 @@ export const mutations = {
   },
   addIssue(state, issue) {
     state.issues.push(issue)
-  },
-  setIncomingUserDeposits(state, deposits) {
-    state.incomingUserDeposits = deposits
   },
   setOutgoingUserDeposits(state, deposits) {
     state.outgoingUserDeposits = deposits
@@ -269,19 +262,16 @@ export const actions = {
       commit('setBalance', '0')
     }
   },
-  githubLogin({ commit, dispatch }) {
+  updateGithubUser({ commit }) {
     const accessToken = localStorage.getItem('github_access_token')
     if (accessToken) {
       this.$axios
-        .$get('https://api.github.com/user', {
-          headers: {
-            Authorization: 'bearer ' + accessToken,
-          },
+        .$get(`${process.env.API_URL}/graph/me`, {
+          headers: { Authorization: 'bearer ' + accessToken },
         })
-        .then((response) => {
+        .then((githubUser) => {
           commit('setGithubAccessToken', accessToken)
-          commit('setGithubUser', response)
-          dispatch('updateGithubUserAddresses')
+          commit('setGithubUser', githubUser)
         })
     }
   },
@@ -289,15 +279,6 @@ export const actions = {
     localStorage.removeItem('github_access_token')
     commit('setGithubUser', null)
     commit('setGithubAccessToken', null)
-  },
-  updateGithubUserAddresses({ state, commit }) {
-    if (state.githubUser) {
-      this.$axios
-        .$get(process.env.API_URL + '/graph/user/' + state.githubUser.node_id)
-        .then((user) => {
-          commit('setGithubUserEthAddresses', user ? user.addresses : [])
-        })
-    }
   },
   updateIssues({ commit }) {
     commit('setIssues', [])
@@ -314,17 +295,6 @@ export const actions = {
         }
       })
     })
-  },
-  updateIncomingUserDeposits({ state, commit }) {
-    if (state.githubUser) {
-      this.$axios
-        .$get(process.env.API_URL + '/graph/user/' + state.githubUser.node_id)
-        .then((user) => {
-          if (user) {
-            commit('setIncomingUserDeposits', user.deposits)
-          }
-        })
-    }
   },
   updateOutgoingUserDeposits({ getters, commit }) {
     this.$axios

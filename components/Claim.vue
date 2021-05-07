@@ -53,14 +53,14 @@
       </ConnectActionButton>
     </div>
     <div
-      v-if="incomingUserDeposits.length"
+      v-if="githubUser.incomingDeposits.length"
       class="card-body border-top mt-2 pt-2"
     >
       <h5 class="text-center text-muted-light py-2 px-4 mt-2">
         Claim funds sent to your GitHub account.
       </h5>
       <div
-        v-for="(deposit, index) in incomingUserDeposits"
+        v-for="(deposit, index) in githubUser.incomingDeposits"
         :key="index"
         class="d-flex justify-content-between align-items-center mt-2"
       >
@@ -108,16 +108,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'account',
-      'redirectPrefills',
-      'githubUser',
-      'incomingUserDeposits',
-    ]),
+    ...mapGetters(['account', 'redirectPrefills', 'githubUser']),
   },
   watch: {
-    githubUser() {
-      this.$store.dispatch('updateIncomingUserDeposits')
+    githubUser(newUser, oldUser) {
+      if (newUser.node_id !== oldUser.node_id)
+        this.$store.dispatch('updateGithubUser')
     },
     redirectPrefills() {
       if (
@@ -159,7 +155,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('updateIncomingUserDeposits')
+    this.$store.dispatch('updateGithubUser')
     if (this.redirectPrefills && this.redirectPrefills.type === 'claim-issue') {
       this.url = this.redirectPrefills.url
     }
@@ -185,10 +181,12 @@ export default {
         .withdrawUserDeposit(id)
         .send({ from: this.account })
         .then(() => {
-          setTimeout(
-            () => this.$store.dispatch('updateIncomingUserDeposits'),
-            1000
-          )
+          // delayed subgraph calls to account for indexing delay
+          // in other components too, needs better solution
+          // https://dgraph.io/docs/graphql/subscriptions
+          // wss://api.thegraph.com/subgraphs/name/octobay/octobay-dev
+          setTimeout(() => this.$store.dispatch('updateGithubUser'), 1000)
+          setTimeout(() => this.$store.dispatch('updateGithubUser'), 5000)
           this.$store.dispatch('updateEthBalance')
         })
         .catch((e) => console.log(e))

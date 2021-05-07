@@ -1,5 +1,5 @@
 export default function ({ app, store }) {
-  store.dispatch('githubLogin')
+  store.dispatch('updateGithubUser')
   store.dispatch('updateIssues')
   store.dispatch('updateDepartments')
   store.dispatch('updateOracles')

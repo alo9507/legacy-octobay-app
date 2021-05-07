@@ -351,7 +351,7 @@ export default {
         (state) => (this.waitingForOracleFulfillment = state)
       ).then(() => {
         this.verificationSuccess = true
-        this.$store.dispatch('updateGithubUserAddresses')
+        this.$store.dispatch('updateGithubUser')
       })
     },
     transferNft(nft, ethAddress) {
