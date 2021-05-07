@@ -18,7 +18,7 @@
             v-clipboard="getDirectLink(user.login)"
             v-clipboard:success="copiedDirectLink"
             v-tooltip="{
-              content: 'Direct link',
+              content: 'Send link',
               trigger: 'hover',
             }"
             class="btn btn-sm btn-light"
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     getDirectLink(username) {
-      return `${window.location.origin}${window.location.pathname}#/u/${username}/1.5`
+      return `${window.location.origin}/#/u/${username}/1.5`
     },
     copiedAddress() {
       this.copyAddressSuccess = true
