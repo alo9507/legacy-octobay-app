@@ -11,7 +11,10 @@
             class="form-control form-control-lg form-control-with-embed mb-2"
             placeholder="https://github.com/..."
           />
-          <b v-if="discussion">{{ discussion.discussion.title }}</b>
+          <DiscussionEmbed
+            v-if="discussion"
+            :discussion="discussion.discussion"
+          />
         </div>
         <div>
           <small>Governance Department</small>
