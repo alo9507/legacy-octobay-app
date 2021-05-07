@@ -17,8 +17,8 @@
             class="form-control form-control-lg form-control-with-embed mb-2"
             placeholder="https://github.com/..."
           />
-          <small v-if="repository">{{ repository.id }}</small>
-          <small v-if="organization">{{ organization.id }}</small>
+          <RepositoryEmbed v-if="repository" :repository="repository" />
+          <OrganizationEmbed v-if="organization" :organization="organization" />
         </div>
         <div>
           <div class="d-flex">
@@ -138,6 +138,7 @@ export default {
         )
         const orgParts = url.match(/^https:\/\/github\.com\/([\w-]+)$/)
         if (repoParts) {
+          this.organization = null
           const owner = repoParts[1]
           const repo = repoParts[2]
           this.loadingProject = true
@@ -149,10 +150,10 @@ export default {
             })
             .catch(() => {
               this.repository = null
-              this.organization = null
             })
             .finally(() => (this.loadingProject = false))
         } else if (orgParts) {
+          this.repository = null
           const name = orgParts[1]
           this.loadingProject = true
           this.organization = null
@@ -162,7 +163,6 @@ export default {
               this.organization = organization
             })
             .catch(() => {
-              this.repository = null
               this.organization = null
             })
             .finally(() => (this.loadingProject = false))

@@ -108,6 +108,7 @@ export default {
         'faCalendarAlt',
       ],
       solid: [
+        'faBook',
         'faCopy',
         'faShareAlt',
         'faPlus',
