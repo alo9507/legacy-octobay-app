@@ -21,19 +21,27 @@
       <b>This is a prototype!</b>
       <div class="mt-2 d-flex flex-column">
         <div>
-          Please connect to the <b>Kovan</b> test network, try things out (spot
-          the bugs) and share your thoughts. This is an open source project,
-          open for ideas of any kind.
+          Try things out (spot the bugs) and share your thoughts. This is an
+          open source project, open for ideas of any kind.
         </div>
         <div class="d-flex mt-3">
           <a
-            href="https://octobay.github.io/docs/"
+            href="https://github.com/octobay/app/wiki"
             target="_blank"
             class="flex-fill btn btn-sm btn-outline-light"
           >
             learn more
           </a>
           <a
+            v-tooltip="{ content: 'Discussions', trigger: 'hover' }"
+            href="https://github.com/Octobay/app/discussions"
+            target="_blank"
+            class="ml-1 btn btn-sm btn-outline-light"
+          >
+            <font-awesome-icon :icon="['fas', 'comments']" />
+          </a>
+          <a
+            v-tooltip="{ content: 'Discord', trigger: 'hover' }"
             href="https://discord.gg/DhKgHrFeCD"
             target="_blank"
             class="ml-1 btn btn-sm btn-outline-light"
@@ -41,6 +49,7 @@
             <font-awesome-icon :icon="['fab', 'discord']" />
           </a>
           <a
+            v-tooltip="{ content: 'Twitter', trigger: 'hover' }"
             href="https://twitter.com/OctobayApp"
             target="_blank"
             class="ml-1 btn btn-sm btn-outline-light"
