@@ -7,78 +7,107 @@
     <div v-else @click.stop>
       <div class="card-body modal-body flex-fill">
         <h5 class="text-center text-muted-light py-3 px-4 m-0">
-          New Department
+          Create a Token for your Repository or Organization.
         </h5>
         <div>
-          <b>Link to Repository or Organization</b>
           <input
             v-model="projectUrl"
             type="text"
             class="form-control form-control-lg form-control-with-embed mb-2"
-            placeholder="https://github.com/..."
+            placeholder="Repo/Org URL"
           />
           <RepositoryEmbed v-if="repository" :repository="repository" />
           <OrganizationEmbed v-if="organization" :organization="organization" />
         </div>
-        <div>
-          <div class="d-flex">
-            <div class="mr-1">
-              <input
-                v-model="tokenName"
-                type="text"
-                class="form-control form-control-lg form-control-with-embed mb-2"
-                placeholder="Token Name"
-              />
-            </div>
-            <div class="ml-1">
-              <input
-                v-model="tokenSymbol"
-                type="text"
-                class="form-control form-control-lg form-control-with-embed mb-2"
-                placeholder="Symbol"
-              />
-            </div>
+        <div class="d-flex">
+          <div class="mr-1" style="width: 66%">
+            <input
+              v-model="tokenName"
+              type="text"
+              class="form-control form-control-lg mb-2"
+              placeholder="Token Name"
+            />
+          </div>
+          <div class="ml-1" style="width: 33%">
+            <input
+              v-model="tokenSymbol"
+              type="text"
+              class="form-control form-control-lg mb-2"
+              placeholder="Symbol"
+            />
           </div>
         </div>
-        <div>
-          <div class="d-flex align-items-end">
-            <div class="mr-1">
-              <small class="d-flex">Shares to create proposals</small>
-              <input
-                v-model="newProposalShare"
-                type="text"
-                class="form-control form-control-lg form-control-with-embed mb-2"
-                placeholder="1-100 %"
-              />
-            </div>
-            <div class="ml-1">
-              <small class="d-flex">Default Quorum</small>
-              <input
-                v-model="minQuorum"
-                type="text"
-                class="form-control form-control-lg form-control-with-embed mb-2"
-                placeholder="1-100 %"
-              />
-            </div>
+        <div class="d-flex align-items-end py-2">
+          <div class="mr-1 d-flex flex-column align-items-center">
+            <small class="d-flex text-muted text-center mb-2">
+              Required token shares<br />to create proposals
+            </small>
+            <input
+              v-model="newProposalShare"
+              type="text"
+              class="text-center form-control w-75 mb-2"
+              placeholder="1-100 %"
+            />
+          </div>
+          <div class="mr-1 d-flex flex-column align-items-center">
+            <small class="d-flex text-muted text-center mb-2">
+              Minimum quorum for new proposals
+            </small>
+            <input
+              v-model="minQuorum"
+              type="text"
+              class="text-center form-control w-75 mb-2"
+              placeholder="1-100 %"
+            />
           </div>
         </div>
-        <div>
-          <b>Permission NFT</b><br />
-          <small>This NFT can be copied and handed out to others.</small>
-          <div class="d-flex mt-2">
-            <input type="checkbox" class="mr-2" checked disabled />
-            <div class="d-flex flex-column">
-              Manage Settings
-              <small class="text-muted">includes creating/revoking NFTs</small>
+        <div class="alert bg-secondary text-white text-center m-0">
+          You'll receive a Permission-NFT for this department. It allows you to:
+          <div
+            class="alert border border-light bg-white text-muted text-center rounded-xl"
+            style="margin: 1rem -1.25rem"
+          >
+            <div class="d-flex justify-content-center">
+              <GithubUser :from-address="account" :force-show-address="true" />
+            </div>
+            <div class="pt-2">
+              <div class="d-flex justify-content-around align-items-center">
+                <div class="text-center w-25">
+                  <font-awesome-icon
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                </div>
+                <div class="text-center w-25">
+                  <font-awesome-icon
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                </div>
+                <div class="text-center w-25">
+                  <font-awesome-icon
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                </div>
+                <div class="text-center w-25">
+                  <font-awesome-icon
+                    :icon="['fas', 'check']"
+                    class="text-success"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="d-flex w-100 justify-content-around align-items-center text-center"
+            >
+              <small class="w-25">Manage<br />NFTs</small>
+              <small class="w-25">Manage<br />Bounties</small>
+              <small class="w-25">Create<br />Proposals</small>
+              <small class="w-25">Transfer<br />this NFT</small>
             </div>
           </div>
-          <div class="d-flex">
-            <input type="checkbox" class="mr-2" />
-            <div class="d-flex flex-column">
-              Create Proposals
-              <small class="text-muted">regardless of token holdings</small>
-            </div>
-          </div>
+          Manage permissions in your wallet and the governance dashboard.
         </div>
       </div>
       <div class="card-body pt-0">
@@ -97,7 +126,7 @@
               ? 'Waiting for confirmation...'
               : waitingForOracleFulfillment
               ? 'Waiting for oracle...'
-              : 'Create new Department'
+              : 'Create Department'
           }}
         </button>
       </div>
@@ -127,7 +156,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['githubUser']),
+    ...mapGetters(['githubUser', 'account']),
   },
   watch: {
     projectUrl(url) {

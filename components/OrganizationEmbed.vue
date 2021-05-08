@@ -60,7 +60,7 @@
         <font-awesome-icon :icon="['fab', 'twitter']" fixed-width />
       </a>
     </div>
-    <small class="text-muted mt-1 d-flex justify-content-between">
+    <small class="text-muted d-flex justify-content-between">
       created
       {{ organization.createdAt | moment('MMM Do YYYY') }}
     </small>
