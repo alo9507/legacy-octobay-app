@@ -261,11 +261,17 @@
                         />
                       </small>
                       <div class="btn-group shadow-sm rounded-xl ml-2">
-                        <button class="btn btn-sm btn-primary">
+                        <button
+                          class="btn btn-sm btn-primary"
+                          @click="openModal('ModalTransferNFT', false, nft)"
+                        >
                           <font-awesome-icon :icon="['fas', 'share']" />
                           Transfer
                         </button>
-                        <button class="btn btn-sm btn-primary">
+                        <button
+                          class="btn btn-sm btn-primary"
+                          @click="openModal('ModalBurnNFT', false, nft)"
+                        >
                           <font-awesome-icon :icon="['fas', 'fire']" />
                           Burn
                         </button>
