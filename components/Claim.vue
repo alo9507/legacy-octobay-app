@@ -53,7 +53,7 @@
       </ConnectActionButton>
     </div>
     <div
-      v-if="githubUser.incomingDeposits.length"
+      v-if="githubUser && githubUser.incomingDeposits.length"
       class="card-body border-top mt-2 pt-2"
     >
       <h5 class="text-center text-muted-light py-2 px-4 mt-2">
@@ -111,10 +111,6 @@ export default {
     ...mapGetters(['account', 'redirectPrefills', 'githubUser']),
   },
   watch: {
-    githubUser(newUser, oldUser) {
-      if (newUser.node_id !== oldUser.node_id)
-        this.$store.dispatch('updateGithubUser')
-    },
     redirectPrefills() {
       if (
         this.redirectPrefills &&
