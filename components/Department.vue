@@ -244,8 +244,35 @@
                     />
                   </div>
                 </div>
-                <button class="btn btn-sm btn-primary w-100 mt-2 shadow-sm">
-                  Save
+                <div
+                  v-if="showUpdateGovTokenParamsSuccess"
+                  class="alert alert-success border-0 mt-2"
+                >
+                  <button
+                    type="button"
+                    class="close text-success"
+                    @click="showUpdateGovTokenParamsSuccess = false"
+                  >
+                    <span>&times;</span>
+                  </button>
+                  <font-awesome-icon :icon="['fas', 'check']" />
+                  Settings updated! :)
+                </div>
+                <button
+                  class="btn btn-sm btn-primary w-100 mt-2 shadow-sm"
+                  :disabled="updatingGovTokenParams"
+                  @click="updateGovTokenParams()"
+                >
+                  <font-awesome-icon
+                    v-if="updatingGovTokenParams"
+                    :icon="['fas', 'circle-notch']"
+                    spin
+                  />
+                  {{
+                    updatingGovTokenParams
+                      ? 'Waiting for confirmation...'
+                      : 'Save'
+                  }}
                 </button>
               </div>
             </transition>
@@ -297,6 +324,8 @@ export default {
       loading: false,
       requiredSharesToCreateProposals: 0,
       minQuorum: 0,
+      showUpdateGovTokenParamsSuccess: false,
+      updatingGovTokenParams: false,
       totalSupply: null,
       copyAddressSuccess: false,
     }
@@ -357,6 +386,22 @@ export default {
       setTimeout(() => {
         this.copyAddressSuccess = false
       }, 1000)
+    },
+    updateGovTokenParams() {
+      this.updatingGovTokenParams = true
+      this.octobay.methods
+        .updateGovTokenParams(
+          this.department.tokenAddress,
+          this.requiredSharesToCreateProposals,
+          this.minQuorum
+        )
+        .send({ from: this.account })
+        .then(() => {
+          this.showUpdateGovTokenParamsSuccess = true
+        })
+        .finally(() => {
+          this.updatingGovTokenParams = false
+        })
     },
   },
 }
