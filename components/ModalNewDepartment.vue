@@ -67,44 +67,12 @@
             class="alert border border-light bg-white text-muted text-center rounded-xl"
             style="margin: 1rem -1.25rem"
           >
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center mb-2">
               <GithubUser :from-address="account" :force-show-address="true" />
             </div>
-            <div class="pt-2">
-              <div class="d-flex justify-content-around align-items-center">
-                <div class="text-center w-25">
-                  <font-awesome-icon
-                    :icon="['fas', 'check']"
-                    class="text-success"
-                  />
-                </div>
-                <div class="text-center w-25">
-                  <font-awesome-icon
-                    :icon="['fas', 'check']"
-                    class="text-success"
-                  />
-                </div>
-                <div class="text-center w-25">
-                  <font-awesome-icon
-                    :icon="['fas', 'check']"
-                    class="text-success"
-                  />
-                </div>
-                <div class="text-center w-25">
-                  <font-awesome-icon
-                    :icon="['fas', 'check']"
-                    class="text-success"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              class="d-flex w-100 justify-content-around align-items-center text-center"
-            >
-              <small class="w-25">Manage<br />NFTs</small>
-              <small class="w-25">Manage<br />Bounties</small>
-              <small class="w-25">Create<br />Proposals</small>
-              <small class="w-25">Transfer<br />this NFT</small>
+            <div style="margin-left: -1.25rem; margin-right: -1.25rem">
+              <NFTPermissions :perms="[true, true, true, true]" />
+              <NFTPermissionLabels />
             </div>
           </div>
           Manage permissions in your wallet and the governance dashboard.

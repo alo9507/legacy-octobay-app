@@ -8,42 +8,8 @@
         <div class="d-flex justify-content-center">
           <GithubUser :from-address="account" :force-show-address="true" />
         </div>
-        <div class="pt-2">
-          <div class="d-flex justify-content-around align-items-center">
-            <div class="text-center w-25">
-              <font-awesome-icon
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-            </div>
-            <div class="text-center w-25">
-              <font-awesome-icon
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-            </div>
-            <div class="text-center w-25">
-              <font-awesome-icon
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-            </div>
-            <div class="text-center w-25">
-              <font-awesome-icon
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="d-flex w-100 justify-content-around align-items-center text-center"
-        >
-          <small class="w-25">Manage<br />Permissions</small>
-          <small class="w-25">Manage<br />Bounties</small>
-          <small class="w-25">Create<br />Proposals</small>
-          <small class="w-25">Transfer this<br />Permission</small>
-        </div>
+        <NFTPermissions :nft="nft" class="mt-2" />
+        <NFTPermissionLabels />
       </div>
     </div>
     <div class="card-body pt-0">
@@ -90,14 +56,16 @@ export default {
     btnDisabled() {
       return this.burningNFT
     },
+    nft() {
+      return this.modalData ? this.modalData : null
+    },
   },
   methods: {
     burnNFT() {
-      const nft = this.modalData
-      if (nft) {
+      if (this.nft) {
         this.burningNFT = true
         this.octobayGovNFT.methods
-          .burn(nft.id)
+          .burn(this.nft.id)
           .send({ from: this.account })
           .then(() => {
             this.showSuccess = true

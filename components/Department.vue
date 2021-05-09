@@ -167,7 +167,7 @@
               </div>
               <!-- nfts -->
               <div v-if="action === 'nfts'" key="nfts" class="pt-3">
-                <div v-if="canCreateNFT" class="px-3 pb-3 border-bottom-light">
+                <div v-if="canManageNFTs" class="px-3 pb-3 border-bottom-light">
                   <button
                     class="btn btn-sm btn-primary w-100 shadow-sm"
                     @click="openModal('ModalNewNFT', false, department)"
@@ -175,82 +175,13 @@
                     New Permission
                   </button>
                 </div>
-                <div v-if="department.nfts.length">
-                  <div
-                    class="d-flex w-100 justify-content-around align-items-center text-center text-muted p-2"
-                  >
-                    <small class="w-25">Manage<br />Permissions</small>
-                    <small class="w-25">Transfer this<br />Permission</small>
-                    <small class="w-25">Manage<br />Bounties</small>
-                    <small class="w-25">Create<br />Proposals</small>
-                  </div>
+                <div v-if="department.nfts.length" style="min-width: 360px">
+                  <NFTPermissionLabels class="py-2" />
                   <div
                     v-for="nft in department.nfts"
                     :key="nft.id"
                     class="py-2 border-top-light"
                   >
-                    <div
-                      class="d-flex justify-content-around align-items-center"
-                    >
-                      <div class="text-center py-2 w-25">
-                        <span class="border-light rounded-xl py-1 px-2">
-                          <font-awesome-icon
-                            v-if="nft.permissions.includes('MINT')"
-                            :icon="['fas', 'check']"
-                            class="text-success"
-                          />
-                          <font-awesome-icon
-                            v-else
-                            :icon="['fas', 'ban']"
-                            class="text-danger"
-                          />
-                        </span>
-                      </div>
-                      <div class="text-center py-2 w-25">
-                        <span class="border-light rounded-xl py-1 px-2">
-                          <font-awesome-icon
-                            v-if="nft.permissions.includes('TRANSFER')"
-                            :icon="['fas', 'check']"
-                            class="text-success"
-                          />
-                          <font-awesome-icon
-                            v-else
-                            :icon="['fas', 'ban']"
-                            class="text-danger"
-                          />
-                        </span>
-                      </div>
-                      <div class="text-center py-2 w-25">
-                        <span class="border-light rounded-xl py-1 px-2">
-                          <font-awesome-icon
-                            v-if="
-                              nft.permissions.includes('SET_ISSUE_GOVTOKEN')
-                            "
-                            :icon="['fas', 'check']"
-                            class="text-success"
-                          />
-                          <font-awesome-icon
-                            v-else
-                            :icon="['fas', 'ban']"
-                            class="text-danger"
-                          />
-                        </span>
-                      </div>
-                      <div class="text-center py-2 w-25">
-                        <span class="border-light rounded-xl py-1 px-2">
-                          <font-awesome-icon
-                            v-if="nft.permissions.includes('CREATE_PROPOSAL')"
-                            :icon="['fas', 'check']"
-                            class="text-success"
-                          />
-                          <font-awesome-icon
-                            v-else
-                            :icon="['fas', 'ban']"
-                            class="text-danger"
-                          />
-                        </span>
-                      </div>
-                    </div>
                     <div
                       class="d-flex justify-content-between align-items-center pb-2 px-3"
                     >
@@ -260,7 +191,10 @@
                           :force-show-address="true"
                         />
                       </small>
-                      <div class="btn-group shadow-sm rounded-xl ml-2">
+                      <div
+                        v-if="canManageNFTs"
+                        class="btn-group shadow-sm rounded-xl ml-2"
+                      >
                         <button
                           class="btn btn-sm btn-primary"
                           @click="openModal('ModalTransferNFT', false, nft)"
@@ -277,6 +211,7 @@
                         </button>
                       </div>
                     </div>
+                    <NFTPermissions :nft="nft" />
                   </div>
                 </div>
                 <div v-else class="text-muted text-center">
@@ -368,7 +303,7 @@ export default {
   },
   computed: {
     ...mapGetters(['account', 'nfts']),
-    canCreateNFT() {
+    canManageNFTs() {
       return (
         this.department.creator === this.account ||
         !!this.nfts.find(

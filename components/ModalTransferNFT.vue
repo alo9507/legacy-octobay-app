@@ -8,66 +8,8 @@
         <div class="d-flex justify-content-center">
           <GithubUser :from-address="account" :force-show-address="true" />
         </div>
-        <div class="pt-2">
-          <div class="d-flex justify-content-around align-items-center">
-            <div class="text-center w-25">
-              <font-awesome-icon
-                v-if="nft && nft.permissions.includes('MINT')"
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-              <font-awesome-icon
-                v-else
-                :icon="['fas', 'ban']"
-                class="text-danger"
-              />
-            </div>
-            <div class="text-center w-25">
-              <font-awesome-icon
-                v-if="nft && nft.permissions.includes('TRANSFER')"
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-              <font-awesome-icon
-                v-else
-                :icon="['fas', 'ban']"
-                class="text-danger"
-              />
-            </div>
-            <div class="text-center w-25">
-              <font-awesome-icon
-                v-if="nft && nft.permissions.includes('SET_ISSUE_GOVTOKEN')"
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-              <font-awesome-icon
-                v-else
-                :icon="['fas', 'ban']"
-                class="text-danger"
-              />
-            </div>
-            <div class="text-center w-25">
-              <font-awesome-icon
-                v-if="nft && nft.permissions.includes('CREATE_PROPOSAL')"
-                :icon="['fas', 'check']"
-                class="text-success"
-              />
-              <font-awesome-icon
-                v-else
-                :icon="['fas', 'ban']"
-                class="text-danger"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="d-flex w-100 justify-content-around align-items-center text-center"
-        >
-          <small class="w-25">Manage<br />Permissions</small>
-          <small class="w-25">Transfer this<br />Permission</small>
-          <small class="w-25">Manage<br />Bounties</small>
-          <small class="w-25">Create<br />Proposals</small>
-        </div>
+        <NFTPermissions :nft="nft" class="mt-2" />
+        <NFTPermissionLabels />
       </div>
       <div class="d-flex flex-column mt-3">
         Recipient Address
