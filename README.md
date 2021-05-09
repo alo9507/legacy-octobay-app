@@ -17,6 +17,14 @@ git clone https://github.com/Octobay/app octobay-app && cd octobay-app && yarn &
 
 Now connect your MetaMask to Kovan and open `http://localhost:3000`.
 
+### API
+
+The `API_URL` configured in `.env`, is called in components and the Vuex store to fetch data from the Subgraph and GitHub (issues, deposits, token information, etc.) and to authenticate a GitHub user. If you need to work on the endpoints [run the API server locally](https://github.com/Octobay/api).
+
+### Octobay Adapters
+
+Some API calls are the same for the frontend API and our [chainlink adapters](https://github.com/Octobay/chainlink-adapters) and potentially interesting for use in other places. They live in [their own repository](https://github.com/Octobay/adapters) and are published as an [NPM package](https://www.npmjs.com/package/@octobay/adapters).
+
 ## Design
 
 The general design guideline is:
@@ -32,7 +40,7 @@ The app is build with [Nuxt.js](https://nuxtjs.org/) on top of [Vue.js](https://
 
 ## Web3
 
-The [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js) injects [`web3.js`](https://web3js.readthedocs.io/) into the app for web3 enabled browsers and [`web3.utils` ](https://web3js.readthedocs.io/en/v1.3.4/web3-utils.html#utils) for all browsers. It starts listeners for account and chain changes, to trigger necessary state updates, and adds a [global mixing](https://vuejs.org/v2/guide/mixins.html) to make our contracts accessible in the app's components.
+The [web3 plugin](https://github.com/Octobay/app/blob/main/plugins/web3.js) injects [`web3.js`](https://web3js.readthedocs.io/) into the app for web3 enabled browsers and [`web3.utils` ](https://web3js.readthedocs.io/en/v1.3.4/web3-utils.html#utils) for all browsers. It starts listeners for account and chain changes, to trigger necessary state updates, and adds a [global mixin](https://vuejs.org/v2/guide/mixins.html) to make our contracts accessible in the app's components.
 
 > (!) Currently only MetaMask is supported. Other wallet integrations will be outsourced to the community as bounties.
 
@@ -77,14 +85,6 @@ methods: {
   },
 },
 ```
-
-## API
-
-The [API server](https://github.com/Octobay/api) configured in `.env`, is called in components and the Vuex store to fetch data from the Subgraph and GitHub (issues, deposits, token information, etc.) and to authenticate a GitHub user.
-
-### Octobay Adapters
-
-Some API calls are the same for the frontend API and our [chainlink adapters](https://github.com/Octobay/chainlink-adapters) and potentially interesting for use in other places. They live in [their own repository](https://github.com/Octobay/adapters) and are published as an [NPM package](https://www.npmjs.com/package/@octobay/adapters).
 
 ## Page Load
 
