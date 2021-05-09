@@ -1,7 +1,16 @@
 <template>
   <div class="card-body" style="max-width: 360px">
     <div>
-      <b>Octobay Contract</b>
+      <b class="d-flex justify-content-between">
+        Octobay
+        <a
+          :href="
+            'https://kovan.etherscan.io/address/' + octobay.options.address
+          "
+        >
+          <small>etherscan</small>
+        </a>
+      </b>
       <div>
         <input
           type="text"
@@ -12,7 +21,14 @@
       </div>
     </div>
     <div class="mt-2">
-      <small><b>OctobayGovernor Contract</b></small>
+      <b class="d-flex justify-content-between">
+        Governor
+        <a
+          :href="'https://kovan.etherscan.io/address/' + config.octobayGovernor"
+        >
+          <small>etherscan</small>
+        </a>
+      </b>
       <div>
         <input
           type="text"
@@ -23,7 +39,12 @@
       </div>
     </div>
     <div class="mt-2">
-      <small><b>OctobayGovNFT Contract</b></small>
+      <b class="d-flex justify-content-between">
+        GovNFT
+        <a :href="'https://kovan.etherscan.io/address/' + config.octobayGovNFT">
+          <small>etherscan</small>
+        </a>
+      </b>
       <div>
         <input
           type="text"
@@ -34,7 +55,12 @@
       </div>
     </div>
     <div class="mt-2">
-      <small><b>OracleStorage Contract</b></small>
+      <b class="d-flex justify-content-between">
+        OracleStorage
+        <a :href="'https://kovan.etherscan.io/address/' + config.oracleStorage">
+          <small>etherscan</small>
+        </a>
+      </b>
       <div>
         <input
           type="text"
@@ -45,7 +71,14 @@
       </div>
     </div>
     <div class="mt-2">
-      <small><b>DepositStorage Contract</b></small>
+      <b class="d-flex justify-content-between">
+        DepositStorage
+        <a
+          :href="'https://kovan.etherscan.io/address/' + config.depositStorage"
+        >
+          <small>etherscan</small>
+        </a>
+      </b>
       <div>
         <input
           type="text"
@@ -56,7 +89,16 @@
       </div>
     </div>
     <div class="mt-2">
-      <small><b>UserAddressStorage Contract</b></small>
+      <b class="d-flex justify-content-between">
+        UserAddressStorage
+        <a
+          :href="
+            'https://kovan.etherscan.io/address/' + config.userAddressStorage
+          "
+        >
+          <small>etherscan</small>
+        </a>
+      </b>
       <div>
         <input
           type="text"
