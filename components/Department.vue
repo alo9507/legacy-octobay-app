@@ -117,7 +117,7 @@
             </button>
             <!-- Permissions NFTs -->
             <button
-              v-tooltip="{ content: 'Permission NFTs', trigger: 'hover' }"
+              v-tooltip="{ content: 'Permissions', trigger: 'hover' }"
               :class="[
                 'btn btn-sm btn-light text-muted',
                 { active: action === 'nfts' },
@@ -172,7 +172,7 @@
                     class="btn btn-sm btn-primary w-100 shadow-sm"
                     @click="openModal('ModalNewNFT', false, department)"
                   >
-                    New Permission-NFT
+                    New Permission
                   </button>
                 </div>
                 <div v-if="department.nfts.length">
@@ -274,7 +274,7 @@
                   </div>
                 </div>
                 <div v-else class="text-muted text-center">
-                  <small>No Permission-NFTs yet.</small>
+                  <small>No Permissions yet.</small>
                 </div>
               </div>
               <!-- settings -->
