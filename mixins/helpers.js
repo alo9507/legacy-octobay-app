@@ -91,15 +91,17 @@ export default {
           .catch((e) => reject(e))
       })
     },
-    openModal(component, blocksUi = false) {
+    openModal(component, blocksUi = false, data = null) {
       this.$store.commit('setModalComponent', component)
       this.$store.commit('setShowModal', true)
       this.$store.commit('setModalBlocksUi', blocksUi)
+      this.$store.commit('setModalData', data)
     },
     closeModal() {
       this.$store.commit('setModalComponent', null)
       this.$store.commit('setShowModal', false)
       this.$store.commit('setModalBlocksUi', false)
+      this.$store.commit('setModalData', null)
     },
     networkName(id) {
       id = Number(id)
