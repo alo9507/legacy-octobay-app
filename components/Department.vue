@@ -177,11 +177,11 @@
                 </div>
                 <div v-if="department.nfts.length">
                   <div
-                    class="d-flex w-100 justify-content-around align-items-center text-center py-2"
+                    class="d-flex w-100 justify-content-around align-items-center text-center text-muted p-2"
                   >
-                    <small class="w-25">Create<br />NFTs</small>
-                    <small class="w-25">Transfer</small>
-                    <small class="w-25">Bounty<br />Minting</small>
+                    <small class="w-25">Manage<br />Permissions</small>
+                    <small class="w-25">Transfer this<br />Permission</small>
+                    <small class="w-25">Manage<br />Bounties</small>
                     <small class="w-25">Create<br />Proposals</small>
                   </div>
                   <div
