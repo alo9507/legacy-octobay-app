@@ -19,6 +19,7 @@ export const state = () => ({
   showModal: false,
   modalComponent: null,
   modalBlocksUi: false,
+  modalData: null,
   selectedDepartment: null,
   departments: [],
   nfts: [],
@@ -109,6 +110,9 @@ export const getters = {
   },
   modalBlocksUi(state) {
     return state.modalBlocksUi
+  },
+  modalData(state) {
+    return state.modalData
   },
   selectedDepartment(state) {
     return state.selectedDepartment
@@ -223,6 +227,9 @@ export const mutations = {
   },
   setModalBlocksUi(state, blocksUi) {
     state.modalBlocksUi = blocksUi
+  },
+  setModalData(state, data) {
+    state.modalData = data
   },
   setDepartments(state, departments) {
     state.departments = departments
