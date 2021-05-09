@@ -5,13 +5,11 @@
       {
         'logo-xl': size == 'xl',
         'logo-lg': size == 'lg',
-        'text-white': color == 'white',
-        'text-dark': color == 'dark',
       },
     ]"
   >
     <img
-      :src="color == 'white' ? './logo-white.png' : './logo-black.png'"
+      src="/logo.png"
       :width="size == 'xl' ? 70 : size == 'lg' ? 50 : size == 'md' ? 46 : 30"
     />
   </div>
@@ -23,10 +21,6 @@ export default {
     size: {
       type: String,
       default: 'sm',
-    },
-    color: {
-      type: String,
-      default: 'white',
     },
   },
 }

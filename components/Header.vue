@@ -7,7 +7,7 @@
         :avatar-url="githubUser.avatar_url"
         size="2.5em"
       />
-      <Logo v-else color="white" class="bg-secondary rounded-xl" size="md" />
+      <Logo v-else class="bg-secondary rounded-xl" size="md" />
     </div>
     <transition name="fade" mode="out-in">
       <div v-if="connected && githubUser" :class="cssClasses">
