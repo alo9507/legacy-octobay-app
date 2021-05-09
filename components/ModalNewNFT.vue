@@ -116,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['account']),
+    ...mapGetters(['account', 'modalData']),
     btnDisabled() {
       return (
         this.creatingNFT ||
@@ -130,11 +130,37 @@ export default {
   },
   methods: {
     createNFT() {
-      this.creatingNFT = true
-      setTimeout(() => {
-        this.creatingNFT = false
-        this.showSuccess = true
-      }, 3000)
+      const department = this.modalData
+      if (department) {
+        const permissionNFT = department.nfts.find((nft) => {
+          return (
+            nft.ownerAddress === this.account &&
+            nft.permissions.includes('MINT')
+          )
+        })
+        if (permissionNFT) {
+          const perms = []
+          if (this.permissions.MINT) perms.push(0)
+          if (this.permissions.TRANSFER) perms.push(1)
+          if (this.permissions.SET_ISSUE_GOVTOKEN) perms.push(2)
+          if (this.permissions.CREATE_PROPOSAL) perms.push(3)
+          this.creatingNFT = true
+          this.octobayGovNFT.methods
+            .mintTokenWithPermissions(
+              this.ethAddress,
+              permissionNFT.id,
+              perms,
+              department.tokenAddress
+            )
+            .send({ from: this.account })
+            .then(() => {
+              this.showSuccess = true
+            })
+            .finally(() => {
+              this.creatingNFT = false
+            })
+        }
+      }
     },
   },
 }

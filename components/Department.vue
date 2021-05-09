@@ -170,7 +170,7 @@
                 <div v-if="canCreateNFT" class="px-3 pb-3 border-bottom-light">
                   <button
                     class="btn btn-sm btn-primary w-100 shadow-sm"
-                    @click="openModal('ModalNewNFT')"
+                    @click="openModal('ModalNewNFT', false, department)"
                   >
                     New Permission-NFT
                   </button>
