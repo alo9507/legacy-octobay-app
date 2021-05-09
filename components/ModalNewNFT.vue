@@ -1,9 +1,7 @@
 <template>
   <div class="card shadow-sm d-flex flex-column" @click.stop>
     <div class="card-body modal-body flex-fill">
-      <h5 class="text-center text-muted-light py-3 px-4 m-0">
-        New Permission NFT
-      </h5>
+      <h5 class="text-center text-muted-light py-3 px-4 m-0">New Permission</h5>
       <div
         class="d-flex w-100 justify-content-around align-items-center text-center py-2 px-3"
       >
@@ -77,7 +75,7 @@
           <span>&times;</span>
         </button>
         <font-awesome-icon :icon="['fas', 'check']" />
-        Permission-NFT created! :)
+        Permission created! :)
       </div>
       <button
         class="btn btn-lg btn-primary w-100 shadow-sm"
@@ -89,9 +87,7 @@
           :icon="['fas', 'circle-notch']"
           spin
         />
-        {{
-          creatingNFT ? 'Waiting for confirmation...' : 'Create Permission-NFT'
-        }}
+        {{ creatingNFT ? 'Waiting for confirmation...' : 'Create Permission' }}
       </button>
     </div>
   </div>
