@@ -295,7 +295,7 @@ export default {
       showDetails: false,
       action: null,
       loading: false,
-      requiredShareToCreateProposals: 0,
+      requiredSharesToCreateProposals: 0,
       minQuorum: 0,
       totalSupply: null,
       copyAddressSuccess: false,
