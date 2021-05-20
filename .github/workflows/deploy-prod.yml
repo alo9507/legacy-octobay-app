@@ -53,7 +53,7 @@ jobs:
           cp -r build/dist/* deploy
           cd deploy
           touch .nojekyll
-          echo ${{ env.URL }} >> CNAME
+          echo ${{ env.URL }} > CNAME
           git add .
           git commit -m $GITHUB_SHA
           git push
