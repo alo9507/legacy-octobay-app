@@ -5,13 +5,15 @@ on:
     paths-ignore:
       - '.github/workflows/**'
       - '**.md'
+env:
+  URL: dev.octobay.org
 
 jobs:
   build:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://octobay.github.io/app-prod/
+      url: https://${{ env.URL }}
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -51,6 +53,7 @@ jobs:
           cp -r build/dist/* deploy
           cd deploy
           touch .nojekyll
+          echo ${{ env.URL }} >> CNAME
           git add .
           git commit -m $GITHUB_SHA
           git push
