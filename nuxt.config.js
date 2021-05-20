@@ -6,7 +6,7 @@ export default {
   ssr: false,
 
   router: {
-    base: process.env.NUXT_ROUTER_BASE_DIR || '/'
+    base: process.env.NUXT_ROUTER_BASE_DIR || '/',
   },
 
   env: {
