@@ -12,10 +12,19 @@ The long term vision for Octobay is to become a decentralized ecosystem for fund
 ## Run locally
 
 ```bash
-git clone https://github.com/Octobay/app octobay-app && cd octobay-app && yarn && cp .env.sample .env && yarn app:dev
+git clone https://github.com/Octobay/app octobay-app && cd octobay-app && yarn
 ```
 
-Now connect your MetaMask to Kovan and open `http://localhost:3000`.
+The following environment variables need to be set:
+
+```bash
+export API_URL=https://octobay.uber.space
+export GITHUB_CLIENT_ID=5fbd39c6916b7efb63cc
+export OCTOBAY_ADDRESS=0xd00Bfe0D99D6c35C6a58287B670185DADCc003c1
+export CHAIN_ID=42
+```
+
+Now run `yarn app:dev`, open `http://localhost:3000` and connect your MetaMask to Kovan.
 
 ### API
 
