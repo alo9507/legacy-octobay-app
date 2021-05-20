@@ -5,6 +5,17 @@ export default {
    */
   ssr: false,
 
+  router: {
+    base: process.env.NUXT_ROUTER_BASE_DIR
+  },
+
+  env: {
+    API_URL: process.env.API_URL,
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    OCTOBAY_ADDRESS: process.env.OCTOBAY_ADDRESS,
+    CHAIN_ID: process.env.CHAIN_ID,
+  },
+
   /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
@@ -70,13 +81,6 @@ export default {
    ** Nuxt.js dev-modules
    */
   buildModules: [
-    [
-      '@nuxtjs/dotenv',
-      {
-        path: './',
-        only: ['API_URL', 'GITHUB_CLIENT_ID', 'OCTOBAY_ADDRESS', 'CHAIN_ID'],
-      },
-    ],
     '@nuxtjs/fontawesome',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
