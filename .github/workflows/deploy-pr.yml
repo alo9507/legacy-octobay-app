@@ -43,7 +43,7 @@ jobs:
       
       - name: Build Pull Request
         run: |
-          cd build
+          cd pr-build
           yarn
           export NUXT_ROUTER_BASE_DIR=/${{ env.PR_REPO_NAME }}/
           export API_URL=https://octobay.uber.space
