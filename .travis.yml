@@ -1,9 +1,0 @@
-sudo: required
-services:
-  - docker
-
-script:
-  - TAG="0.1.0"
-  - docker build -t octobay/app:${TAG} .
-  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin
-  - docker push octobay/app:${TAG}
