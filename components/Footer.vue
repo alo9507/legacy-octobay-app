@@ -35,7 +35,7 @@
         @click="$store.commit('setShowOracleList', true)"
       >
         <img
-          :src="'/chainlink-icon.png'"
+          :src="baseDir + 'chainlink-icon.png'"
           width="36px"
           class="rounded-circle py-1 pl-1"
         />
@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       octobayAddress: process.env.OCTOBAY_ADDRESS,
+      baseDir: process.env.BASE_DIR,
     }
   },
 }

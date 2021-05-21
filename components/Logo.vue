@@ -9,7 +9,7 @@
     ]"
   >
     <img
-      src="/logo.png"
+      :src="baseDir + 'logo.png'"
       :width="size == 'xl' ? 70 : size == 'lg' ? 50 : size == 'md' ? 46 : 30"
     />
   </div>
@@ -22,6 +22,11 @@ export default {
       type: String,
       default: 'sm',
     },
+  },
+  data() {
+    return {
+      baseDir: process.env.BASE_DIR,
+    }
   },
 }
 </script>
