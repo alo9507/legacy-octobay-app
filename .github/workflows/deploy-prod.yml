@@ -6,7 +6,7 @@ on:
       - '.github/workflows/**'
       - '**.md'
 env:
-  URL: dev.octobay.org
+  URL: app.octobay.org
 
 jobs:
   build:
@@ -33,7 +33,6 @@ jobs:
         run: |
           cd build
           yarn
-          export NUXT_ROUTER_BASE_DIR=/app-dev/
           export API_URL=https://octobay.uber.space
           export GITHUB_CLIENT_ID=5fbd39c6916b7efb63cc
           export OCTOBAY_ADDRESS=0xd00Bfe0D99D6c35C6a58287B670185DADCc003c1
@@ -41,7 +40,7 @@ jobs:
           yarn app:generate
           cd ..
       
-      - name: Checkout Dev Target
+      - name: Checkout Prod Target
         uses: actions/checkout@v2
         with:
           repository: octobay/app-prod
