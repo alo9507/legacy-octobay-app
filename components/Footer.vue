@@ -1,5 +1,8 @@
 <template>
-  <footer class="text-center">
+  <footer
+    class="text-center"
+    :style="`background-image: url('${baseDir}footer-bg.png')`"
+  >
     <div class="mb-3">
       <a
         href="https://twitter.com/OctobayApp"
@@ -44,10 +47,19 @@
   </footer>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      baseDir: process.env.BASE_DIR,
+    }
+  },
+}
+</script>
+
 <style lang="sass" scoped>
 footer
   background-color: white
-  background-image: url('/footer-bg.png')
   background-size: 110%
   background-repeat: no-repeat
   background-position: top

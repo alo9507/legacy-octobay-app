@@ -49,8 +49,16 @@ export default {
       },
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: '/logo.png' },
-      { rel: 'shortcut icon', type: 'image/png', href: '/logo.png' },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'logo.png',
+      },
+      {
+        rel: 'shortcut icon',
+        type: 'image/png',
+        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'logo.png',
+      },
     ],
   },
   loading: {
