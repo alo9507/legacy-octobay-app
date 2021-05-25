@@ -101,6 +101,7 @@
       <Nuxt />
     </div>
     <Footer />
+    <About />
     <RecipientTypeList />
     <IntervalSelect />
     <OracleList />
