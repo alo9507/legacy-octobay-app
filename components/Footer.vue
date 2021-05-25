@@ -98,7 +98,7 @@ footer
       font-weight: 900
       font-size: 7vw
       margin-left: -10vw
-      text-shadow: 0 0 35px rgba(0, 0, 0, 0.3)
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.3)
       animation-name: header-content-slide-left
       animation-duration: 2s
       animation-fill-mode: forwards
@@ -108,7 +108,7 @@ footer
       margin-top: 1rem
       font-weight: 700
       font-size: 4vw
-      text-shadow: 0 0 35px rgba(0, 0, 0, 0.6)
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.6)
       animation-name: header-content-slide-right
       animation-duration: 2s
       animation-fill-mode: forwards
