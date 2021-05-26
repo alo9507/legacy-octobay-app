@@ -52,12 +52,12 @@ export default {
       {
         rel: 'icon',
         type: 'image/png',
-        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'logo.png',
+        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'icon.png',
       },
       {
         rel: 'shortcut icon',
         type: 'image/png',
-        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'logo.png',
+        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'icon.png',
       },
     ],
   },
