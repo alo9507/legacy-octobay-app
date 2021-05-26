@@ -47,20 +47,20 @@
     </div>
     <a id="about" />
     <div class="headers text-white mt-5 pt-5">
-      <h1 class="mb-5">Octobay</h1>
+      <h1 class="mb-4">Octobay</h1>
       <h2>
         Decentralized Job Marketplace<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for
         Developers
       </h2>
-      <div class="mt-5">
+      <div class="mt-5 pt-5 d-flex flex-column align-items-center">
         <button
-          class="btn btn-lg py-4 px-5 btn-primary shadow-sm"
-          style="border-radius: 2rem"
+          class="btn btn-lg py-3 px-5 btn-primary play-button"
+          style="font-size: 1.9rem; border-radius: 2.5rem"
         >
-          <font-awesome-icon
-            :icon="['fas', 'play']"
-            style="font-size: 2.6rem"
-          />
+          <small class="pr-2" style="opacity: 0.5">
+            <font-awesome-icon :icon="['fas', 'play']" />
+          </small>
+          How it works
         </button>
       </div>
     </div>
@@ -106,9 +106,9 @@ footer
       font-weight: 900
       font-size: 7vw
       margin-left: -10vw
-      text-shadow: 0 0 35px rgba(255, 255, 255, 0.6)
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.7), 0 -3px 3px rgba(0, 0, 0, 0.2)
       animation-name: header-content-slide-left
-      animation-duration: 2s
+      animation-duration: 8s
       animation-fill-mode: forwards
       animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1)
       animation-delay: 5.5s
@@ -116,12 +116,14 @@ footer
       margin-top: 1rem
       font-weight: 700
       font-size: 4vw
-      text-shadow: 0 0 25px rgba(255, 255, 255, 0.7)
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 -3px 3px rgba(0, 0, 0, 0.2)
       animation-name: header-content-slide-right
-      animation-duration: 2s
+      animation-duration: 8s
       animation-fill-mode: forwards
       animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1)
       animation-delay: 5.5s
+    .play-button
+      box-shadow: 0 0 55px rgba(255, 255, 255, 0.8), 0 -3px 3px rgba(0, 0, 0, 0.4) !important
 
 @keyframes about-arrow-bounce
   0%
