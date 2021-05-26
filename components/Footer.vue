@@ -53,7 +53,10 @@
         Developers
       </h2>
       <div class="mt-5">
-        <button class="btn btn-lg py-4 px-5 rounded-xl btn-primary shadow-sm">
+        <button
+          class="btn btn-lg py-4 px-5 btn-primary shadow-sm"
+          style="border-radius: 2rem"
+        >
           <font-awesome-icon
             :icon="['fas', 'play']"
             style="font-size: 2.6rem"
