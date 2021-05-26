@@ -3,7 +3,7 @@
     <div class="intro container">
       <h4 class="text-center text-secondary">A Brave New Economy</h4>
       <h1 class="text-center">Incentivized Open Source Collaboration</h1>
-      <p class="text-center lead">
+      <p class="text-center lead pt-4 text-muted">
         Octobay is a collaboration platform connecting contributors with open
         source projects. Active contributors are rewarded with Bounties for
         their accepted submissions.
