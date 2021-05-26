@@ -5,11 +5,7 @@
       class="alert text-white bg-secondary border-0 mx-auto"
       style="max-width: 360px"
     >
-      <button
-        type="button"
-        class="close p-1"
-        @click="showPrototypeWarning = false"
-      >
+      <button type="button" class="close p-1" @click="hidePrototypeWarning">
         <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
           <path
             fill="#ffffff"
@@ -121,8 +117,8 @@ export default {
   middleware: ['load', 'deeplinks'],
   data() {
     return {
-      showPrototypeWarning: true,
       showCompatibilityWarning: true,
+      showPrototypeWarning: false,
     }
   },
   computed: {
@@ -135,6 +131,24 @@ export default {
       } else {
         this.closeModal()
       }
+    },
+  },
+  mounted() {
+    const hidePrototypeWarningExpire = localStorage.getItem(
+      'hidePrototypeWarningExpire'
+    )
+    this.showPrototypeWarning = !(
+      hidePrototypeWarningExpire &&
+      Number(hidePrototypeWarningExpire) > Math.floor(Date.now() / 1000)
+    )
+  },
+  methods: {
+    hidePrototypeWarning() {
+      this.showPrototypeWarning = false
+      localStorage.setItem(
+        'hidePrototypeWarningExpire',
+        Math.floor(Date.now() / 1000) + 60 * 60 // expire in one hour
+      )
     },
   },
 }
