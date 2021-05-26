@@ -8,10 +8,10 @@
         <small class="about-arrow">
           <font-awesome-icon :icon="['fas', 'chevron-down']" />
         </small>
-        about
+        About
       </a>
       <a href="https://docs.octobay.org" target="_blank" class="text-white">
-        documentation
+        Documentation
         <sup style="opacity: 0.3">
           <small>
             <font-awesome-icon :icon="['fas', 'external-link-alt']" />
@@ -19,7 +19,7 @@
         </sup>
       </a>
       <span class="text-white" style="opacity: 0.2; pointer-events: none">
-        governance
+        Governance
       </span>
     </div>
     <div class="mt-3 mb-4">
