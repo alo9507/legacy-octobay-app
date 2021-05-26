@@ -3,7 +3,26 @@
     class="text-center"
     :style="`background-image: url('${baseDir}footer-bg.png')`"
   >
-    <div class="mb-3">
+    <div class="d-flex flex-column">
+      <a href="#about" class="text-white mb-3" style="font-size: 2.2vw">
+        <small class="about-arrow">
+          <font-awesome-icon :icon="['fas', 'chevron-down']" />
+        </small>
+        about
+      </a>
+      <a href="https://docs.octobay.org" target="_blank" class="text-white">
+        documentation
+        <sup style="opacity: 0.3">
+          <small>
+            <font-awesome-icon :icon="['fas', 'external-link-alt']" />
+          </small>
+        </sup>
+      </a>
+      <span class="text-white" style="opacity: 0.2; pointer-events: none">
+        governance
+      </span>
+    </div>
+    <div class="mt-3 mb-4">
       <a
         href="https://twitter.com/OctobayApp"
         target="_blank"
@@ -26,23 +45,21 @@
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
     </div>
-    <div class="d-flex flex-column">
-      <a href="https://octobay.org" target="_blank" class="text-white">
-        about
-      </a>
-      <a href="https://docs.octobay.org" target="_blank" class="text-white">
-        documentation
-      </a>
-      <span class="text-white" style="opacity: 0.2; pointer-events: none">
-        governance
-      </span>
-    </div>
+    <a id="about" />
     <div class="headers text-white mt-5 pt-5">
       <h1 class="mb-5">Octobay</h1>
       <h2>
         Decentralized Job Marketplace<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for
         Developers
       </h2>
+      <div class="mt-5">
+        <button class="btn btn-lg py-4 px-5 rounded-xl btn-primary shadow-sm">
+          <font-awesome-icon
+            :icon="['fas', 'play']"
+            style="font-size: 2.6rem"
+          />
+        </button>
+      </div>
     </div>
   </footer>
 </template>
@@ -67,25 +84,13 @@ footer
   padding-top: 12vw
   font-size: 1.9rem
   font-weight: 800
-  .oracle-button
-    transition: opacity .2s ease
-    &:hover,
-    &:active,
-    &:focus
-      text-decoration: none
-  .donate-btn
+  .about-arrow
     position: relative
-    z-index: 1
-  .donate
-    max-width: 330px
-    position: relative
-    z-index: 0
     opacity: 0
-    max-height: 0
-    transition: opacity .3s ease, max-height .3s ease
-    &.show
-      opacity: 1
-      max-height: 500px
+    animation-name: about-arrow-bounce
+    animation-duration: 1.5s
+    animation-fill-mode: forwards
+    animation-iteration-count: 6
 
   .headers
     opacity: 0
@@ -98,7 +103,7 @@ footer
       font-weight: 900
       font-size: 7vw
       margin-left: -10vw
-      text-shadow: 0 0 25px rgba(255, 255, 255, 0.3)
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.6)
       animation-name: header-content-slide-left
       animation-duration: 2s
       animation-fill-mode: forwards
@@ -108,12 +113,20 @@ footer
       margin-top: 1rem
       font-weight: 700
       font-size: 4vw
-      text-shadow: 0 0 25px rgba(255, 255, 255, 0.6)
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.7)
       animation-name: header-content-slide-right
       animation-duration: 2s
       animation-fill-mode: forwards
       animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1)
       animation-delay: 5.5s
+
+@keyframes about-arrow-bounce
+  0%
+    opacity: 0
+    top: -20px
+  100%
+    opacity: 0.5
+    top: 0
 
 @keyframes header-content-fade
   from

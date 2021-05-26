@@ -168,6 +168,7 @@ export default {
         'faFire',
         'faWallet',
         'faShare',
+        'faPlay',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },
