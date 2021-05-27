@@ -4,13 +4,18 @@
     :style="`background-image: url('${baseDir}footer-bg.png')`"
   >
     <div class="d-flex flex-column">
-      <a href="#about" class="text-white mb-3" style="font-size: 2.2vw">
+      <a href="#about" class="text-white" style="font-size: 2.2vw">
         <small class="about-arrow">
           <font-awesome-icon :icon="['fas', 'chevron-down']" />
         </small>
         About
       </a>
-      <a href="https://docs.octobay.org" target="_blank" class="text-white">
+      <a id="about" />
+      <a
+        href="https://docs.octobay.org"
+        target="_blank"
+        class="text-white mt-5"
+      >
         Documentation
         <sup style="opacity: 0.3">
           <small>
@@ -45,8 +50,7 @@
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
     </div>
-    <a id="about" />
-    <div class="headers text-white mt-5 pt-5">
+    <div class="headers text-white mt-3 pt-5">
       <h1 class="mb-4">Octobay</h1>
       <h2>
         Decentralized Job Marketplace<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for
