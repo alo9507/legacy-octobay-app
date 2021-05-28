@@ -72,6 +72,7 @@ export default {
     '@/plugins/clipboard',
     '@/plugins/web3',
     '@/plugins/octicons',
+    '@/plugins/api',
   ],
   /*
    ** Auto import components
