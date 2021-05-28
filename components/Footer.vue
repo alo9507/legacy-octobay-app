@@ -23,6 +23,7 @@
           </small>
         </sup>
       </a>
+      <a href="#roadmap" class="text-white">Roadmap</a>
       <span class="text-white" style="opacity: 0.2; pointer-events: none">
         Governance
       </span>

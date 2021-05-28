@@ -91,7 +91,48 @@
         class="position-absolute content-image"
       />
     </div>
-    <img :src="baseDir + 'wave-footer.svg'" class="w-100" />
+    <div class="p-5"></div>
+    <a id="roadmap"></a>
+    <div class="intro container pb-5">
+      <h4 class="text-center text-secondary d-flex flex-column">There is no</h4>
+      <h1 class="text-center">Roadmap</h1>
+      <p class="text-center lead pt-4 text-muted">
+        We don't want to get lost in endless planning. We want to iterate fast
+        and retain the ability to implement
+        <a href="https://github.com/octobay/app/discussions" target="_blank">
+          new ideas
+        </a>
+        quickly. Flexibility is a must in a space that evolves this fast.
+      </p>
+      <h4 class="text-center text-secondary d-flex flex-column pt-4 pb-3">
+        <i>Release early, release often.</i>
+        <small
+          class="text-muted-light"
+          style="margin-left: 15vw; margin-top: 0.5rem"
+        >
+          <sup>
+            <i>Linus Torvalds</i>
+          </sup>
+        </small>
+      </h4>
+      <p class="text-center lead text-muted">
+        The long term vision that guides us, is to make the magical code vending
+        machine finally work. Funds can be converted into deployed software way
+        more efficiently and with higher quality than it is the case today.
+        Everthing that serves this purpose will be incorprated into our...
+        "roadmap".
+      </p>
+    </div>
+    <img
+      :src="baseDir + 'roadmap.png'"
+      class="w-100 position-relative"
+      style="margin-bottom: -50px; z-index: 1"
+    />
+    <img
+      :src="baseDir + 'wave-footer.svg'"
+      class="w-100 position-relative"
+      style="z-index: 0"
+    />
     <div class="bg-secondary text-white">
       <div
         class="container px-5 pb-5 pt-0 text-white d-flex flex-column align-items-center"
