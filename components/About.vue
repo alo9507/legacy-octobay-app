@@ -19,14 +19,14 @@
     <div class="container position-relative my-5 py-5">
       <div class="card w-75 p-5 mt-5 shadow-lg border-0">
         <h4 class="text-secondary mb-0">
-          Automate Rewards for Issues and Pull Requests
+          Fund Issues, Get Devs. Resolve Issues, Get Paid.
         </h4>
         <h1 class="mb-4">Smart Bounties</h1>
         <p class="lead text-muted">
           Create bounties by depositing on open issues. Withdrawals are only
           possible once an issue is closed. If a
           <a
-            href="https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword"
+            href="https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-issues/linking-a-pull-request-to-an-issue"
             target="_blank"
           >
             pull request was involved
@@ -34,7 +34,8 @@
           only its author is eligible to withdraw. 30 days after an issue has
           been closed, deposits can be refunded to their senders.<br />
           <br />
-          Bounties can also be released manually, by commenting on the issue.
+          Bounties can also be released manually by maintainers commenting on an
+          issue.
         </p>
       </div>
       <img
