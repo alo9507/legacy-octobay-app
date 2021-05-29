@@ -71,13 +71,11 @@ export default {
     },
   },
   mounted() {
-    this.$axios
-      .$get(process.env.API_URL + '/graph/issue/' + this.issue.id)
-      .then((issue) => {
-        if (issue) {
-          this.deposits = issue.deposits
-        }
-      })
+    this.$subgraph.getIssue(this.issue.id).then((issue) => {
+      if (issue) {
+        this.deposits = issue.deposits
+      }
+    })
   },
 }
 </script>

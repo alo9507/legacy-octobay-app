@@ -61,29 +61,17 @@ export default {
   },
   mounted() {
     if (this.githubUserId) {
-      this.$axios
-        .$get(process.env.API_URL + '/github/user-by-id/' + this.githubUserId)
-        .then((githubUser) => {
-          if (githubUser) {
-            this.githubUser = githubUser
-          }
-        })
+      this.$github.getUserById(this.githubUserId).then((githubUser) => {
+        this.githubUser = githubUser
+      })
     } else if (this.fromAddress) {
-      this.$axios
-        .$get(
-          process.env.API_URL + '/graph/user-by-address/' + this.fromAddress
-        )
-        .then((githubUserId) => {
-          if (githubUserId) {
-            this.$axios
-              .$get(process.env.API_URL + '/github/user-by-id/' + githubUserId)
-              .then((githubUser) => {
-                if (githubUser) {
-                  this.githubUser = githubUser
-                }
-              })
-          }
-        })
+      this.$subgraph.getUserAddress(this.fromAddress).then((userAddress) => {
+        if (userAddress) {
+          this.$github.getUserById(userAddress.user.id).then((githubUser) => {
+            this.githubUser = githubUser
+          })
+        }
+      })
     }
   },
 }

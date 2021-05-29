@@ -11,10 +11,7 @@
             class="form-control form-control-lg form-control-with-embed mb-2"
             placeholder="https://github.com/..."
           />
-          <DiscussionEmbed
-            v-if="discussion"
-            :discussion="discussion.discussion"
-          />
+          <DiscussionEmbed v-if="discussion" :discussion="discussion" />
         </div>
         <div>
           <small>Governance Department</small>
@@ -120,10 +117,8 @@ export default {
           const number = discussionParts[3]
           this.loadingDiscussion = true
           this.discussion = null
-          this.$axios
-            .$get(
-              `${process.env.API_URL}/github/discussion/${owner}/${repo}/${number}`
-            )
+          this.$github
+            .getDiscussionByOwnerRepoNumber(owner, repo, Number(number))
             .then((discussion) => {
               this.discussion = discussion
             })
@@ -143,8 +138,8 @@ export default {
   },
   methods: {
     createNewProposal() {
-      const projectId = this.discussion.owner.id
-      const discussionId = this.discussion.discussion.id
+      const projectId = this.discussion.repository.id
+      const discussionId = this.discussion.id
       const startDate = new Date(this.startDate).getTime() / 1000
       const endDate = new Date(this.endDate).getTime() / 1000
       const quorum = Number(this.quorum) * 100

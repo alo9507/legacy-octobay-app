@@ -272,14 +272,10 @@ export const actions = {
   updateGithubUser({ commit }) {
     const accessToken = localStorage.getItem('github_access_token')
     if (accessToken) {
-      this.$axios
-        .$get(`${process.env.API_URL}/graph/me`, {
-          headers: { Authorization: 'bearer ' + accessToken },
-        })
-        .then((githubUser) => {
-          commit('setGithubAccessToken', accessToken)
-          commit('setGithubUser', githubUser)
-        })
+      this.$subgraph.me(accessToken).then((githubUser) => {
+        commit('setGithubAccessToken', accessToken)
+        commit('setGithubUser', githubUser)
+      })
     }
   },
   githubLogout({ commit }) {
@@ -289,7 +285,7 @@ export const actions = {
   },
   updateIssues({ commit }) {
     commit('setIssues', [])
-    this.$axios.$get(process.env.API_URL + '/graph/issues').then((issues) => {
+    this.$subgraph.getIssues().then((issues) => {
       issues.forEach((issue) => {
         // TODO: this all has to go to graph as well
         let depositAmount = BigInt(0)
@@ -304,10 +300,8 @@ export const actions = {
     })
   },
   updateOutgoingUserDeposits({ getters, commit }) {
-    this.$axios
-      .$get(
-        process.env.API_URL + '/graph/outgoing-user-deposits/' + getters.account
-      )
+    this.$subgraph
+      .getOutgoingDepositsByAddress(getters.account)
       .then((deposits) => {
         if (deposits) {
           commit('setOutgoingUserDeposits', deposits)
@@ -315,33 +309,25 @@ export const actions = {
       })
   },
   updateDepartments({ commit }) {
-    this.$axios
-      .$get(process.env.API_URL + '/graph/departments')
-      .then((departments) => {
-        commit('setDepartments', departments)
-      })
+    this.$subgraph.getDepartments().then((departments) => {
+      commit('setDepartments', departments)
+    })
   },
   updateNFTs({ getters, commit }) {
-    return this.$axios
-      .$get(
-        process.env.API_URL +
-          '/graph/permission-nfts-by-owner/' +
-          getters.account
-      )
+    return this.$subgraph
+      .getPermissionNFTsByAddress(getters.account)
       .then((nfts) => {
         commit('setNFTs', nfts)
       })
   },
   updateOracles({ commit }) {
-    this.$axios.$get(process.env.API_URL + '/graph/oracles').then((oracles) => {
+    this.$subgraph.getOracles().then((oracles) => {
       commit('setOracles', oracles)
     })
   },
   updateConfig({ commit }) {
-    this.$axios
-      .$get(
-        `${process.env.API_URL}/graph/config/${process.env.OCTOBAY_ADDRESS}`
-      )
+    this.$subgraph
+      .getConfig(process.env.OCTOBAY_ADDRESS.toLowerCase())
       .then((config) => {
         commit('setConfig', config)
       })

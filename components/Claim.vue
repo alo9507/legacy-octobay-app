@@ -130,7 +130,8 @@ export default {
         const number = parts[3]
         this.loadingIssue = true
         this.canWithdrawIssue = null
-        this.loadIssue(owner, repo, number)
+        this.$github
+          .getIssueByOwnerRepoNumber(owner, repo, Number(number))
           .then((issue) => {
             this.issue = issue
             if (this.githubUser) {
