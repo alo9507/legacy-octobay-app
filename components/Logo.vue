@@ -1,26 +1,17 @@
 <template>
-  <div
-    :class="[
-      'logo d-flex flex-column align-items-center',
-      {
-        'logo-xl': size == 'xl',
-        'logo-lg': size == 'lg',
-      },
-    ]"
-  >
-    <img
-      :src="baseDir + 'logo.png'"
-      :width="size == 'xl' ? 70 : size == 'lg' ? 50 : size == 'md' ? 46 : 30"
-    />
-  </div>
+  <img :class="'logo ' + variant" :src="baseDir + 'logo.png'" :width="width" />
 </template>
 
 <script>
 export default {
   props: {
-    size: {
+    width: {
       type: String,
-      default: 'sm',
+      default: '195px',
+    },
+    variant: {
+      type: String,
+      default: 'colored',
     },
   },
   data() {
@@ -33,13 +24,9 @@ export default {
 
 <style lang="sass">
 .logo
-  font-family: 'Fredoka', serif
-  font-size: 0.8rem
-  line-height: 1.7rem
-  &.logo-lg
-    font-size: 1.5rem
-    line-height: 2.5rem
-  &.logo-xl
-    font-size: 2rem
-    line-height: 3.5rem
+  &.grayscale
+    filter: grayscale(100%)
+    opacity: 0.07
+  &.white
+    filter: contrast(0%) brightness(999%)
 </style>
