@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex flex-column pt-5" style="min-height: 100vh">
+  <div class="d-flex flex-column pt-3" style="min-height: 100vh">
+    <div class="text-center pb-5">
+      <Logo variant="grayscale" />
+    </div>
     <div
       v-if="showPrototypeWarning"
       class="alert text-white bg-secondary border-0 mx-auto"
@@ -101,6 +104,7 @@
       <Nuxt />
     </div>
     <Footer />
+    <About />
     <RecipientTypeList />
     <IntervalSelect />
     <OracleList />

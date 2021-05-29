@@ -5,9 +5,12 @@ $box-shadow-sm: 0 .125rem .3rem rgba(black, .25) !default
 @import "./tooltips"
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap')
 
+html,
 body
   background: white
   font-family: 'Montserrat', sans-serif
+  scroll-behavior: smooth
+  overflow-x: hidden
 
 body,
 #__nuxt,
@@ -104,16 +107,21 @@ a:hover
   position: relative
 
 .custom-select
-  background: #f2f2f2 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") right 0.75rem center/8px 10px no-repeat
   border: none
+  background: #f8f8f8 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") right 0.75rem center/8px 10px no-repeat
+  box-shadow: inset 0 -2px 5px rgba(0,0,0,.08)
+  &:focus
+    box-shadow: inset 0 -1px 4px rgba(0,0,0,.08)
+    background-color: #f2f2f2
   
 .form-control
   border-radius: 2rem
   border: none
-  background: #f2f2f2
+  background: #f8f8f8
+  box-shadow: inset 0 -2px 5px rgba(0,0,0,.08)
   &:focus
-    box-shadow: none
-    background: #f8f8f8
+    box-shadow: inset 0 -1px 4px rgba(0,0,0,.08)
+    background: #f2f2f2
     &:read-only
       background: #e9ecef
 
