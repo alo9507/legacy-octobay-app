@@ -20,7 +20,7 @@ The following environment variables need to be set:
 ```bash
 export API_URL=https://octobay.uber.space
 export GITHUB_CLIENT_ID=5fbd39c6916b7efb63cc
-export OCTOBAY_ADDRESS=0xd00Bfe0D99D6c35C6a58287B670185DADCc003c1
+export OCTOBAY_ADDRESS=0xEC1dA9EeE346A67C121E4fce746C64b4e31b61A4
 export CHAIN_ID=42
 ```
 

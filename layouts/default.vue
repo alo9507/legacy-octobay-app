@@ -1,15 +1,14 @@
 <template>
-  <div class="d-flex flex-column pt-5" style="min-height: 100vh">
+  <div class="d-flex flex-column pt-3" style="min-height: 100vh">
+    <div class="text-center pb-5">
+      <Logo variant="grayscale" />
+    </div>
     <div
       v-if="showPrototypeWarning"
       class="alert text-white bg-secondary border-0 mx-auto"
       style="max-width: 360px"
     >
-      <button
-        type="button"
-        class="close p-1"
-        @click="showPrototypeWarning = false"
-      >
+      <button type="button" class="close p-1" @click="hidePrototypeWarning">
         <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
           <path
             fill="#ffffff"
@@ -105,6 +104,7 @@
       <Nuxt />
     </div>
     <Footer />
+    <About />
     <RecipientTypeList />
     <IntervalSelect />
     <OracleList />
@@ -121,8 +121,8 @@ export default {
   middleware: ['load', 'deeplinks'],
   data() {
     return {
-      showPrototypeWarning: true,
       showCompatibilityWarning: true,
+      showPrototypeWarning: false,
     }
   },
   computed: {
@@ -135,6 +135,24 @@ export default {
       } else {
         this.closeModal()
       }
+    },
+  },
+  mounted() {
+    const hidePrototypeWarningExpire = localStorage.getItem(
+      'hidePrototypeWarningExpire'
+    )
+    this.showPrototypeWarning = !(
+      hidePrototypeWarningExpire &&
+      Number(hidePrototypeWarningExpire) > Math.floor(Date.now() / 1000)
+    )
+  },
+  methods: {
+    hidePrototypeWarning() {
+      this.showPrototypeWarning = false
+      localStorage.setItem(
+        'hidePrototypeWarningExpire',
+        Math.floor(Date.now() / 1000) + 60 * 60 // expire in one hour
+      )
     },
   },
 }

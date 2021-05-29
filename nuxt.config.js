@@ -49,8 +49,16 @@ export default {
       },
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: '/logo.png' },
-      { rel: 'shortcut icon', type: 'image/png', href: '/logo.png' },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'icon.png',
+      },
+      {
+        rel: 'shortcut icon',
+        type: 'image/png',
+        href: (process.env.NUXT_ROUTER_BASE_DIR || '/') + 'icon.png',
+      },
     ],
   },
   loading: {
@@ -161,6 +169,7 @@ export default {
         'faFire',
         'faWallet',
         'faShare',
+        'faPlay',
       ],
       brands: ['faEthereum', 'faTwitter', 'faGithub', 'faDiscord'],
     },
