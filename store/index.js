@@ -326,8 +326,10 @@ export const actions = {
     })
   },
   updateConfig({ commit }) {
-    this.$subgraph.getConfig(process.env.OCTOBAY_ADDRESS).then((config) => {
-      commit('setConfig', config)
-    })
+    this.$subgraph
+      .getConfig(process.env.OCTOBAY_ADDRESS.toLowerCase())
+      .then((config) => {
+        commit('setConfig', config)
+      })
   },
 }
