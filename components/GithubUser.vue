@@ -61,13 +61,13 @@ export default {
   },
   mounted() {
     if (this.githubUserId) {
-      this.$api.getUserById(this.githubUserId).then((githubUser) => {
+      this.$github.getUserById(this.githubUserId).then((githubUser) => {
         this.githubUser = githubUser
       })
     } else if (this.fromAddress) {
-      this.$api.getUserAddress(this.fromAddress).then((userAddress) => {
+      this.$subgraph.getUserAddress(this.fromAddress).then((userAddress) => {
         if (userAddress) {
-          this.$api.getUserById(userAddress.user.id).then((githubUser) => {
+          this.$github.getUserById(userAddress.user.id).then((githubUser) => {
             this.githubUser = githubUser
           })
         }
