@@ -349,7 +349,8 @@ export default {
       this.department.requiredSharesToCreateProposals / 100
     this.minQuorum = this.department.minQuorum / 100
     this.loading = true
-    this.loadProjectById(this.department.projectId)
+    this.$github
+      .getProjectById(this.department.projectId)
       .then((project) => {
         if (project) {
           this.projectNode = {

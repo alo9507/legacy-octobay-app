@@ -140,8 +140,8 @@ export default {
           const repo = repoParts[2]
           this.loadingProject = true
           this.repository = null
-          this.$axios
-            .$get(`${process.env.API_URL}/github/repository/${owner}/${repo}`)
+          this.$github
+            .getRepository(owner, repo)
             .then((repository) => {
               this.repository = repository
             })
@@ -154,8 +154,8 @@ export default {
           const name = orgParts[1]
           this.loadingProject = true
           this.organization = null
-          this.$axios
-            .$get(`${process.env.API_URL}/github/organization/${name}`)
+          this.$github
+            .getOrganizationByName(name)
             .then((organization) => {
               this.organization = organization
             })

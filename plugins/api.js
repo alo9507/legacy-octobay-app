@@ -3,9 +3,114 @@ export default ({ app, store }, inject) => {
   const subgraphEndpoint =
     'https://api.thegraph.com/subgraphs/name/octobay/octobay-dev'
 
+  const githubUserProps = `
+    id
+    createdAt
+    updatedAt
+    login
+    url
+    avatarUrl
+    location
+    name
+    websiteUrl
+    twitterUsername
+    email
+    hasSponsorsListing
+    isHireable
+  `
+  const pullRequestProps = `
+    id
+    url
+    number
+    author {
+      ... on User {
+        login
+        url
+        createdAt
+        followers {
+          totalCount
+        }
+      }
+    }
+    title
+    state
+    merged
+    mergedAt
+    createdAt
+    changedFiles
+    autoMergeRequest {
+      mergeMethod
+    }
+    reviews {
+      totalCount
+    }
+    commits {
+      totalCount
+    }
+    comments {
+      totalCount
+    }
+    repository {
+      owner {
+        login
+      }
+      createdAt
+      forkCount
+      viewerCanAdminister
+      stargazers {
+        totalCount
+      }
+    }
+  `
+
+  const issueProps = `
+    id
+    title
+    url
+    number
+    closed
+    createdAt
+    comments {
+      totalCount
+    }
+    labels(first: 100) {
+      edges {
+        node {
+          name
+          color
+        }
+      }
+    }
+    repository {
+      name
+      primaryLanguage {
+        name
+        color
+      }
+      owner {
+        login
+      }
+    }
+    author {
+      ... on User {
+        login
+        url
+        email
+      }
+    }
+  `
+
+  const githubAuthHeader = (accessToken) => {
+    return {
+      headers: {
+        Authorization: 'bearer ' + accessToken,
+        'GraphQL-Features': 'discussions_api',
+      },
+    }
+  }
+
   const github = {
     getUserById(githubUserId) {
-      const accessToken = store.state.githubAccessToken
       return app.$axios
         .$post(
           githubEndpoint,
@@ -13,19 +118,7 @@ export default ({ app, store }, inject) => {
             query: `query($githubUserId:ID!) {
               node(id: $githubUserId) {
                 ... on User {
-                  id
-                  createdAt
-                  updatedAt
-                  login
-                  url
-                  avatarUrl
-                  location
-                  name
-                  websiteUrl
-                  twitterUsername
-                  email
-                  hasSponsorsListing
-                  isHireable
+                  ${githubUserProps}
                 }
               }
             }`,
@@ -33,13 +126,250 @@ export default ({ app, store }, inject) => {
               githubUserId,
             },
           },
-          {
-            headers: {
-              Authorization: 'bearer ' + accessToken,
-            },
-          }
+          githubAuthHeader(store.state.githubAccessToken)
         )
         .then((response) => (response.data ? response.data.node : null))
+    },
+    getUserByUsername(username) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($username:String!) {
+              user(login: $username) {
+                ${githubUserProps}
+              }
+            }`,
+            variables: {
+              username,
+            },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.user : null))
+    },
+    getIssueById(issueId) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($issueId: ID!) {
+              node(id: $issueId) {
+                ... on Issue {
+                  ${issueProps}
+                }
+              }
+            }`,
+            variables: { issueId },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.node : null))
+    },
+    getIssueByOwnerRepoNumber(owner, repo, number) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name: $repo) {
+                issue(number: $number) {
+                  ${issueProps}
+                }
+              }
+            }`,
+            variables: { owner, repo, number },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) =>
+          response.data ? response.data.repository.issue : null
+        )
+    },
+    getPullRequestById(prId) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($prId: ID!) {
+              node(id: $prId) {
+                ... on PullRequest {
+                  ${pullRequestProps}
+                }
+              }
+            }`,
+            variables: { prId },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.node : null))
+    },
+    getPullRequestByOwnerRepoNumber(owner, repo, number) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name:$repo) {
+                pullRequest(number: $number) {
+                  ${pullRequestProps}
+                }
+              }
+            }`,
+            variables: { owner, repo, number },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.repository : null))
+    },
+    getRepository(owner, repo) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($owner: String!, $repo: String!) {
+              repository(owner: $owner, name:$repo) {
+                id
+                name
+                url
+                homepageUrl
+                createdAt
+                description
+                collaborators {
+                  totalCount
+                }
+                stargazerCount
+                forkCount
+                primaryLanguage {
+                  name
+                  color
+                }
+                owner {
+                  login
+                  url
+                }
+              }
+            }`,
+            variables: { owner, repo },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.repository : null))
+    },
+    getDiscussionById(discussionId) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($discussionId: ID!) {
+              node(id: $discussionId) {
+                ... on Discussion {
+                  id
+                  title
+                  url
+                }
+              }
+            }`,
+            variables: { discussionId },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.node : null))
+    },
+    getDiscussionByOwnerRepoNumber(owner, repo, number) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name:$repo) {
+                discussion(number: $number) {
+                  id
+                  title
+                  url
+                  createdAt
+                  repository {
+                    id
+                    owner {
+                      id
+                    }
+                  }
+                }
+              }
+            }`,
+            variables: { owner, repo, number },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) =>
+          response.data ? response.data.repository.discussion : null
+        )
+    },
+    getProjectById(id) {
+      // TODO: implement this
+      return new Promise((resolve) => {
+        resolve({
+          id: '123',
+        })
+      })
+    },
+    getOrganizationByName(name) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($name:String!) {
+              organization(login: $name) {
+                id
+                name
+                url
+                avatarUrl
+                websiteUrl
+                createdAt
+                description
+                twitterUsername
+                membersWithRole {
+                  totalCount
+                }
+                repositories {
+                  totalCount
+                }
+              }
+            }`,
+            variables: { name },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => (response.data ? response.data.organization : null))
+    },
+    isRepoAdmin(owner, repo, username) {
+      return app.$axios
+        .$post(
+          githubEndpoint,
+          {
+            query: `query($owner: String!, $repo: String!, $username: String!) {
+              repository(owner: $owner, name: $repo) {
+                collaborators(query: $username) {
+                  edges {
+                    permission
+                  }
+                  nodes {
+                    login
+                  }
+                }
+              }
+            }`,
+            variables: { owner, repo, username },
+          },
+          githubAuthHeader(store.state.githubAccessToken)
+        )
+        .then((response) => {
+          return (
+            !!response.data.repository &&
+            response.data.repository.collaborators.edges[0].permission.toLowerCase() ===
+              'admin'
+          )
+        })
     },
   }
 
@@ -147,7 +477,7 @@ export default ({ app, store }, inject) => {
       return app.$axios
         .$post(subgraphEndpoint, {
           query: `{
-            issues(first: 10) {
+            issues(first: 100) {
               id
               status
               deposits {
@@ -183,7 +513,7 @@ export default ({ app, store }, inject) => {
       return app.$axios
         .$post(subgraphEndpoint, {
           query: `{
-            oracles(first: 10) {
+            oracles(first: 100) {
               id
               name
               ethAddress
