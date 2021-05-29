@@ -119,7 +119,7 @@
         The long term vision that guides us, is to make the magical code vending
         machine finally work. Funds can be converted into deployed software way
         more efficiently and with higher quality than it is the case today.
-        Everthing that serves this purpose will be incorprated into our...
+        Everything that serves this purpose will be incorporated into our...
         "roadmap".
       </p>
     </div>
