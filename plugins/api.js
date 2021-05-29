@@ -1,5 +1,9 @@
 export default ({ app, store }, inject) => {
   const githubEndpoint = 'https://api.github.com/graphql'
+
+  // https://github.com/github/feedback/discussions/3622
+  const githubEndpointCorsProxy = process.env.API_URL + '/github/corsproxy'
+
   const subgraphEndpoint =
     'https://api.thegraph.com/subgraphs/name/octobay/octobay-dev'
 
@@ -104,7 +108,7 @@ export default ({ app, store }, inject) => {
     return {
       headers: {
         Authorization: 'bearer ' + accessToken,
-        'GraphQL-Features': 'discussions_api',
+        // 'GraphQL-Features': 'discussions_api',
       },
     }
   }
@@ -259,7 +263,7 @@ export default ({ app, store }, inject) => {
     getDiscussionById(discussionId) {
       return app.$axios
         .$post(
-          githubEndpoint,
+          githubEndpointCorsProxy,
           {
             query: `query($discussionId: ID!) {
               node(id: $discussionId) {
@@ -279,7 +283,7 @@ export default ({ app, store }, inject) => {
     getDiscussionByOwnerRepoNumber(owner, repo, number) {
       return app.$axios
         .$post(
-          githubEndpoint,
+          githubEndpointCorsProxy,
           {
             query: `query($owner: String!, $repo: String!, $number: Int!) {
               repository(owner: $owner, name:$repo) {
