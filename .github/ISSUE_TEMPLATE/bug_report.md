@@ -7,6 +7,14 @@ assignees: ''
 
 ---
 
+<!--
+We support Octobay Rewards! Configure an Ethereum address in your profile repository (github.com/<username>/<usernam>) by adding a .octobay.json with the following content:
+
+{
+  "address": "your ETH address"
+}
+-->
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
