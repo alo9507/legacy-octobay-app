@@ -282,7 +282,8 @@ export default {
         if (username.match(/^[\w-]+$/)) {
           this.loadingRecipient = true
           this.user = null
-          this.loadUser(username)
+          this.$github
+            .getUserByUsername(username)
             .then((user) => {
               this.user = user
               // TODO: fetch info from subgraph
@@ -311,10 +312,8 @@ export default {
           const number = parts[3]
           this.loadingRecipient = true
           this.issue = null
-          this.$axios
-            .$get(
-              `${process.env.API_URL}/github/issue/${owner}/${repo}/${number}`
-            )
+          this.$github
+            .getIssueByOwnerRepoNumber(owner, repo, Number(number))
             .then((issue) => {
               this.issue = issue
             })

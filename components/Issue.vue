@@ -319,14 +319,11 @@ export default {
     showDetails(show) {
       if (show) {
         if (this.githubUser) {
-          this.$axios
-            .$get(
-              `${process.env.API_URL}/github/is-repo-admin/${this.githubUser.login}/${this.issueNode.owner}/${this.issueNode.repository}`,
-              {
-                headers: {
-                  Authorization: 'bearer ' + this.githubAccessToken,
-                },
-              }
+          this.$github
+            .isRepoAdmin(
+              this.githubUser.login,
+              this.issueNode.owner,
+              this.issueNode.repository
             )
             .then((isRepoAdmin) => (this.isRepoAdmin = isRepoAdmin))
             .catch(() => (this.isRepoAdmin = false))
@@ -341,11 +338,9 @@ export default {
           )
           .then((activePullRequestIds) => {
             activePullRequestIds.forEach((prId) => {
-              this.$axios
-                .$get(`${process.env.API_URL}/github/pullrequest-by-id/${prId}`)
-                .then((pr) => {
-                  this.linkedPullRequests.push(pr)
-                })
+              this.$github.getPullRequestById(prId).then((pr) => {
+                this.linkedPullRequests.push(pr)
+              })
             })
           })
           .catch(() => (this.linkedPullRequests = []))
@@ -354,7 +349,8 @@ export default {
   },
   mounted() {
     this.loading = true
-    this.loadIssueById(this.issue.id)
+    this.$github
+      .getIssueById(this.issue.id)
       .then((issue) => {
         if (issue) {
           this.issueNode = {

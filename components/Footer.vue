@@ -1,8 +1,34 @@
 <template>
   <footer
-    class="d-flex flex-column justify-content-end pt-5 px-5 pb-4 text-center mt-auto"
+    class="text-center"
+    :style="`background-image: url('${baseDir}footer-bg.png')`"
   >
-    <div class="mb-3">
+    <div class="d-flex flex-column">
+      <a href="#about" class="text-white" style="font-size: 2.2vw">
+        <small class="about-arrow">
+          <font-awesome-icon :icon="['fas', 'chevron-down']" />
+        </small>
+        About
+      </a>
+      <a id="about" />
+      <a
+        href="https://docs.octobay.org"
+        target="_blank"
+        class="text-white mt-5"
+      >
+        Documentation
+        <sup style="opacity: 0.3">
+          <small>
+            <font-awesome-icon :icon="['fas', 'external-link-alt']" />
+          </small>
+        </sup>
+      </a>
+      <a href="#roadmap" class="text-white">Roadmap</a>
+      <span class="text-white" style="opacity: 0.2; pointer-events: none">
+        Governance
+      </span>
+    </div>
+    <div class="mt-3 mb-4">
       <a
         href="https://twitter.com/OctobayApp"
         target="_blank"
@@ -24,38 +50,24 @@
       >
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
-      <a
-        :href="'https://kovan.etherscan.io/address/' + octobayAddress"
-        class="text-white px-2"
-      >
-        <font-awesome-icon :icon="['fab', 'ethereum']" />
-      </a>
-      <button
-        class="align-items-center btn btn-link text-white btn-sm oracle-button"
-        @click="$store.commit('setShowOracleList', true)"
-      >
-        <img
-          :src="baseDir + 'chainlink-icon.png'"
-          width="36px"
-          class="rounded-circle py-1 pl-1"
-        />
-        <small
-          ><font-awesome-icon
-            :icon="['fas', 'chevron-down']"
-            style="opacity: 0.5"
-        /></small>
-      </button>
     </div>
-    <div class="d-flex flex-column">
-      <nuxt-link v-if="$route.name === 'index'" to="/gov" class="text-white">
-        governance
-      </nuxt-link>
-      <nuxt-link v-if="$route.name === 'gov'" to="/" class="text-white">
-        payments
-      </nuxt-link>
-      <a href="https://octobay.org" target="_blank" class="text-white">
-        about
-      </a>
+    <div class="headers text-white mt-3 pt-5">
+      <h1 class="mb-4">Octobay</h1>
+      <h2>
+        Decentralized Job Marketplace<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for
+        Developers
+      </h2>
+      <div class="mt-5 pt-5 d-flex flex-column align-items-center">
+        <button
+          class="btn btn-lg py-3 px-5 btn-primary play-button"
+          style="font-size: 1.9rem; border-radius: 2.5rem"
+        >
+          <small class="pr-2" style="opacity: 0.5">
+            <font-awesome-icon :icon="['fas', 'play']" />
+          </small>
+          How it works
+        </button>
+      </div>
     </div>
   </footer>
 </template>
@@ -64,7 +76,6 @@
 export default {
   data() {
     return {
-      octobayAddress: process.env.OCTOBAY_ADDRESS,
       baseDir: process.env.BASE_DIR,
     }
   },
@@ -73,32 +84,76 @@ export default {
 
 <style lang="sass" scoped>
 footer
-  font-size: 1.9rem
-  background-color: #652FFF
-  background-image: url('/wave-footer.svg')
+  background-color: white
   background-size: 110%
   background-repeat: no-repeat
   background-position: top
-  height: 22vw
-  min-height: 360px
+  min-height: 85vw
+  padding-top: 12vw
+  font-size: 1.9rem
   font-weight: 800
-  .oracle-button
-    transition: opacity .2s ease
-    &:hover,
-    &:active,
-    &:focus
-      text-decoration: none
-  .donate-btn
+  .about-arrow
     position: relative
-    z-index: 1
-  .donate
-    max-width: 330px
-    position: relative
-    z-index: 0
     opacity: 0
-    max-height: 0
-    transition: opacity .3s ease, max-height .3s ease
-    &.show
-      opacity: 1
-      max-height: 500px
+    animation-name: about-arrow-bounce
+    animation-duration: 1.5s
+    animation-fill-mode: forwards
+    animation-iteration-count: 6
+
+  .headers
+    opacity: 0
+    animation-name: header-content-fade
+    animation-duration: 4s
+    animation-fill-mode: forwards
+    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1)
+    animation-delay: 5.5s
+    h1
+      font-weight: 900
+      font-size: 7vw
+      margin-left: -10vw
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.7), 0 -3px 3px rgba(0, 0, 0, 0.2)
+      animation-name: header-content-slide-left
+      animation-duration: 8s
+      animation-fill-mode: forwards
+      animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1)
+      animation-delay: 5.5s
+    h2
+      margin-top: 1rem
+      font-weight: 700
+      font-size: 4vw
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 -3px 3px rgba(0, 0, 0, 0.2)
+      animation-name: header-content-slide-right
+      animation-duration: 8s
+      animation-fill-mode: forwards
+      animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1)
+      animation-delay: 5.5s
+    .play-button
+      box-shadow: 0 0 55px rgba(255, 255, 255, 0.8), 0 -3px 3px rgba(0, 0, 0, 0.4) !important
+
+@keyframes about-arrow-bounce
+  0%
+    opacity: 0
+    top: -20px
+  100%
+    opacity: 0.5
+    top: 0
+
+@keyframes header-content-fade
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+@keyframes header-content-slide-left
+  from
+    padding-left: 4rem
+
+  to
+    padding-left: 0rem
+
+@keyframes header-content-slide-right
+  from
+    padding-left: 0rem
+  to
+    padding-left: 4rem
 </style>

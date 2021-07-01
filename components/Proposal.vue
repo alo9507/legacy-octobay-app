@@ -226,7 +226,8 @@ export default {
   },
   mounted() {
     this.loading = true
-    this.loadDiscussionById(this.proposal.id)
+    this.$github
+      .getDiscussionById(this.proposal.id)
       .then((discussion) => {
         if (discussion) {
           this.discussionNode = {

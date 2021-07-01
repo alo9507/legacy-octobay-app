@@ -5,33 +5,6 @@ export default {
     ...mapGetters(['oracles', 'activeOracle']),
   },
   methods: {
-    loadIssue(owner, repo, number) {
-      return this.$axios
-        .get(`${process.env.API_URL}/github/issue/${owner}/${repo}/${number}`)
-        .then((res) => res.data)
-    },
-    loadIssueById(issueId) {
-      return this.$axios
-        .get(`${process.env.API_URL}/github/issue-by-id/${issueId}`)
-        .then((res) => res.data)
-    },
-    loadUser(username) {
-      return this.$axios
-        .get(`${process.env.API_URL}/github/user-by-username/${username}`)
-        .then((res) => res.data)
-    },
-    loadProjectById(id) {
-      return new Promise((resolve) => {
-        resolve({
-          id: '123',
-        })
-      })
-    },
-    loadDiscussionById(discussionId) {
-      return this.$axios
-        .get(`${process.env.API_URL}/github/discussion-by-id/${discussionId}`)
-        .then((res) => res.data)
-    },
     brightnessByColor(color) {
       color = '' + color
       const isHEX = color.indexOf('#') === 0
