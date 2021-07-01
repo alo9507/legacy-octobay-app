@@ -6,7 +6,7 @@ on:
       - '.github/workflows/**'
       - '**.md'
 env:
-  URL: app.octobay.org
+  URL: app.openq.dev
 
 jobs:
   build:
