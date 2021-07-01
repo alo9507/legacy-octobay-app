@@ -2,9 +2,9 @@ name: Production Build and Deploy
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - '.github/workflows/**'
-      - '**.md'
+    #paths-ignore:
+     #- '.github/workflows/**'
+      #- '**.md'
 env:
   URL: app.openq.dev
 
