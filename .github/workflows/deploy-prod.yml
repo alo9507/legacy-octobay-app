@@ -33,7 +33,7 @@ jobs:
         run: |
           cd build
           yarn
-          export API_URL=https://octobay.uber.space
+          export API_URL=https://octobay.uber.space/v1
           export GITHUB_CLIENT_ID=79c2b8f305ad223cfb5e
           export OCTOBAY_ADDRESS=0xEC1dA9EeE346A67C121E4fce746C64b4e31b61A4
           export CHAIN_ID=42
