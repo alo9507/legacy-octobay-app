@@ -1,4 +1,4 @@
-# Octobay
+# OpenQ
 
 The long term vision for Octobay is to become a decentralized ecosystem for funding, governance, promotion and gamified recruitment on top of GitHub and potentially other open source collaboration platforms.
 
