@@ -43,7 +43,7 @@ jobs:
       - name: Checkout Dev Target
         uses: actions/checkout@v2
         with:
-          repository: octobay/app-dev
+          repository: openqdev/app-dev
           path: 'deploy'
           token: ${{ secrets.PAT }}
       
