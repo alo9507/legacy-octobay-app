@@ -14,7 +14,7 @@ The long term vision for Octobay is to become a decentralized ecosystem for fund
 ```bash
 git clone https://github.com/Octobay/app octobay-app && cd octobay-app && yarn
 ```
-
+ 
 The following environment variables need to be set:
 
 ```bash
